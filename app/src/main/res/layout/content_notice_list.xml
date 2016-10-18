@@ -3,9 +3,10 @@
     android:layout_width="match_parent"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:layout_height="72dp">
+    android:layout_height="?attr/actionBarSize">
 
     <TextView
+        android:id="@+id/notice_tv_subject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
@@ -14,8 +15,9 @@
         android:text="testtest"
         />
     <CheckBox
+        android:id="@+id/notice_cb_star"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:button="@drawable/star_selector"/>

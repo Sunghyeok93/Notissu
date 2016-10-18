@@ -12,11 +12,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
+import com.notissu.Adapter.NoticeAdapter;
 import com.notissu.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    ListView noticeList;
+    NoticeAdapter noticeAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,14 +29,9 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        initWidget();
+        settingWidget();
+        settingListener();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -43,6 +42,36 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
+
+    private void initWidget() {
+        noticeList = (ListView) findViewById(R.id.notice_list);
+
+    }
+
+    private void settingWidget() {
+        noticeAdapter = new NoticeAdapter(this);
+        noticeList.setAdapter(noticeAdapter);
+        noticeAdapter.add("helloworld1");
+        noticeAdapter.add("helloworld2");
+        noticeAdapter.add("helloworld3");
+        noticeAdapter.add("helloworld4");
+        noticeAdapter.add("helloworld5");
+        noticeAdapter.add("helloworld6");
+        noticeAdapter.add("helloworld7");
+        noticeAdapter.add("helloworld8");
+        noticeAdapter.add("helloworld9");
+        noticeAdapter.add("helloworld0");
+        noticeAdapter.add("helloworld10");
+        noticeAdapter.add("helloworld12");
+        noticeAdapter.add("helloworld13");
+        noticeAdapter.add("helloworld14");
+        noticeAdapter.add("helloworld15");
+    }
+
+    private void settingListener() {
+
+    }
+
 
     @Override
     public void onBackPressed() {
