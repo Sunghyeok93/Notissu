@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity
         settingWidget();
         settingListener();
 
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -56,16 +57,6 @@ public class MainActivity extends AppCompatActivity
         noticeAdapter.add("helloworld3");
         noticeAdapter.add("helloworld4");
         noticeAdapter.add("helloworld5");
-        noticeAdapter.add("helloworld6");
-        noticeAdapter.add("helloworld7");
-        noticeAdapter.add("helloworld8");
-        noticeAdapter.add("helloworld9");
-        noticeAdapter.add("helloworld0");
-        noticeAdapter.add("helloworld10");
-        noticeAdapter.add("helloworld12");
-        noticeAdapter.add("helloworld13");
-        noticeAdapter.add("helloworld14");
-        noticeAdapter.add("helloworld15");
     }
 
     private void settingListener() {
