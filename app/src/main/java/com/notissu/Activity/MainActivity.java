@@ -57,6 +57,11 @@ public class MainActivity extends AppCompatActivity
         noticeAdapter.add("helloworld3");
         noticeAdapter.add("helloworld4");
         noticeAdapter.add("helloworld5");
+        noticeAdapter.add("helloworld1");
+        noticeAdapter.add("helloworld2");
+        noticeAdapter.add("helloworld3");
+        noticeAdapter.add("helloworld4");
+        noticeAdapter.add("helloworld5");
     }
 
     private void settingListener() {
