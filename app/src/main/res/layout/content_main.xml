@@ -9,5 +9,5 @@
     tools:context="com.notissu.Activity.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <include layout="@layout/fragment_notice_list"/>
+    <include layout="@layout/part_notice_list"/>
 </RelativeLayout>
