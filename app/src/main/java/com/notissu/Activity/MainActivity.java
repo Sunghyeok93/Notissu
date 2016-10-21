@@ -3,6 +3,8 @@ package com.notissu.Activity;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,12 +17,16 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.notissu.Adapter.NoticeAdapter;
+import com.notissu.Adapter.NoticeFragmentPagerAdapter;
 import com.notissu.R;
+import com.notissu.Util.ResString;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     ListView noticeList;
     NoticeAdapter noticeAdapter;
+    TabLayout tabLayout;
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +35,12 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*initWidget();
+        /*위젯을 초기화하는 함수*/
+        initWidget();
+        /*초기화한 위젯에 데이터를 처리하는 함수*/
         settingWidget();
-        settingListener();*/
+        /*위젯에 리스터를 붙여주는 함수*/
+        settingListener();
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -45,23 +54,30 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initWidget() {
-        noticeList = (ListView) findViewById(R.id.notice_list);
 
+        /*앱이 실행되면 가장 먼저 호출되어야 할 기능이다.
+        resource에서 문자열 읽어들기 편하게 하기위해 만든 Util.
+        singleton으로 되어있기에 최초에 context를 넘겨줘야함.*/
+        ResString.getInstance().setContext(getApplicationContext());
+        /*noticeList = (ListView) findViewById(R.id.notice_list);*/
+        tabLayout = (TabLayout) findViewById(R.id.tab_tab_layout);
+        viewPager = (ViewPager) findViewById(R.id.tab_view_pager);
     }
 
     private void settingWidget() {
-        noticeAdapter = new NoticeAdapter(this);
+        /*noticeAdapter = new NoticeAdapter(this);
         noticeList.setAdapter(noticeAdapter);
-        noticeAdapter.add("helloworld1");
-        noticeAdapter.add("helloworld2");
-        noticeAdapter.add("helloworld3");
-        noticeAdapter.add("helloworld4");
-        noticeAdapter.add("helloworld5");
-        noticeAdapter.add("helloworld1");
-        noticeAdapter.add("helloworld2");
-        noticeAdapter.add("helloworld3");
-        noticeAdapter.add("helloworld4");
-        noticeAdapter.add("helloworld5");
+        noticeAdapter.add("helloworld1");*/
+        String[] tabStringList = ResString.getInstance().getStringArray(ResString.RES_SSU_NOTICES);
+
+        for (int i=0;i<tabStringList.length;i++) {
+            tabLayout.addTab(tabLayout.newTab().setText(tabStringList[i]));
+        }
+
+        NoticeFragmentPagerAdapter noticeFragmentPagerAdapter =
+                new NoticeFragmentPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(noticeFragmentPagerAdapter);
+
     }
 
     private void settingListener() {
