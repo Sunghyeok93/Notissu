@@ -20,6 +20,7 @@ import com.notissu.Adapter.NoticeAdapter;
 import com.notissu.Adapter.NoticeFragmentPagerAdapter;
 import com.notissu.R;
 import com.notissu.Util.ResString;
+import com.notissu.Util.Str;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -68,7 +69,8 @@ public class MainActivity extends AppCompatActivity
         /*noticeAdapter = new NoticeAdapter(this);
         noticeList.setAdapter(noticeAdapter);
         noticeAdapter.add("helloworld1");*/
-        String[] tabStringList = ResString.getInstance().getStringArray(ResString.RES_SSU_NOTICES);
+
+        String[] tabStringList = ResString.getInstance().getStringArray(Str.RES_SSU_NOTICES);
 
         for (int i=0;i<tabStringList.length;i++) {
             tabLayout.addTab(tabLayout.newTab().setText(tabStringList[i]));

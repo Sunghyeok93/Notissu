@@ -1,6 +1,7 @@
 package com.notissu.Util;
 
 import android.content.Context;
+import android.widget.Toast;
 
 import com.notissu.R;
 
@@ -8,14 +9,12 @@ import com.notissu.R;
  * Created by forhack on 2016-10-21.
  */
 public class ResString {
-    //숭실대 공지사항 String array의 name
-    public static final String RES_SSU_NOTICES = "ssu_notices";
-
     private static final String RESOURCE_STRING = "string";
     private static final String RESOURCE_STRING_ARRAY = "array";
     private Context context;
 
     private static ResString ourInstance = new ResString();
+
 
     public static ResString getInstance() {
         return ourInstance;
