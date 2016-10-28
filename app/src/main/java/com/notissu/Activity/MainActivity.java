@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Fragment.NoticeTabFragment;
 import com.notissu.R;
 import com.notissu.Util.ResString;
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity
 
         Fragment fragment = new NoticeTabFragment();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.main_container,fragment);
+        fragmentTransaction.add(R.id.main_fragment_container,fragment);
         fragmentTransaction.commit();
 
     }
@@ -105,17 +104,11 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_ssu_notice) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_cse_notice) {
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_ssu_library) {
 
         }
 
