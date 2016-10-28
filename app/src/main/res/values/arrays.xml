@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ssu_notices">
+        <item>전체</item>
+        <item>학사</item>
+        <item>장학</item>
+        <item>국제교류</item>
+        <item>모집,채용</item>
+        <item>교내행사</item>
+        <item>교외행사</item>
+        <item>봉사</item>
+    </string-array>
+</resources>

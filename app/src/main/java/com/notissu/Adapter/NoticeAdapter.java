@@ -31,9 +31,6 @@ public class NoticeAdapter extends ArrayAdapter<String> {
         this.context = context;
     }
 
-
-
-
     @Override
     public int getCount() {
         return noticeSubject.size();
@@ -52,7 +49,7 @@ public class NoticeAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if(view == null) {
-            view = View.inflate(context, R.layout.content_notice_list, null);
+            view = View.inflate(context, R.layout.row_notice_list, null);
             viewHolder = new ViewHolder();
             viewHolder.tvSubject = (TextView) view.findViewById(R.id.notice_tv_subject);
             viewHolder.cbStar = (CheckBox) view.findViewById(R.id.notice_cb_star);
