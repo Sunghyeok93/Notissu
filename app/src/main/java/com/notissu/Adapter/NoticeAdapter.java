@@ -31,9 +31,6 @@ public class NoticeAdapter extends ArrayAdapter<String> {
         this.context = context;
     }
 
-
-
-
     @Override
     public int getCount() {
         return noticeSubject.size();
