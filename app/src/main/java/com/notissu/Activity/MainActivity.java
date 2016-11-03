@@ -1,9 +1,10 @@
 package com.notissu.Activity;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.notissu.Fragment.NoticeTabFragment;
+import com.notissu.Fragment.SearchDialogFragment;
 import com.notissu.R;
 import com.notissu.Util.ResString;
 
@@ -91,10 +93,12 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if(id == R.id.item_search)
+        {
+            showDialog();
             return true;
         }
-
+ 
         return super.onOptionsItemSelected(item);
     }
 
@@ -116,4 +120,13 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    //diaglog fragment생성
+    public void showDialog() {
+        FragmentManager manager = getSupportFragmentManager();
+        SearchDialogFragment mydialog = new SearchDialogFragment();
+        mydialog.show(manager,"asd");
+    }
+
+
 }
