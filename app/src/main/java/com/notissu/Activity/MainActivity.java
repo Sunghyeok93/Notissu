@@ -15,6 +15,7 @@ import android.view.MenuItem;
 
 import com.notissu.Fragment.NoticeTabFragment;
 import com.notissu.Fragment.SearchDialogFragment;
+import com.notissu.Fragment.SetKeywordFragment;
 import com.notissu.R;
 import com.notissu.Util.ResString;
 
@@ -95,10 +96,15 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if(id == R.id.item_search)
         {
-            showDialog();
+            showSearchDialog();
             return true;
         }
- 
+        else if(id == R.id.item_set_keyword)
+        {
+            showKeywordDialog();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -122,11 +128,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     //diaglog fragment생성
-    public void showDialog() {
+    public void showSearchDialog() {
         FragmentManager manager = getSupportFragmentManager();
         SearchDialogFragment mydialog = new SearchDialogFragment();
-        mydialog.show(manager,"asd");
+        mydialog.show(manager,"");
     }
 
+    public void showKeywordDialog()
+    {
+        FragmentManager manager = getSupportFragmentManager();
+        SetKeywordFragment mydialog = new SetKeywordFragment();
+        mydialog.show(manager,"");
+    }
 
 }
