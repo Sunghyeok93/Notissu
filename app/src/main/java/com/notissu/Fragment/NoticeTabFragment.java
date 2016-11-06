@@ -26,6 +26,9 @@ public class NoticeTabFragment extends Fragment {
         settingWidget();
         settingListener();
         return rootView;
+
+
+
     }
 
     private void initWidget() {

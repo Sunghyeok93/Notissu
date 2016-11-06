@@ -1,30 +1,30 @@
 package com.notissu.Fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.notissu.Adapter.NoticeAdapter;
 import com.notissu.R;
-import com.notissu.Util.Str;
 
 public class NoticeListFragment extends Fragment {
     private static final String KEY_ITEM_ARRAY = "KEY_ITEM_ARRAY";
+    private static final String KEY_TIME_ARRAY = "KEY_TIME_ARRAY";
+
     ListView noticeList;
     NoticeAdapter noticeAdapter;
     View rootView;
     String[] itemArray;
+    String[] timeArray;
 
-    public static Fragment newInstance(String[] itemArray) {
+    public static Fragment newInstance(String[] itemArray, String[] timeArray) {
         Bundle bundle = new Bundle();
         //이름 제대로 지정해야한다..
         bundle.putStringArray(KEY_ITEM_ARRAY,itemArray);
+        bundle.putStringArray(KEY_TIME_ARRAY,timeArray);
         Fragment fragment = new NoticeListFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -51,11 +51,13 @@ public class NoticeListFragment extends Fragment {
     private void settingWidget() {
         Bundle bundle = getArguments();
         this.itemArray = bundle.getStringArray(KEY_ITEM_ARRAY);
-        
+        this.timeArray = bundle.getStringArray(KEY_TIME_ARRAY);
         noticeList.setAdapter(noticeAdapter);
         for (int i=0;i<itemArray.length;i++) {
             noticeAdapter.add(itemArray[i]);
+            noticeAdapter.addTime(timeArray[i]);
         }
+
 
 
 

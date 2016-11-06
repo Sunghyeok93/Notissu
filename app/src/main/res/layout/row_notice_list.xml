@@ -14,6 +14,7 @@
         android:layout_alignParentLeft="true"
         android:text="testtest"
         />
+
     <CheckBox
         android:id="@+id/notice_cb_star"
         android:layout_width="wrap_content"
@@ -21,5 +22,16 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:button="@drawable/star_selector"/>
+
+    <TextView
+        android:id= "@+id/notice_tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:text="11-02"
+        android:layout_alignBaseline="@+id/notice_tv_subject"
+        android:layout_alignBottom="@+id/notice_tv_subject"
+        android:layout_toStartOf="@+id/notice_cb_star"
+        android:layout_toLeftOf="@+id/notice_cb_star" />
 
 </RelativeLayout>

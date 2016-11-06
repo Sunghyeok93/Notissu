@@ -19,11 +19,13 @@ public class NoticeAdapter extends ArrayAdapter<String> {
     Context context;
     ViewHolder viewHolder;
     ArrayList<String> noticeSubject = new ArrayList<>();
+    ArrayList<String> noticeTime = new ArrayList<>();
 
-    public NoticeAdapter(Context context, ArrayList<String> noticeSubject) {
+    public NoticeAdapter(Context context, ArrayList<String> noticeSubject, ArrayList<String> noticeTime) {
         super(context, android.R.layout.simple_expandable_list_item_2);
         this.context = context;
         this.noticeSubject = noticeSubject;
+        this.noticeTime = noticeTime;
     }
 
     public NoticeAdapter(Context context) {
@@ -46,18 +48,26 @@ public class NoticeAdapter extends ArrayAdapter<String> {
         return i;
     }
 
+    public String getItemTime(int i) {
+        return noticeTime.get(i);
+    }
+
+
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if(view == null) {
             view = View.inflate(context, R.layout.row_notice_list, null);
             viewHolder = new ViewHolder();
             viewHolder.tvSubject = (TextView) view.findViewById(R.id.notice_tv_subject);
+            viewHolder.tvTime = (TextView) view.findViewById(R.id.notice_tv_time);
             viewHolder.cbStar = (CheckBox) view.findViewById(R.id.notice_cb_star);
             view.setTag(viewHolder);
         }else{
             viewHolder = (ViewHolder) view.getTag();
         }
+
         viewHolder.tvSubject.setText(getItem(i));
+        viewHolder.tvTime.setText(getItemTime(i));
         viewHolder.cbStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,8 +80,13 @@ public class NoticeAdapter extends ArrayAdapter<String> {
         noticeSubject.add(str);
     }
 
+    public void addTime(String str) {
+        noticeTime.add(str);
+    }
+
     static class ViewHolder{
         TextView tvSubject;
+        TextView tvTime;
         CheckBox cbStar;
     }
 }
