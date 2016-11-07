@@ -3,12 +3,12 @@ package com.notissu.Adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.util.Log;
 
-import com.notissu.Activity.SplashActivity;
 import com.notissu.Fragment.NoticeListFragment;
-import com.notissu.Fragment.NoticeTabFragment;
+import com.notissu.Model.NoticeRow;
 import com.notissu.Util.Str;
+
+import java.util.ArrayList;
 
 import static com.notissu.Util.LogUtils.makeLogTag;
 
@@ -28,12 +28,12 @@ public class NoticeFragmentPagerAdapter extends FragmentStatePagerAdapter{
 
     @Override
     public Fragment getItem(int position) {
-        String[] notices = getSsuNotice(tabStringList[position]);
+        ArrayList<NoticeRow> noticeRows = getSsuNotice(tabStringList[position]);
 
-        return NoticeListFragment.newInstance(notices);
+        return NoticeListFragment.newInstance(noticeRows);
     }
 
-    public String[] getSsuNotice(String category) {
+    public ArrayList<NoticeRow> getSsuNotice(String category) {
         switch (category) {
             case "전체":
                 return Str.ALL_SSU_NOTICES;

@@ -1,30 +1,30 @@
 package com.notissu.Fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.notissu.Adapter.NoticeAdapter;
+import com.notissu.Model.NoticeRow;
 import com.notissu.R;
-import com.notissu.Util.Str;
+
+import java.util.ArrayList;
 
 public class NoticeListFragment extends Fragment {
-    private static final String KEY_ITEM_ARRAY = "KEY_ITEM_ARRAY";
+    private static final String KEY_NOTICE_ROWS = "KEY_NOTICE_ROWS";
+
     ListView noticeList;
     NoticeAdapter noticeAdapter;
     View rootView;
-    String[] itemArray;
+    ArrayList<NoticeRow> noticeRows;
 
-    public static Fragment newInstance(String[] itemArray) {
+    public static Fragment newInstance(ArrayList<NoticeRow> noticeRows) {
         Bundle bundle = new Bundle();
         //이름 제대로 지정해야한다..
-        bundle.putStringArray(KEY_ITEM_ARRAY,itemArray);
+        bundle.putParcelableArrayList(KEY_NOTICE_ROWS,noticeRows);
         Fragment fragment = new NoticeListFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -50,12 +50,12 @@ public class NoticeListFragment extends Fragment {
 
     private void settingWidget() {
         Bundle bundle = getArguments();
-        this.itemArray = bundle.getStringArray(KEY_ITEM_ARRAY);
-        
+        this.noticeRows = bundle.getParcelableArrayList(KEY_NOTICE_ROWS);
         noticeList.setAdapter(noticeAdapter);
-        for (int i=0;i<itemArray.length;i++) {
-            noticeAdapter.add(itemArray[i]);
+        for (int i=0;i<noticeRows.size();i++) {
+            noticeAdapter.add(noticeRows.get(i));
         }
+
 
 
 
