@@ -17,6 +17,10 @@ public class NoticeTabFragment extends Fragment {
     TabLayout tabLayout;
     ViewPager viewPager;
     View rootView;
+
+    public static NoticeTabFragment newInstance() {
+        return new NoticeTabFragment();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -26,9 +30,6 @@ public class NoticeTabFragment extends Fragment {
         settingWidget();
         settingListener();
         return rootView;
-
-
-
     }
 
     private void initWidget() {

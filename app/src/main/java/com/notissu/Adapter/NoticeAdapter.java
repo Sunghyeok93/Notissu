@@ -3,6 +3,7 @@ package com.notissu.Adapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -79,4 +80,5 @@ public class NoticeAdapter extends ArrayAdapter<NoticeRow> {
         TextView tvTime;
         CheckBox cbStar;
     }
+
 }

@@ -98,13 +98,7 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if(id == R.id.item_search)
-        {
-            showSearchDialog();
-            return true;
-        }
-        else if(id == R.id.item_set_keyword)
+        if(id == R.id.item_set_keyword)
         {
             showKeywordDialog();
             return true;
@@ -118,17 +112,12 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (id == R.id.nav_ssu_notice) {
-            Fragment fragment = new NoticeTabFragment();
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.main_fragment_container,fragment);
-            fragmentTransaction.commit();
+            fragmentTransaction.replace(R.id.main_fragment_container,NoticeTabFragment.newInstance()).commit();
         } else if (id == R.id.nav_ssu_library) {
             ArrayList<NoticeRow> noticeRows = Str.OASIS_SSU_NOTICES;
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.main_fragment_container,NoticeListFragment.newInstance(noticeRows));
-            fragmentTransaction.commit();
+            fragmentTransaction.replace(R.id.main_fragment_container,NoticeListFragment.newInstance(noticeRows)).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

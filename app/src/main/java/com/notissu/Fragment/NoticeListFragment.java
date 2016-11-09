@@ -1,14 +1,20 @@
 package com.notissu.Fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.notissu.Adapter.NoticeAdapter;
 import com.notissu.Model.NoticeRow;
+import com.notissu.Model.RssItem;
 import com.notissu.R;
 
 import java.util.ArrayList;
@@ -58,7 +64,18 @@ public class NoticeListFragment extends Fragment {
     }
 
     private void settingListener() {
+        noticeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                FragmentManager manager = getFragmentManager();
+                RssItem rssItem = new RssItem(
+                        "[모집·채용]졸업 선배 멘토링 안내[현대상선/농협정보시스템]",
+                        "","","2016.11.09 09:24:01","");
+                DialogFragment mydialog = RssItemDialog.newInstance(rssItem);
+                mydialog.show(manager,"");
+            }
 
+        });
     }
 
 }

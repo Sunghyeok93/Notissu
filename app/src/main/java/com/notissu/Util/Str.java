@@ -112,6 +112,19 @@ public class Str {
         OASIS_SSU_NOTICES.add(new NoticeRow(
                 "[공지] 한국학 DB KRPIA 이벤트",
                 "10-12"));
+        OASIS_SSU_NOTICES.add(new NoticeRow(
+                "[공지] 중간시험 기간 중 자료실 사석화 관리 안내",
+                "10-11"));
+        OASIS_SSU_NOTICES.add(new NoticeRow(
+                "[공고] 중앙도서관 대출데스크 CCTV설치 의견수렴",
+                "10-10"));
+        OASIS_SSU_NOTICES.add(new NoticeRow(
+                "[공지] 학위논문 원문서비스(dcollection) 작업 공지",
+                "10-08"));
+        OASIS_SSU_NOTICES.add(new NoticeRow(
+                "[공지] 중간시험 기간 도서관 운영 안내",
+                "10-05"));
+
 
 
         JANGHACK_SSU_NOTICES.add(new NoticeRow("장학","11-08"));
