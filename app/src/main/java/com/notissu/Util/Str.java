@@ -47,7 +47,47 @@ public class Str {
         ALL_SSU_NOTICES.add(new NoticeRow(
                 "[모집·채용]지학사 인사총무노무 신입 추천 (11. 14 월 오전 09시 마감)",
                 "2016.11.08"));
-        HACKSA_SSU_NOTICES.add(new NoticeRow("학사","11-07"));
+        ALL_SSU_NOTICES.add(new NoticeRow(
+                "[학사]2016-2학기 졸업예정자 연계전공 이수구분 변경 신청 안내",
+                "2016.11.07"));
+        ALL_SSU_NOTICES.add(new NoticeRow(
+                "[학사]학사과정 수료생의 졸업예정자 등록 최종 신청 안내",
+                "2016.11.07"));
+        HACKSA_SSU_NOTICES.add(new NoticeRow(
+                "[학사]2016-2학기 졸업예정자 연계전공 이수구분 변경 신청 안내",
+                "2016.11.07"));
+        HACKSA_SSU_NOTICES.add(new NoticeRow(
+                "[학사]학사과정 수료생의 졸업예정자 등록 최종 신청 안내",
+                "2016.11.07"));
+        HACKSA_SSU_NOTICES.add(new NoticeRow(
+                "[학사]국내대학 학점교류 실시 및 수강신청 안내(2016-겨울)",
+                "10.31"));
+        HACKSA_SSU_NOTICES.add(new NoticeRow(
+                "[학사]2016년도 2차 종합보충훈련안내",
+                "10.27"));
+        HACKSA_SSU_NOTICES.add(new NoticeRow(
+                "[학사]졸업예정자 중 조기취업자의 출석 인정 시행지침 안내",
+                "10.26"));
+        HACKSA_SSU_NOTICES.add(new NoticeRow(
+                "[학사]2016-겨울계절제 사전 수요조사 안내",
+                "10.26"));
+        HACKSA_SSU_NOTICES.add(new NoticeRow(
+                "[학사]2016「대학생 핵심역량 진단(K-CESA)」참여자 추가 모집",
+                "10.25"));
+        HACKSA_SSU_NOTICES.add(new NoticeRow(
+                "[학사]2016학년도 공감과 소통 글쓰기 공모전(부모님 평전, 멘토와의 대화)...",
+                "10.24"));
+        HACKSA_SSU_NOTICES.add(new NoticeRow(
+                "[학사]제 3 회 숭실독서향연 안내",
+                "10.24"));
+        HACKSA_SSU_NOTICES.add(new NoticeRow(
+                "[학사]2016 겨울계절제 운영일정 및 유의사항 안내",
+                "10.19"));
+        HACKSA_SSU_NOTICES.add(new NoticeRow(
+                "[학사]2016학년도 2학기 교직과정 이수 신청 안내",
+                "10.13"));
+
+
         JANGHACK_SSU_NOTICES.add(new NoticeRow("장학","11-08"));
         KUCKJE_SSU_NOTICES.add(new NoticeRow("국제","11-09"));
         MOJIP_SSU_NOTICES.add(new NoticeRow("모집","11-00"));
