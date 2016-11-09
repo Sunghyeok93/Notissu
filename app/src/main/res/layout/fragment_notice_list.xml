@@ -4,5 +4,6 @@
     android:layout_height="match_parent"
     tools:context="com.notissu.Fragment.NoticeListFragment">
 
-    <include layout="@layout/part_notice_list"/>
+    <include
+        layout="@layout/part_notice_list"/>
 </FrameLayout>

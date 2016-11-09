@@ -1,36 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:layout_height="?attr/actionBarSize">
+    android:layout_height="48dp"
+    android:minHeight="48dp">
 
     <TextView
         android:id="@+id/notice_tv_subject"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:layout_centerVertical="true"
-        android:text="testtest"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:paddingLeft="16dp"
+        android:gravity="center_vertical"
+        android:layout_weight="1"
+        android:textSize="16sp"
+        android:text="[모집·채용]실전창업프로젝트 [내가 CEO라면 이렇게 마케팅한다!] 참가자 모집"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_toLeftOf="@+id/notice_tv_time"
         />
-
-    <CheckBox
-        android:id="@+id/notice_cb_star"
-        android:layout_width="wrap_content"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:button="@drawable/star_selector"/>
 
     <TextView
         android:id= "@+id/notice_tv_time"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:text="11-02"
-        android:layout_marginRight="10dp"
-        android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/notice_cb_star"
-        android:layout_toLeftOf="@+id/notice_cb_star" />
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:text="11.09" />
 
-</RelativeLayout>
+    <LinearLayout
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:layout_gravity="end"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+    <CheckBox
+        android:id="@+id/notice_cb_star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:button="@drawable/star_selector"/>
+    </LinearLayout>
+
+</LinearLayout>
