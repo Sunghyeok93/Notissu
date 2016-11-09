@@ -13,11 +13,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Fragment.NoticeTabFragment;
 import com.notissu.Fragment.SearchDialogFragment;
 import com.notissu.Fragment.SetKeywordFragment;
+import com.notissu.Model.NoticeRow;
 import com.notissu.R;
 import com.notissu.Util.ResString;
+import com.notissu.Util.Str;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -93,13 +98,7 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if(id == R.id.item_search)
-        {
-            showSearchDialog();
-            return true;
-        }
-        else if(id == R.id.item_set_keyword)
+        if(id == R.id.item_set_keyword)
         {
             showKeywordDialog();
             return true;
@@ -113,13 +112,12 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (id == R.id.nav_ssu_notice) {
-
-        } else if (id == R.id.nav_cse_notice) {
-
+            fragmentTransaction.replace(R.id.main_fragment_container,NoticeTabFragment.newInstance()).commit();
         } else if (id == R.id.nav_ssu_library) {
-
+            ArrayList<NoticeRow> noticeRows = Str.OASIS_SSU_NOTICES;
+            fragmentTransaction.replace(R.id.main_fragment_container,NoticeListFragment.newInstance(noticeRows)).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

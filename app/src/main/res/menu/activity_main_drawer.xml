@@ -8,10 +8,6 @@
                 android:icon="@drawable/ic_menu_share"
                 android:title="학교 공지사항" />
             <item
-                android:id="@+id/nav_cse_notice"
-                android:icon="@drawable/ic_menu_send"
-                android:title="컴퓨터학부 공지사항" />
-            <item
                 android:id="@+id/nav_ssu_library"
                 android:icon="@drawable/ic_menu_send"
                 android:title="도서관" />
@@ -29,9 +25,11 @@
     <item android:title="키워드">
         <menu>
             <item
-                android:id="@+id/nav_keyword"
                 android:icon="@drawable/ic_menu_send"
                 android:title="장학금" />
+            <item
+                android:icon="@drawable/ic_menu_send"
+                android:title="독서" />
         </menu>
     </item>
 </menu>
