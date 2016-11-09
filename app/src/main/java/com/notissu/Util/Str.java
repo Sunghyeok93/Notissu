@@ -19,6 +19,7 @@ public class Str {
     public static final ArrayList<NoticeRow> KYONE_SSU_NOTICES = new ArrayList<>();
     public static final ArrayList<NoticeRow> KYOWAE_SSU_NOTICES = new ArrayList<>();
     public static final ArrayList<NoticeRow> BONGSA_SSU_NOTICES = new ArrayList<>();
+    public static final ArrayList<NoticeRow> OASIS_SSU_NOTICES = new ArrayList<>();
     static {
         ALL_SSU_NOTICES.add(new NoticeRow(
                 "[모집·채용]졸업 선배 멘토링 안내[외국계항공사(해외취업)]",
@@ -86,6 +87,31 @@ public class Str {
         HACKSA_SSU_NOTICES.add(new NoticeRow(
                 "[학사]2016학년도 2학기 교직과정 이수 신청 안내",
                 "10.13"));
+
+        OASIS_SSU_NOTICES.add(new NoticeRow(
+                "[공지] 11월 중앙도서관 영화상영회 안내",
+                "11-08"));
+        OASIS_SSU_NOTICES.add(new NoticeRow(
+                "[공지] 수능시험일 및 수시 논술고사일 도서관 운영 안내",
+                "11-08"));
+        OASIS_SSU_NOTICES.add(new NoticeRow(
+                "[공지] 2016-2학기 학술DB 이용교육 신청 안내",
+                "11-03"));
+        OASIS_SSU_NOTICES.add(new NoticeRow(
+                "[이벤트] KRPIA 시즌 1 당첨자 발표",
+                "10-24"));
+        OASIS_SSU_NOTICES.add(new NoticeRow(
+                "[공지] 중앙도서관 공간재조정 및 리모델링 완료 안내",
+                "10-19"));
+        OASIS_SSU_NOTICES.add(new NoticeRow(
+                "[공지] 모아진 전자잡지 이벤트",
+                "10-17"));
+        OASIS_SSU_NOTICES.add(new NoticeRow(
+                "[공지] 교외접속 이용장애 안내(10/16)",
+                "10-13"));
+        OASIS_SSU_NOTICES.add(new NoticeRow(
+                "[공지] 한국학 DB KRPIA 이벤트",
+                "10-12"));
 
 
         JANGHACK_SSU_NOTICES.add(new NoticeRow("장학","11-08"));

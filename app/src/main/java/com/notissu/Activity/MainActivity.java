@@ -13,11 +13,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Fragment.NoticeTabFragment;
 import com.notissu.Fragment.SearchDialogFragment;
 import com.notissu.Fragment.SetKeywordFragment;
+import com.notissu.Model.NoticeRow;
 import com.notissu.R;
 import com.notissu.Util.ResString;
+import com.notissu.Util.Str;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -115,11 +120,15 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_ssu_notice) {
-
-        } else if (id == R.id.nav_cse_notice) {
-
+            Fragment fragment = new NoticeTabFragment();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.main_fragment_container,fragment);
+            fragmentTransaction.commit();
         } else if (id == R.id.nav_ssu_library) {
-
+            ArrayList<NoticeRow> noticeRows = Str.OASIS_SSU_NOTICES;
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.main_fragment_container,NoticeListFragment.newInstance(noticeRows));
+            fragmentTransaction.commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

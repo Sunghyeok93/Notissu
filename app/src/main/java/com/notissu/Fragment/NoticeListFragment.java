@@ -55,10 +55,6 @@ public class NoticeListFragment extends Fragment {
         for (int i=0;i<noticeRows.size();i++) {
             noticeAdapter.add(noticeRows.get(i));
         }
-
-
-
-
     }
 
     private void settingListener() {
