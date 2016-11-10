@@ -2,8 +2,7 @@ package com.notissu.Activity;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,8 +14,7 @@ import android.view.MenuItem;
 
 import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Fragment.NoticeTabFragment;
-import com.notissu.Fragment.SearchDialogFragment;
-import com.notissu.Fragment.SetKeywordFragment;
+import com.notissu.Fragment.AddKeywordFragment;
 import com.notissu.Model.NoticeRow;
 import com.notissu.R;
 import com.notissu.Util.ResString;
@@ -38,17 +36,12 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         /*위젯을 초기화하는 함수*/
         initWidget();
         /*초기화한 위젯에 데이터를 처리하는 함수*/
         settingWidget();
         /*위젯에 리스터를 붙여주는 함수*/
         settingListener();
-
-
-
-
 
     }
 
@@ -63,18 +56,14 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
 
-
-
     }
 
     private void settingWidget() {
         setSupportActionBar(toolbar);
         toggle.syncState();
-        
-        Fragment fragment = new NoticeTabFragment();
+
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.main_fragment_container,fragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.add(R.id.main_fragment_container,NoticeTabFragment.newInstance()).commit();
     }
 
     private void settingListener() {
@@ -100,6 +89,9 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /*
+    Actionbar Item을 선택했을 때 생기는 Event 구현
+    */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -107,15 +99,19 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if(id == R.id.item_set_keyword)
+        if(id == R.id.item_add_keyword)
         {
-            showKeywordDialog();
+            DialogFragment dialogFragment = AddKeywordFragment.newInstance();
+            dialogFragment.show(getSupportFragmentManager(),"");
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    /*
+    Navigation의 메뉴가 클릭 됐을 때 생기는 Event 구현
+    */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -135,20 +131,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    //diaglog fragment생성
-    public void showSearchDialog() {
-        FragmentManager manager = getSupportFragmentManager();
-        SearchDialogFragment mydialog = new SearchDialogFragment();
-        mydialog.show(manager,"");
-    }
-
-    public void showKeywordDialog()
-    {
-        FragmentManager manager = getSupportFragmentManager();
-        SetKeywordFragment mydialog = new SetKeywordFragment();
-        mydialog.show(manager,"");
     }
 
 }
