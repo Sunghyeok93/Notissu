@@ -4,7 +4,7 @@
 
     <item
         android:title="setKeyword"
-        android:id="@+id/item_set_keyword"
+        android:id="@+id/item_add_keyword"
         android:orderInCategory="200"
         android:icon="@android:drawable/ic_menu_add"
         app:showAsAction="always"

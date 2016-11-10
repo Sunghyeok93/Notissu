@@ -14,8 +14,16 @@ import com.notissu.R;
  * Created by Sunghyeok on 2016-11-03.
  */
 
-public class SetKeywordFragment extends DialogFragment implements View.OnClickListener{
+public class AddKeywordFragment extends DialogFragment implements View.OnClickListener{
     Button keyword_button;
+
+    public static AddKeywordFragment newInstance() {
+        Bundle args = new Bundle();
+
+        AddKeywordFragment fragment = new AddKeywordFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -23,7 +31,7 @@ public class SetKeywordFragment extends DialogFragment implements View.OnClickLi
 
         getDialog().setTitle("키워드 추가");
 
-        View view = inflater.inflate(R.layout.fragment_dialog_keyword, null, false);
+        View view = inflater.inflate(R.layout.dialog_keyword, null, false);
 
         keyword_button = (Button) view.findViewById(R.id.button_keyword_set);
 

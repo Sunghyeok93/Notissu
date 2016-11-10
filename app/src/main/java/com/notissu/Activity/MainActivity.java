@@ -2,8 +2,7 @@ package com.notissu.Activity;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,24 +14,27 @@ import android.view.MenuItem;
 
 import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Fragment.NoticeTabFragment;
-import com.notissu.Fragment.SearchDialogFragment;
-import com.notissu.Fragment.SetKeywordFragment;
+import com.notissu.Fragment.AddKeywordFragment;
 import com.notissu.Model.NoticeRow;
 import com.notissu.R;
 import com.notissu.Util.ResString;
 import com.notissu.Util.Str;
 
 import java.util.ArrayList;
-
+//메인 화면이 나오는 Activity
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    DrawerLayout drawer;
+    ActionBarDrawerToggle toggle;
+    NavigationView navigationView;
+    Toolbar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         /*위젯을 초기화하는 함수*/
         initWidget();
@@ -41,15 +43,6 @@ public class MainActivity extends AppCompatActivity
         /*위젯에 리스터를 붙여주는 함수*/
         settingListener();
 
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
     private void initWidget() {
@@ -57,20 +50,25 @@ public class MainActivity extends AppCompatActivity
         resource에서 문자열 읽어들기 편하게 하기위해 만든 Util.
         singleton으로 되어있기에 최초에 context를 넘겨줘야함.*/
         ResString.getInstance().setContext(getApplicationContext());
-
-        Fragment fragment = new NoticeTabFragment();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.main_fragment_container,fragment);
-        fragmentTransaction.commit();
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
 
     }
 
     private void settingWidget() {
+        setSupportActionBar(toolbar);
+        toggle.syncState();
 
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.main_fragment_container,NoticeTabFragment.newInstance()).commit();
     }
 
     private void settingListener() {
-
+        drawer.setDrawerListener(toggle);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
 
@@ -91,6 +89,9 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /*
+    Actionbar Item을 선택했을 때 생기는 Event 구현
+    */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -98,15 +99,19 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if(id == R.id.item_set_keyword)
+        if(id == R.id.item_add_keyword)
         {
-            showKeywordDialog();
+            DialogFragment dialogFragment = AddKeywordFragment.newInstance();
+            dialogFragment.show(getSupportFragmentManager(),"");
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    /*
+    Navigation의 메뉴가 클릭 됐을 때 생기는 Event 구현
+    */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -126,20 +131,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    //diaglog fragment생성
-    public void showSearchDialog() {
-        FragmentManager manager = getSupportFragmentManager();
-        SearchDialogFragment mydialog = new SearchDialogFragment();
-        mydialog.show(manager,"");
-    }
-
-    public void showKeywordDialog()
-    {
-        FragmentManager manager = getSupportFragmentManager();
-        SetKeywordFragment mydialog = new SetKeywordFragment();
-        mydialog.show(manager,"");
     }
 
 }
