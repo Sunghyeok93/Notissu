@@ -126,15 +126,25 @@ public class Str {
                 "[공지] 중간시험 기간 도서관 운영 안내",
                 "10-05"));
 
+
         STARRED_SSU_NOTICES.add(new NoticeRow(
-                "[공고] 중앙도서관 대출데스크 CCTV설치 의견수렴",
-                "10-10"));
+                "[모집·채용]졸업 선배 멘토링 안내[외국계항공사(해외취업)]",
+                "11.09"));
         STARRED_SSU_NOTICES.add(new NoticeRow(
-                "[공지] 학위논문 원문서비스(dcollection) 작업 공지",
-                "10-08"));
+                "[모집·채용]졸업 선배 멘토링 안내[현대상선/농협정보시스템]",
+                "11.09"));
         STARRED_SSU_NOTICES.add(new NoticeRow(
-                "[공지] 중간시험 기간 도서관 운영 안내",
-                "10-05"));
+                "[모집·채용]실전창업프로젝트 [내가 CEO라면 이렇게 마케팅한다!] 참가자 모집",
+                "11.08"));
+        STARRED_SSU_NOTICES.add(new NoticeRow(
+                "[모집·채용]다우케미칼 CDP(Commercial Development...",
+                "11.08"));
+        STARRED_SSU_NOTICES.add(new NoticeRow(
+                "[교내행사]숭실대 재학생 대상 진로 및 학습 프로그램- 나너길",
+                "11.08"));
+        STARRED_SSU_NOTICES.add(new NoticeRow(
+                "[교내행사]2016학년도 숭실기독인연합 '아빠를 위한 문화제' 참여 안내",
+                "11.08"));
 
 
         JANGHACK_SSU_NOTICES.add(new NoticeRow("장학","11-08"));
