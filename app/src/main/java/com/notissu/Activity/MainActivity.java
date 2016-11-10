@@ -118,6 +118,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_ssu_library) {
             ArrayList<NoticeRow> noticeRows = Str.OASIS_SSU_NOTICES;
             fragmentTransaction.replace(R.id.main_fragment_container,NoticeListFragment.newInstance(noticeRows)).commit();
+        } else if (id == R.id.nav_starred) {
+            ArrayList<NoticeRow> noticeRows = Str.STARRED_SSU_NOTICES;
+            fragmentTransaction.replace(R.id.main_fragment_container,NoticeListFragment.newInstance(noticeRows)).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -20,6 +20,7 @@ public class Str {
     public static final ArrayList<NoticeRow> KYOWAE_SSU_NOTICES = new ArrayList<>();
     public static final ArrayList<NoticeRow> BONGSA_SSU_NOTICES = new ArrayList<>();
     public static final ArrayList<NoticeRow> OASIS_SSU_NOTICES = new ArrayList<>();
+    public static final ArrayList<NoticeRow> STARRED_SSU_NOTICES = new ArrayList<>();
     static {
         ALL_SSU_NOTICES.add(new NoticeRow(
                 "[모집·채용]졸업 선배 멘토링 안내[외국계항공사(해외취업)]",
@@ -125,6 +126,15 @@ public class Str {
                 "[공지] 중간시험 기간 도서관 운영 안내",
                 "10-05"));
 
+        STARRED_SSU_NOTICES.add(new NoticeRow(
+                "[공고] 중앙도서관 대출데스크 CCTV설치 의견수렴",
+                "10-10"));
+        STARRED_SSU_NOTICES.add(new NoticeRow(
+                "[공지] 학위논문 원문서비스(dcollection) 작업 공지",
+                "10-08"));
+        STARRED_SSU_NOTICES.add(new NoticeRow(
+                "[공지] 중간시험 기간 도서관 운영 안내",
+                "10-05"));
 
 
         JANGHACK_SSU_NOTICES.add(new NoticeRow("장학","11-08"));
