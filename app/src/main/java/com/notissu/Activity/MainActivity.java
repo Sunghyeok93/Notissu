@@ -23,16 +23,21 @@ import com.notissu.Util.ResString;
 import com.notissu.Util.Str;
 
 import java.util.ArrayList;
-
+//메인 화면이 나오는 Activity
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    DrawerLayout drawer;
+    ActionBarDrawerToggle toggle;
+    NavigationView navigationView;
+    Toolbar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
 
         /*위젯을 초기화하는 함수*/
         initWidget();
@@ -42,14 +47,9 @@ public class MainActivity extends AppCompatActivity
         settingListener();
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+
+
     }
 
     private void initWidget() {
@@ -57,20 +57,29 @@ public class MainActivity extends AppCompatActivity
         resource에서 문자열 읽어들기 편하게 하기위해 만든 Util.
         singleton으로 되어있기에 최초에 context를 넘겨줘야함.*/
         ResString.getInstance().setContext(getApplicationContext());
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
 
-        Fragment fragment = new NoticeTabFragment();
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.main_fragment_container,fragment);
-        fragmentTransaction.commit();
+
 
     }
 
     private void settingWidget() {
-
+        setSupportActionBar(toolbar);
+        toggle.syncState();
+        
+        Fragment fragment = new NoticeTabFragment();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.main_fragment_container,fragment);
+        fragmentTransaction.commit();
     }
 
     private void settingListener() {
-
+        drawer.setDrawerListener(toggle);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
 
