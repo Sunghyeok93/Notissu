@@ -35,7 +35,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         /*위젯을 초기화하는 함수*/
         initWidget();
         /*초기화한 위젯에 데이터를 처리하는 함수*/
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity
         resource에서 문자열 읽어들기 편하게 하기위해 만든 Util.
         singleton으로 되어있기에 최초에 context를 넘겨줘야함.*/
         ResString.getInstance().setContext(getApplicationContext());
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void settingWidget() {
-        setSupportActionBar(toolbar);
+
         toggle.syncState();
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
