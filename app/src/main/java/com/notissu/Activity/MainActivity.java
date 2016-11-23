@@ -14,7 +14,7 @@ import android.view.MenuItem;
 
 import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Fragment.NoticeTabFragment;
-import com.notissu.Fragment.AddKeywordFragment;
+import com.notissu.Dialog.AddKeywordDialog;
 import com.notissu.Model.NoticeRow;
 import com.notissu.R;
 import com.notissu.Util.ResString;
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity
 
         if(id == R.id.item_add_keyword)
         {
-            DialogFragment dialogFragment = AddKeywordFragment.newInstance();
+            DialogFragment dialogFragment = AddKeywordDialog.newInstance();
             dialogFragment.show(getSupportFragmentManager(),"");
             return true;
         }

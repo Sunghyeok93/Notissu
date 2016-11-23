@@ -1,4 +1,4 @@
-package com.notissu.Fragment;
+package com.notissu.Dialog;
 
 
 import android.os.Bundle;
@@ -14,13 +14,13 @@ import com.notissu.R;
  * Created by Sunghyeok on 2016-11-03.
  */
 
-public class AddKeywordFragment extends DialogFragment implements View.OnClickListener{
+public class AddKeywordDialog extends DialogFragment implements View.OnClickListener{
     Button keyword_button;
 
-    public static AddKeywordFragment newInstance() {
+    public static AddKeywordDialog newInstance() {
         Bundle args = new Bundle();
 
-        AddKeywordFragment fragment = new AddKeywordFragment();
+        AddKeywordDialog fragment = new AddKeywordDialog();
         fragment.setArguments(args);
         return fragment;
     }

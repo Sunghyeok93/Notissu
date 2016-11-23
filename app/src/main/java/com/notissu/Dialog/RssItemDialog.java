@@ -1,10 +1,7 @@
-package com.notissu.Fragment;
+package com.notissu.Dialog;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.text.TextDirectionHeuristicCompat;
-import android.support.v4.widget.TextViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +10,6 @@ import android.widget.TextView;
 
 import com.notissu.Model.RssItem;
 import com.notissu.R;
-
-import org.w3c.dom.Text;
 
 /**
  * Created by forhack on 2016-11-09.
