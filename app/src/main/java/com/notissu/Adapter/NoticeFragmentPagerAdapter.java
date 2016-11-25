@@ -29,8 +29,34 @@ public class NoticeFragmentPagerAdapter extends FragmentStatePagerAdapter{
     @Override
     public Fragment getItem(int position) {
         ArrayList<NoticeRow> noticeRows = getSsuNotice(tabStringList[position]);
-
-        return NoticeListFragment.newInstance(noticeRows);
+        switch(position) {
+            case 0:
+                NoticeListFragment noticeList1 = new NoticeListFragment();
+                return noticeList1.newInstance(getSsuNotice(tabStringList[position]));
+            case 1:
+                NoticeListFragment noticeList2 = new NoticeListFragment();
+                return noticeList2.newInstance(getSsuNotice(tabStringList[position]));
+            case 2:
+                NoticeListFragment noticeList3 = new NoticeListFragment();
+                return noticeList3.newInstance(getSsuNotice(tabStringList[position]));
+            case 3:
+                NoticeListFragment noticeList4 = new NoticeListFragment();
+                return noticeList4.newInstance(getSsuNotice(tabStringList[position]));
+            case 4:
+                NoticeListFragment noticeList5 = new NoticeListFragment();
+                return noticeList5.newInstance(getSsuNotice(tabStringList[position]));
+            case 5:
+                NoticeListFragment noticeList6 = new NoticeListFragment();
+                return noticeList6.newInstance(getSsuNotice(tabStringList[position]));
+            case 6:
+                NoticeListFragment noticeList7 = new NoticeListFragment();
+                return noticeList7.newInstance(getSsuNotice(tabStringList[position]));
+            case 7:
+                NoticeListFragment noticeList8 = new NoticeListFragment();
+                return noticeList8.newInstance(getSsuNotice(tabStringList[position]));
+            default:
+                return null;
+        }
     }
 
     public ArrayList<NoticeRow> getSsuNotice(String category) {
