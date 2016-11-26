@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.notissu.R;
+import com.notissu.SyncAdapter.SyncUtil;
 
 import static com.notissu.Util.LogUtils.makeLogTag;
 
@@ -20,6 +21,8 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        SyncUtil.CreateSyncAccount(this);
 
         handler = new Handler(){
             @Override
