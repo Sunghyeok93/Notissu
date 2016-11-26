@@ -11,6 +11,11 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.rometools.rome.feed.synd.SyndFeed;
+import com.rometools.rome.io.FeedException;
+import com.rometools.rome.io.SyndFeedInput;
+import com.rometools.rome.io.XmlReader;
+
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
@@ -74,20 +79,20 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             Log.e(TAG, "Error updating database: " + e.toString());
             syncResult.databaseError = true;
             return;
-        } /*catch (FeedException e) {
+        } catch (FeedException e) {
             Log.e(TAG, "Error Feed Read: " + e.toString());
             syncResult.databaseError = true;
-        }*/
+        }
         Log.i(TAG, "Network synchronization complete");
     }
 
     private void updateLocalFeedData(final URL feedUrl, final SyncResult syncResult)
             throws IOException, XmlPullParserException, RemoteException,
-            OperationApplicationException, ParseException{
+            OperationApplicationException, ParseException, FeedException{
         Log.d(TAG,"helloworld");
-        /*SyndFeedInput input = new SyndFeedInput();
+        SyndFeedInput input = new SyndFeedInput();
         SyndFeed feed = input.build(new XmlReader(feedUrl));
 
-        Log.d(TAG,feed+"");*/
+        Log.d(TAG,feed+"");
     }
 }
