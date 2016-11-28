@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.notissu">
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <!-- Required for fetching feed data. -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -57,5 +58,7 @@
         </service>
 
     </application>
-
+    <service android:name=".NotificationService"
+        android:enabled="true"/>
+    <receiver android:name=".NotificationReceiver"/>
 </manifest>
