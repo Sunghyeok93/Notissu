@@ -48,6 +48,9 @@ public class NoticeTabFragment extends Fragment {
                 new NoticeFragmentPagerAdapter(getFragmentManager(),tabLayout.getTabCount(),tabStringList);
         viewPager.setAdapter(noticeFragmentPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+    }
+    private void settingListener() {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -63,11 +66,7 @@ public class NoticeTabFragment extends Fragment {
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
-            });
-
-        }
-    private void settingListener() {
-
+        });
     }
 
 }
