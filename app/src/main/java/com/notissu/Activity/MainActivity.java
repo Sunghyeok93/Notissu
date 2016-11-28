@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -128,7 +127,15 @@ public class MainActivity extends AppCompatActivity
 
         if(id == R.id.item_add_keyword)
         {
-            DialogFragment dialogFragment = AddKeywordDialog.newInstance();
+            AddKeywordDialog dialogFragment = AddKeywordDialog.newInstance();
+            dialogFragment.setOnAddKeywordListner(new AddKeywordDialog.OnAddKeywordListner() {
+                @Override
+                public void onAdd(Bundle bundle) {
+                    String name = bundle.getString("aa");
+                    if (name != null)
+                        addNewItem(name);
+                }
+            });
             dialogFragment.show(getSupportFragmentManager(),"");
             return true;
         }
@@ -157,6 +164,14 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    // itemName을 키워드 이름 받아와서 네비게이션에 메뉴 추가
+    public boolean addNewItem(String itemName){
+        Menu menu = navigationView.getMenu();
+        menu.add(R.id.group_keyword,Menu.NONE,Menu.NONE,itemName);
+
         return true;
     }
 

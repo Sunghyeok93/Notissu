@@ -24,12 +24,14 @@
     </item>
     <item android:title="키워드">
         <menu>
-            <item
-                android:icon="@drawable/ic_menu_send"
-                android:title="장학금" />
-            <item
-                android:icon="@drawable/ic_menu_send"
-                android:title="독서" />
+            <group android:id="@+id/group_keyword">
+                <item
+                    android:icon="@drawable/ic_menu_send"
+                    android:title="장학금" />
+                <item
+                    android:icon="@drawable/ic_menu_send"
+                    android:title="독서" />
+            </group>
         </menu>
     </item>
         <item
