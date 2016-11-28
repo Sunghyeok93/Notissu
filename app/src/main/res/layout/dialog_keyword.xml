@@ -30,6 +30,7 @@
         android:layout_gravity="right"
         android:id="@+id/button_keyword_set"
         android:text = "추 가"
+        android:onClick = "KeywordClick"
 />
 
 
