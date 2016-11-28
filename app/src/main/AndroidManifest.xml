@@ -58,7 +58,4 @@
         </service>
 
     </application>
-    <service android:name=".NotificationService"
-        android:enabled="true"/>
-    <receiver android:name=".NotificationReceiver"/>
 </manifest>
