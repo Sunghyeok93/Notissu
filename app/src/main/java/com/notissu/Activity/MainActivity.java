@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity
             dialogFragment.setOnAddKeywordListner(new AddKeywordDialog.OnAddKeywordListner() {
                 @Override
                 public void onAdd(Bundle bundle) {
-                    String name = bundle.getString("aa");
+                    String name = bundle.getString(AddKeywordDialog.KEY_KEYWORD);
                     if (name != null)
                         addNewItem(name);
                 }

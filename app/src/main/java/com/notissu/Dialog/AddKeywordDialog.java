@@ -16,6 +16,7 @@ import com.notissu.R;
  */
 
 public class AddKeywordDialog extends DialogFragment {
+    public static final String KEY_KEYWORD = "KEY_KEYWORD";
     View rootView;
     Button btnKeyword;
     EditText etText;
@@ -46,22 +47,10 @@ public class AddKeywordDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                String output = etText.getText().toString();
-                bundle.putString("aa",output);
+                String keyword = etText.getText().toString();
+                bundle.putString(KEY_KEYWORD,keyword);
                 onAddKeywordListner.onAdd(bundle);
                 dismiss();
-                /*Intent intent = new Intent();
-                ComponentName componentName = new ComponentName(
-                        "com.notissu",
-                        "com.notissu.Activity.MainActivity");
-                intent.setComponent(componentName);
-
-
-                String output = etText.getText().toString();
-                intent.putExtra("Keyword_name", output);
-                startActivity(intent);
-
-*/
             }
         });
      //   btnKeyword.setOnClickListener(this);
