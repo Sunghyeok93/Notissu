@@ -35,18 +35,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String TAG = SyncAdapter.class.getName();
 //    private static final String FEED_URL = "https://leesanghyeok.github.io/feed.xml"; //내 블로그 임시
     private static final String FEED_URL = "http://www.ssu.ac.kr/web/kor/plaza_d_01;jsessionid=yIPyJDhVJSyGG1SWk3kZeQ5qXfdbVfqihsikvlZZVAILUn5tgH2HjcX4fiQFXD40?p_p_id=EXT_MIRRORBBS&p_p_lifecycle=0&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_pos=1&p_p_col_count=2&_EXT_MIRRORBBS_struts_action=%2Fext%2Fmirrorbbs%2Frss"; //내 블로그 임시
-    Context context;
     ContentResolver mContentResolver;
 
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
-        this.context = context;
         mContentResolver = context.getContentResolver();
     }
 
     public SyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
         super(context, autoInitialize, allowParallelSyncs);
-        this.context = context;
         mContentResolver = context.getContentResolver();
     }
 
@@ -96,12 +93,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             throws IOException, XmlPullParserException, RemoteException,
             OperationApplicationException, ParseException, FeedException{
 
-        File file = IOUtils.URLToFile(context, FEED_URL);
-
-        Log.d(TAG,IOUtils.fileToString(file));
+        InputStream inputStream = IOUtils.URLToInputStream(FEED_URL);
 
         SyndFeedInput input = new SyndFeedInput();
-        SyndFeed feed = input.build(new XmlReader(file));
+        SyndFeed feed = input.build(new XmlReader(inputStream));
 
         Log.d(TAG,feed+"");
     }

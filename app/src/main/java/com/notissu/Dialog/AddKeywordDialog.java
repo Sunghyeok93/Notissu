@@ -53,10 +53,6 @@ public class AddKeywordDialog extends DialogFragment {
                 dismiss();
             }
         });
-     //   btnKeyword.setOnClickListener(this);
-
-
-
         return rootView;
 
     }
