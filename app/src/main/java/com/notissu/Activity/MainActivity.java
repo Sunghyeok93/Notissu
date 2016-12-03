@@ -195,7 +195,8 @@ public class MainActivity extends AppCompatActivity
     // itemName을 키워드 이름 받아와서 네비게이션에 메뉴 추가
     public boolean addNewItem(String itemName){
         Menu menu = navigationView.getMenu();
-        menu.add(R.id.group_keyword,Menu.NONE,Menu.NONE,itemName);
+        menu.getItem(2).getSubMenu().add(R.id.group_keyword,Menu.NONE,1,itemName).setIcon(R.drawable.ic_menu_send);
+        //menu.add(R.id.group_keyword,Menu.NONE,1,itemName).setIcon(R.drawable.ic_menu_send);
 
         return true;
     }

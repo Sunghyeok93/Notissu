@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item android:title="공지사항">
         <menu>
             <item
@@ -13,7 +14,6 @@
                 android:title="도서관" />
         </menu>
     </item>
-
     <item android:title="기능">
         <menu>
             <item
@@ -22,20 +22,14 @@
                 android:title="즐겨찾기" />
         </menu>
     </item>
-    <item android:title="키워드">
+    <item android:title="키워드"
+        android:id="@+id/group_keyword">
         <menu>
-            <group android:id="@+id/group_keyword">
-                <item
-                    android:icon="@drawable/ic_menu_send"
-                    android:title="장학금" />
-                <item
-                    android:icon="@drawable/ic_menu_send"
-                    android:title="독서" />
-            </group>
         </menu>
     </item>
-        <item
+
+    <item
+            android:orderInCategory="2"
             android:icon="@drawable/ic_drawer_settings_24dp"
             android:title="설정" />
-
 </menu>
