@@ -18,7 +18,6 @@ import com.notissu.R;
 public class RssItemDialog extends DialogFragment{
     private static final String KEY_RSSITEM = "KEY_RSSITEM";
     TextView tvTitle;
-    TextView tvAuthor;
     TextView tvTime;
     Button btnVisit;
     View rootView;
@@ -50,14 +49,12 @@ public class RssItemDialog extends DialogFragment{
     private void initWidget() {
         btnVisit = (Button) rootView.findViewById(R.id.rssitem_btn_visit_site);
         tvTitle = (TextView) rootView.findViewById(R.id.rssitem_tv_title);
-        tvAuthor = (TextView) rootView.findViewById(R.id.rssitem_tv_author);
         tvTime = (TextView) rootView.findViewById(R.id.rssitem_tv_time);
     }
 
     private void settingWidget() {
         RssItem rssItem = getArguments().getParcelable(KEY_RSSITEM);
         tvTitle.setText(rssItem.getTitle());
-        tvAuthor.setText(rssItem.getAuthor());
         tvTime.setText(rssItem.getDate());
     }
 

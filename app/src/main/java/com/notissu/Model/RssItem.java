@@ -27,7 +27,6 @@ public class RssItem implements Parcelable{
         link = in.readString();
         description = in.readString();
         date = in.readString();
-        author = in.readString();
     }
 
     @Override
@@ -36,7 +35,6 @@ public class RssItem implements Parcelable{
         dest.writeString(link);
         dest.writeString(description);
         dest.writeString(date);
-        dest.writeString(author);
     }
 
     @Override
@@ -70,9 +68,5 @@ public class RssItem implements Parcelable{
 
     public String getDate() {
         return date;
-    }
-
-    public String getAuthor() {
-        return author;
     }
 }
