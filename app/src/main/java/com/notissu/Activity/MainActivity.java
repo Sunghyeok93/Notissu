@@ -6,7 +6,9 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,6 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.notissu.Dialog.AddKeywordDialog;
 import com.notissu.Fragment.NoticeListFragment;
@@ -34,6 +38,7 @@ public class MainActivity extends AppCompatActivity
     ActionBarDrawerToggle toggle;
     NavigationView navigationView;
     Toolbar toolbar;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,24 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                AddKeywordDialog dialogFragment = AddKeywordDialog.newInstance();
+                dialogFragment.setOnAddKeywordListner(new AddKeywordDialog.OnAddKeywordListner() {
+                    @Override
+                    public void onAdd(Bundle bundle) {
+                        String name = bundle.getString(AddKeywordDialog.KEY_KEYWORD);
+                        if (name != null)
+                            addNewItem(name);
+                    }
+                });
+                dialogFragment.show(getSupportFragmentManager(),"");
+                return false;
+            }
+        });
+
         /*위젯을 초기화하는 함수*/
         initWidget();
         /*초기화한 위젯에 데이터를 처리하는 함수*/
@@ -50,7 +73,10 @@ public class MainActivity extends AppCompatActivity
 
         //string받아 푸쉬알림 띄우는 함수
         popAlarm("[키워드]");
+
+
     }
+
 
     // 푸쉬 알림 구현
     private void popAlarm(String string)
