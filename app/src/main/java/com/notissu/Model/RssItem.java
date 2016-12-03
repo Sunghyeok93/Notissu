@@ -12,14 +12,12 @@ public class RssItem implements Parcelable{
     String link;
     String description;
     String date;
-    String author;
 
-    public RssItem(String title, String link, String description, String date, String author) {
+    public RssItem(String title, String link, String description, String date) {
         this.title = title;
         this.link = link;
         this.description = description;
         this.date = date;
-        this.author = author;
     }
 
     protected RssItem(Parcel in) {
