@@ -47,23 +47,22 @@ public class MainActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                AddKeywordDialog dialogFragment = AddKeywordDialog.newInstance();
-                dialogFragment.setOnAddKeywordListner(new AddKeywordDialog.OnAddKeywordListner() {
-                    @Override
-                    public void onAdd(Bundle bundle) {
-                        String name = bundle.getString(AddKeywordDialog.KEY_KEYWORD);
-                        if (name != null)
-                            addNewItem(name);
-                    }
-                });
-                dialogFragment.show(getSupportFragmentManager(),"");
-                return false;
-            }
-        });
-
+       fab.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               AddKeywordDialog dialogFragment = AddKeywordDialog.newInstance();
+               dialogFragment.setOnAddKeywordListner(new AddKeywordDialog.OnAddKeywordListner() {
+                   @Override
+                   public void onAdd(Bundle bundle) {
+                       String name = bundle.getString(AddKeywordDialog.KEY_KEYWORD);
+                       if (name != null)
+                           addNewItem(name);
+                   }
+               });
+               dialogFragment.show(getSupportFragmentManager(),"");
+           }
+       });
+        
         /*위젯을 초기화하는 함수*/
         initWidget();
         /*초기화한 위젯에 데이터를 처리하는 함수*/
