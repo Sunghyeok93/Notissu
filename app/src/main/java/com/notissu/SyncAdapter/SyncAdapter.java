@@ -12,6 +12,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.notissu.Util.IOUtils;
+import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
@@ -26,6 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.ParseException;
+import java.util.List;
 
 /**
  * Created by forhack on 2016-11-26.
@@ -98,6 +100,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         SyndFeedInput input = new SyndFeedInput();
         SyndFeed feed = input.build(new XmlReader(inputStream));
 
-        Log.d(TAG,feed+"");
+        List<SyndEntry> syndEntry = feed.getEntries();
+        Log.d(TAG,syndEntry.get(0).getPublishedDate()+"");
+        Log.d(TAG,syndEntry.get(0).getTitle());
+
     }
 }
