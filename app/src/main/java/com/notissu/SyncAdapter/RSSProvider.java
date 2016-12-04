@@ -10,12 +10,14 @@ import android.support.annotation.Nullable;
  * Created by forhack on 2016-11-26.
  */
 
-public class StubProvider extends ContentProvider {
+public class RSSProvider extends ContentProvider {
     public static final String AUTHORITIES = "com.notissu";
+    private RssDatabase mRssDatabase;
+
 
     @Override
     public boolean onCreate() {
-        return false;
+        return true;
     }
 
     @Nullable
@@ -45,4 +47,5 @@ public class StubProvider extends ContentProvider {
     public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
         return 0;
     }
+
 }
