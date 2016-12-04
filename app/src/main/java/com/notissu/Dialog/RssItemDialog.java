@@ -22,9 +22,9 @@ public class RssItemDialog extends DialogFragment{
     Button btnVisit;
     View rootView;
 
-    public static RssItemDialog newInstance(RssItem rssItem) {
+    public static RssItemDialog newInstance(RssItem rssitem) {
         Bundle args = new Bundle();
-        args.putParcelable(KEY_RSSITEM,rssItem);
+        args.putParcelable(KEY_RSSITEM, rssitem);
         RssItemDialog fragment = new RssItemDialog();
         fragment.setArguments(args);
         return fragment;
@@ -53,9 +53,9 @@ public class RssItemDialog extends DialogFragment{
     }
 
     private void settingWidget() {
-        RssItem rssItem = getArguments().getParcelable(KEY_RSSITEM);
-        tvTitle.setText(rssItem.getTitle());
-        tvTime.setText(rssItem.getDate());
+        RssItem rssitem = getArguments().getParcelable(KEY_RSSITEM);
+        tvTitle.setText(rssitem.getTitle());
+        tvTime.setText(rssitem.getPublishDate());
     }
 
     private void settingListener() {

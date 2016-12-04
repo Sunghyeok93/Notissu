@@ -34,7 +34,7 @@
         </activity>
 
         <provider
-                android:name=".SyncAdapter.StubProvider"
+                android:name=".SyncAdapter.RSSProvider"
                 android:authorities="com.notissu"
                 android:exported="false"
                 android:syncable="true"/>

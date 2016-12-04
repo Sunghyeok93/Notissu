@@ -2,10 +2,8 @@ package com.notissu.SyncAdapter;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
@@ -16,7 +14,7 @@ import android.preference.PreferenceManager;
 public class SyncUtil {
     public static final String ACCOUNT_TYPE = "com.notissu.account";
     private static final String PREF_SETUP_COMPLETE = "PREF_SETUP_COMPLETE";
-    private static final String CONTENT_AUTHORITY = StubProvider.AUTHORITIES;
+    private static final String CONTENT_AUTHORITY = RSSProvider.AUTHORITIES;
     private static final long SYNC_FREQUENCY = 60;// 최소 1초부터라는데 1초는 안되고 최소 1분부터다
 
 
