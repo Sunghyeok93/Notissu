@@ -78,12 +78,21 @@ public class RssDatabase extends SQLiteOpenHelper{
     }
 
     //입력받은 RSS를 DB에 업데이트(수정)하는 메소드
-    public void updateRss(RssItem isExist) {
+    //일치하는 row가 없으면 0 반환
+    public int updateRss(RssItem isExist) {
+        SQLiteDatabase writeDatabase = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(RssItem.Rss.COLUMN_NAME_TITLE,isExist.getTitle());
+        values.put(RssItem.Rss.COLUMN_NAME_LINK,isExist.getLink());
+        values.put(RssItem.Rss.COLUMN_NAME_PUBLISH_DATE,isExist.getPublishDate());
+        values.put(RssItem.Rss.COLUMN_NAME_DESCRIPTION,isExist.getDescription());
 
+        return writeDatabase.update(RssItem.Rss.TABLE_NAME,values,
+                RssItem.Rss.COLUMN_NAME_GUID+"=?",new String[]{isExist.getGuid()});
     }
 
-
     //입력받은 RSS를 DB에 삽입하는 메소드
+    //실패했을 때 -1 반환
     public long addRss(RssItem isExist) {
         SQLiteDatabase writeDatabase = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -95,5 +104,14 @@ public class RssDatabase extends SQLiteOpenHelper{
         values.put(RssItem.Rss.COLUMN_NAME_DESCRIPTION,isExist.getDescription());
 
         return writeDatabase.insert(RssItem.Rss.TABLE_NAME,null,values);
+    }
+
+    //인자로 넣은 GUID와 일치하는 RSS 삭제
+    //일치하는 row가 없으면 0 반환
+    public int deleteRss(String guid) {
+        SQLiteDatabase writeDatabase = this.getWritableDatabase();
+        //두번째 인자를 null로 채우면 모든 row 삭제
+        return writeDatabase.delete(RssItem.Rss.TABLE_NAME,
+                RssItem.Rss.COLUMN_NAME_GUID+"=?",new String[]{guid});
     }
 }

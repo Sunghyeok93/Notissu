@@ -28,9 +28,7 @@ public class SplashActivity extends AppCompatActivity {
 
         SyncUtil.CreateSyncAccount(this);
 
-//        TestUtils.DB.addRss(getApplicationContext());
-//        TestUtils.DB.getRssItemList(getApplicationContext());
-
+        new TestUtils.DB(getApplicationContext());
 
         handler = new Handler(){
             @Override

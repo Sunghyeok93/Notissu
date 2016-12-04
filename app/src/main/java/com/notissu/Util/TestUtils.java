@@ -19,6 +19,12 @@ public class TestUtils {
     private static final String TAG = makeLogTag(TestUtils.class);
 
     public static class DB {
+        public DB(Context context) {
+            addRss(context);
+            getRssItemList(context);
+            updateRss(context);
+            deleteRss(context);
+        }
 
         public static void getRssItemList(Context context) {
             RssDatabase rssDatabase = new RssDatabase(context);
@@ -41,6 +47,28 @@ public class TestUtils {
             else
                 Log.d(TAG, "addRss() : Success");
         }
+
+        public static void updateRss(Context context) {
+            RssDatabase rssDatabase = new RssDatabase(context);
+            //테스트 케이스
+            RssItem rssItem = new RssItem("guid","update","update","update","update");
+            int result = rssDatabase.updateRss(rssItem);
+            if (result <= 0)
+                Log.d(TAG, "updateRss() : Fail");
+            else
+                Log.d(TAG, "updateRss() : Success");
+        }
+
+        public static void deleteRss(Context context) {
+            RssDatabase rssDatabase = new RssDatabase(context);
+            //테스트 케이스
+            int result = rssDatabase.deleteRss("guid");
+            if (result <= 0)
+                Log.d(TAG, "deleteRss() : Fail");
+            else
+                Log.d(TAG, "deleteRss() : Success");
+        }
+
     }
 
 }
