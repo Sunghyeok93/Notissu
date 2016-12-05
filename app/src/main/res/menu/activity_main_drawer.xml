@@ -27,9 +27,10 @@
         <menu>
         </menu>
     </item>
-
     <item
-            android:orderInCategory="2"
-            android:icon="@drawable/ic_drawer_settings_24dp"
-            android:title="설정" />
+        android:orderInCategory="2"
+        android:id="@+id/nav_option"
+        android:icon="@drawable/ic_drawer_settings_24dp"
+        android:title="설정" />
 </menu>
+
