@@ -1,10 +1,5 @@
 package com.notissu.Activity;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -23,6 +18,7 @@ import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Fragment.NoticeTabFragment;
 import com.notissu.Fragment.OptionFragment;
 import com.notissu.Model.NoticeRow;
+import com.notissu.Notification.Alarm;
 import com.notissu.R;
 import com.notissu.Util.ResString;
 import com.notissu.Util.Str;
@@ -38,6 +34,7 @@ public class MainActivity extends AppCompatActivity
     NavigationView navigationView;
     Toolbar toolbar;
     FloatingActionButton fab;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,30 +66,9 @@ public class MainActivity extends AppCompatActivity
         /*위젯에 리스터를 붙여주는 함수*/
         settingListener();
 
-        //string받아 푸쉬알림 띄우는 함수
-        popAlarm("[키워드]");
+        Alarm alarm = new Alarm(this);
+        alarm.popString("ㅎㅎ");
 
-
-    }
-
-
-    // 푸쉬 알림 구현
-    private void popAlarm(String string)
-    {
-        NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
-
-        Notification.Builder mBuilder = new Notification.Builder(this);
-        mBuilder.setSmallIcon(R.drawable.ssu_mark);
-        mBuilder.setTicker("Notification.Builder");
-        mBuilder.setWhen(System.currentTimeMillis());
-        mBuilder.setContentTitle("NOTISSU 공지사항 업데이트");
-        mBuilder.setContentText(string + " 관련 공지사항");
-        mBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
-        mBuilder.setContentIntent(pendingIntent);
-        mBuilder.setAutoCancel(true);
-
-        nm.notify(111, mBuilder.build());
     }
 
     private void initWidget() {
