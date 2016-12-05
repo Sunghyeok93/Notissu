@@ -112,7 +112,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
         //DB에 저장되어 있는 모든 RssItem을 불러들인다.
         RssDatabase rssDatabase = new RssDatabase(getContext());
-        final List<RssItem> DBReceiveRssItemList = rssDatabase.getRssItemList();
+        final List<RssItem> DBRssItemList = rssDatabase.getRssItemList();
         /*DB에 있는 RSS를 모두 가져오려고 하는데, 인자가 없어도 괜찮으려나?? 없어도 괜찮긴한데,
         범용성이 떨어지니깐, 지정한 하나 가져오는건 따로 만들고, 그럼 지정해야하는게 뭐가 있지??
         테이블이야 내부에서 지정하고, 가져올 column들 그건 따로 만들까, 배열로 넣어서 그것만 가져오게 할까?
@@ -121,9 +121,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 
         //서버에서 읽어온 RssItem과 localDB에 저장된 RssItem과 비교해서 있는지 확인한다.
-        for (int i = 0; i < DBReceiveRssItemList.size(); i++) {
+        for (int i = 0; i < DBRssItemList.size(); i++) {
             syncResult.stats.numEntries++;
-            RssItem dbRssItem = DBReceiveRssItemList.get(i);
+            RssItem dbRssItem = DBRssItemList.get(i);
             RssItem isExist = rssMap.get(dbRssItem.getGuid());
             if (isExist != null) {  //같은게 있으면
                 rssMap.remove(dbRssItem.getGuid());
