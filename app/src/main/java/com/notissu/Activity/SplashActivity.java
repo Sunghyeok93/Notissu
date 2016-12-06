@@ -8,6 +8,8 @@ import android.os.Bundle;
 
 import com.notissu.Model.RssItem;
 import com.notissu.R;
+import com.notissu.SyncAdapter.NoticeProvider;
+import com.notissu.SyncAdapter.NoticeProviderImpl;
 import com.notissu.SyncAdapter.SyncUtil;
 import com.notissu.Util.TestUtils;
 
@@ -28,6 +30,7 @@ public class SplashActivity extends AppCompatActivity {
 
         SyncUtil.CreateSyncAccount(this);
 
+        //DB테스트코드
         new TestUtils.DB(getApplicationContext());
 
         handler = new Handler(){
