@@ -22,6 +22,9 @@ public class RssItem implements Parcelable{
     private String link;
     private String description;
     private String publishDate;
+    //MainNotice에서만 값을 가지고
+    //Library에서는 값을 가지지 않는다.
+    private String category;
 
     public RssItem(String guid, String title, String link, String description, String publishDate) {
         this.guid = guid;
@@ -31,36 +34,42 @@ public class RssItem implements Parcelable{
         this.publishDate = publishDate;
     }
 
+    //커서가 인자인 생성자는 DB이외에는 생성되지 않는다.
     public RssItem(Cursor results) {
-        int index = results.getColumnIndex(MainNotice.COLUMN_NAME_ID);
+        int index = results.getColumnIndex(Common.COLUMN_NAME_ID);
         this.id = results.getInt(index);
-        index = results.getColumnIndex(MainNotice.COLUMN_NAME_GUID);
+        index = results.getColumnIndex(Common.COLUMN_NAME_GUID);
         this.guid = results.getString(index);
-        index = results.getColumnIndex(MainNotice.COLUMN_NAME_TITLE);
+        index = results.getColumnIndex(Common.COLUMN_NAME_TITLE);
         this.title = results.getString(index);
-        index = results.getColumnIndex(MainNotice.COLUMN_NAME_LINK);
+        index = results.getColumnIndex(Common.COLUMN_NAME_LINK);
         this.link = results.getString(index);
-        index = results.getColumnIndex(MainNotice.COLUMN_NAME_PUBLISH_DATE);
+        index = results.getColumnIndex(Common.COLUMN_NAME_PUBLISH_DATE);
         this.publishDate = results.getString(index);
-        index = results.getColumnIndex(MainNotice.COLUMN_NAME_DESCRIPTION);
+        index = results.getColumnIndex(Common.COLUMN_NAME_DESCRIPTION);
         this.description = results.getString(index);
     }
 
+
     protected RssItem(Parcel in) {
+        id = in.readInt();
         guid = in.readString();
         title = in.readString();
         link = in.readString();
         description = in.readString();
         publishDate = in.readString();
+        category = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(guid);
         dest.writeString(title);
         dest.writeString(link);
         dest.writeString(description);
         dest.writeString(publishDate);
+        dest.writeString(category);
     }
 
     @Override
@@ -96,8 +105,20 @@ public class RssItem implements Parcelable{
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getGuid() {
         return guid;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     //인자로 넘어온 List<SyndEntry>를 List<RssItem>로 변환하는 메소드
@@ -105,12 +126,28 @@ public class RssItem implements Parcelable{
         List<RssItem> rssItems = new ArrayList<>();
         for (int i = 0; i < syndEntries.size(); i++) {
             SyndEntry se = syndEntries.get(i);
+            String date;
+            if (se.getPublishedDate() == null)
+                date = "";
+            else
+                date = se.getPublishedDate().toString();
+
             RssItem rssItem = new RssItem(se.getUri(),se.getTitle(),se.getLink(),
-                    se.getDescription().getValue(),se.getPublishedDate().toString());
+                    se.getDescription().getValue(), date);
             rssItems.add(rssItem);
         }
         return rssItems;
     }
+
+    public static class Common {
+        public static final String COLUMN_NAME_ID = "id";
+        public static final String COLUMN_NAME_GUID = "guid";
+        public static final String COLUMN_NAME_TITLE = "title";
+        public static final String COLUMN_NAME_LINK = "link";
+        public static final String COLUMN_NAME_PUBLISH_DATE = "published";
+        public static final String COLUMN_NAME_DESCRIPTION = "description";
+    }
+    
     
     /*
     COLUMN_NAME_ID : 테이블의 고유 숫자
@@ -123,12 +160,12 @@ public class RssItem implements Parcelable{
     */
     public static class MainNotice {
         public static final String TABLE_NAME = "main_notice";
-        public static final String COLUMN_NAME_ID = "id";
-        public static final String COLUMN_NAME_GUID = "guid";
-        public static final String COLUMN_NAME_TITLE = "title";
-        public static final String COLUMN_NAME_LINK = "link";
-        public static final String COLUMN_NAME_PUBLISH_DATE = "published";
-        public static final String COLUMN_NAME_DESCRIPTION = "description";
+        public static final String COLUMN_NAME_ID = Common.COLUMN_NAME_ID;
+        public static final String COLUMN_NAME_GUID = Common.COLUMN_NAME_GUID;
+        public static final String COLUMN_NAME_TITLE = Common.COLUMN_NAME_TITLE;
+        public static final String COLUMN_NAME_LINK = Common.COLUMN_NAME_LINK;
+        public static final String COLUMN_NAME_PUBLISH_DATE = Common.COLUMN_NAME_PUBLISH_DATE;
+        public static final String COLUMN_NAME_DESCRIPTION = Common.COLUMN_NAME_DESCRIPTION;
         public static final String COLUMN_NAME_CATEGORY = "category";
     }
 
@@ -142,12 +179,12 @@ public class RssItem implements Parcelable{
     */
     public static class LibraryNotice {
         public static final String TABLE_NAME = "library_notice";
-        public static final String COLUMN_NAME_ID = "id";
-        public static final String COLUMN_NAME_GUID = "guid";
-        public static final String COLUMN_NAME_TITLE = "title";
-        public static final String COLUMN_NAME_LINK = "link";
-        public static final String COLUMN_NAME_PUBLISH_DATE = "published";
-        public static final String COLUMN_NAME_DESCRIPTION = "description";
+        public static final String COLUMN_NAME_ID = Common.COLUMN_NAME_ID;
+        public static final String COLUMN_NAME_GUID = Common.COLUMN_NAME_GUID;
+        public static final String COLUMN_NAME_TITLE = Common.COLUMN_NAME_TITLE;
+        public static final String COLUMN_NAME_LINK = Common.COLUMN_NAME_LINK;
+        public static final String COLUMN_NAME_PUBLISH_DATE = Common.COLUMN_NAME_PUBLISH_DATE;
+        public static final String COLUMN_NAME_DESCRIPTION = Common.COLUMN_NAME_DESCRIPTION;
     }
 
     /*
@@ -157,7 +194,17 @@ public class RssItem implements Parcelable{
     public static class Starred {
         public static final String TABLE_NAME = "starred";
         public static final String COLUMN_NAME_ID = "id";
-        public static final String COLUMN_NAME_NOTICE_ID = "notice_id";
+        public static final String COLUMN_NAME_NOTICE_GUID = "notice_guid";
+    }
+
+    /*
+    COLUMN_NAME_ID : 테이블의 고유 숫자
+    COLUMN_NAME_GUID : Item 식별자
+    */
+    public static class Keyword {
+        public static final String TABLE_NAME = "keyword";
+        public static final String COLUMN_NAME_ID = "id";
+        public static final String COLUMN_NAME_KEYWORD = "keyword";
     }
 }
 
