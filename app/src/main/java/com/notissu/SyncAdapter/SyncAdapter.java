@@ -81,7 +81,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             HashMap<String, RssItem> libraryMap = transToMap(receiveLibraryNotices);
 
             //DB에 저장되어 있는 MainNotice, LibraryNotice RssItem을 불러들인다.
-            RssDatabase rssDatabase = new RssDatabase(getContext());
+            RssDatabase rssDatabase = RssDatabase.getInstance();
             final List<RssItem> DBMainNotice = rssDatabase.getMainNotice(NoticeProvider.NOTICE_SSU_ALL);
             final List<RssItem> DBLibararyNotice = rssDatabase.getLibraryNotice();
 
