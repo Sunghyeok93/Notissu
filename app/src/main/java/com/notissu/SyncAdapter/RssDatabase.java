@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.notissu.Model.RssItem;
-import com.notissu.Util.Str;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.List;
  */
 public class RssDatabase extends SQLiteOpenHelper{
     /** Schema version. */
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 5;
     /** Filename for SQLite file. */
     public static final String DATABASE_NAME = "MainNotice.db";
 
@@ -61,7 +60,7 @@ public class RssDatabase extends SQLiteOpenHelper{
             "CREATE TABLE " +
                     RssItem.Starred.TABLE_NAME + " (" +
                     RssItem.Starred.COLUMN_NAME_ID + " INTEGER PRIMARY KEY," +
-                    RssItem.Starred.COLUMN_NAME_NOTICE_GUID + TYPE_TEXT + ")";
+                    RssItem.Starred.COLUMN_NAME_TITLE + TYPE_TEXT + ")";
 
     //main_notice Table 삭제 SQL 코드
     private static final String SQL_DELETE_STARRED =
@@ -305,9 +304,9 @@ public class RssDatabase extends SQLiteOpenHelper{
         Cursor results = getCursor(RssItem.Starred.TABLE_NAME,null,null);
 
         while (!results.isAfterLast()){
-            int index = results.getColumnIndex(RssItem.Starred.COLUMN_NAME_NOTICE_GUID);
-            String guid = results.getString(index);
-            List<RssItem> rssItem = getNotice(RssItem.Common.COLUMN_NAME_GUID+"=?", new String[]{guid});
+            int index = results.getColumnIndex(RssItem.Starred.COLUMN_NAME_TITLE);
+            String title = results.getString(index);
+            List<RssItem> rssItem = getNotice(RssItem.Common.COLUMN_NAME_TITLE+"=?", new String[]{title});
             // Starred가 여러개 나올 가능성은 배제하고 무조건 첫번째 것만 취한다.
             // 코드에 버그가 없다면 1개는 꼭 나온다.
             if (rssItem.size() > 0) {
@@ -321,20 +320,20 @@ public class RssDatabase extends SQLiteOpenHelper{
     
     //입력받은 RSS를 DB에 삽입하는 메소드
     //실패했을 때 -1 반환
-    public long addStarred(String noticeGuId) {
+    public long addStarred(String noticeTitle) {
         ContentValues values = new ContentValues();
 
-        values.put(RssItem.Starred.COLUMN_NAME_NOTICE_GUID,noticeGuId);
+        values.put(RssItem.Starred.COLUMN_NAME_TITLE,noticeTitle);
 
         return writeDatabase.insert(RssItem.Starred.TABLE_NAME,null,values);
     }
 
     //인자로 넣은 GUID와 일치하는 RSS 삭제
     //일치하는 row가 없으면 0 반환
-    public int deleteStarred(String noticeGuid) {
+    public int deleteStarred(String noticeTitle) {
         //두번째 인자를 null로 채우면 모든 row 삭제
         return writeDatabase.delete(RssItem.Starred.TABLE_NAME,
-                RssItem.Starred.COLUMN_NAME_NOTICE_GUID +"=?",new String[]{noticeGuid});
+                RssItem.Starred.COLUMN_NAME_TITLE +"=?",new String[]{noticeTitle});
     }
 
     /*Keyword 기능들

@@ -70,6 +70,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 for (int i = 0; i < category.length; i++) {
                     if (title.contains("[" + category[i] + "]")) {
                         rssItem.setCategory(category[i]);
+                        break;
                     } else {
                         Log.w(TAG,"Category can not find!");
                     }
@@ -155,10 +156,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                           RssDatabase rssDatabase, SyncResult syncResult) {
         for (RssItem dbRssItem : dbRssItems) {
             syncResult.stats.numEntries++;
-            RssItem existedItem = receiveMap.get(dbRssItem.getGuid());
+            RssItem existedItem = receiveMap.get(dbRssItem.getTitle());
             if (existedItem != null) {  //같은게 있으면
-                receiveMap.remove(dbRssItem.getGuid()); // map에서 지우고
-                if (existedItem.getTitle() != null && !existedItem.getTitle().equals(dbRssItem.getTitle()) ||
+                receiveMap.remove(dbRssItem.getTitle()); // map에서 지우고
+                if (existedItem.getGuid() != null && !existedItem.getGuid().equals(dbRssItem.getGuid()) ||
                         existedItem.getLink() != null && !existedItem.getLink().equals(dbRssItem.getLink()) ||
                         existedItem.getDescription() != null && !existedItem.getDescription().equals(dbRssItem.getDescription()) ||
                         existedItem.getPublishDate() != null && !existedItem.getPublishDate().equals(dbRssItem.getPublishDate()) ||
@@ -175,7 +176,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         HashMap<String, RssItem> rssMap = new HashMap<String, RssItem>();
         for (int i = 0; i < rssItems.size(); i++) {
             RssItem item = rssItems.get(i);
-            rssMap.put(item.getGuid(), item);
+            rssMap.put(item.getTitle(), item);
         }
         return rssMap;
     }

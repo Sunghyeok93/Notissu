@@ -188,7 +188,7 @@ public class TestUtils {
 
             public void addStarred(Context context) {
 
-                long result = rssDatabase.addStarred(rssItem.getGuid());
+                long result = rssDatabase.addStarred(rssItem.getTitle());
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result == -1)
@@ -199,7 +199,7 @@ public class TestUtils {
 
             public void deleteStarred(Context context) {
 
-                int result = rssDatabase.deleteStarred(rssItem.getGuid());
+                int result = rssDatabase.deleteStarred(rssItem.getTitle());
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result <= 0)

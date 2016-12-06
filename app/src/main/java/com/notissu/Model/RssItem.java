@@ -194,7 +194,7 @@ public class RssItem implements Parcelable{
     public static class Starred {
         public static final String TABLE_NAME = "starred";
         public static final String COLUMN_NAME_ID = "id";
-        public static final String COLUMN_NAME_NOTICE_GUID = "notice_guid";
+        public static final String COLUMN_NAME_TITLE = "title";
     }
 
     /*
