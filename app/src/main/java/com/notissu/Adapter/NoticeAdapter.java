@@ -3,12 +3,10 @@ package com.notissu.Adapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.notissu.Model.NoticeRow;
 import com.notissu.Model.RssItem;
 import com.notissu.R;
 

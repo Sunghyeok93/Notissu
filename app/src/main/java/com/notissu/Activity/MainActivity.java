@@ -18,13 +18,11 @@ import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Fragment.NoticeTabFragment;
 import com.notissu.Model.RssItem;
 import com.notissu.Fragment.OptionFragment;
-import com.notissu.Model.NoticeRow;
 import com.notissu.Notification.Alarm;
 import com.notissu.R;
 import com.notissu.SyncAdapter.NoticeProvider;
 import com.notissu.SyncAdapter.NoticeProviderImpl;
 import com.notissu.Util.ResString;
-import com.notissu.Util.Str;
 
 import java.util.ArrayList;
 

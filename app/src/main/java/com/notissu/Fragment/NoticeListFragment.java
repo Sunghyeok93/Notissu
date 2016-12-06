@@ -12,12 +12,10 @@ import android.widget.ListView;
 
 import com.notissu.Adapter.NoticeAdapter;
 import com.notissu.Dialog.RssItemDialog;
-import com.notissu.Model.NoticeRow;
 import com.notissu.Model.RssItem;
 import com.notissu.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class NoticeListFragment extends Fragment {
     private static final String KEY_NOTICE_ROWS = "KEY_NOTICE_ROWS";
