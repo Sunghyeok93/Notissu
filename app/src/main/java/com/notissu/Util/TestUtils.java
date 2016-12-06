@@ -18,6 +18,7 @@ import static com.notissu.Util.LogUtils.makeLogTag;
 public class TestUtils {
     private static final String TAG = makeLogTag(TestUtils.class);
 
+
     public static String getMethodName(StackTraceElement e[]) {
         boolean doNext = false;
         for (StackTraceElement s : e) {
@@ -38,6 +39,7 @@ public class TestUtils {
     }
 
     public static class DB {
+        static RssDatabase rssDatabase = RssDatabase.getInstance();
         public DB(Context context) {
             new Main(context);
             new Library(context);
@@ -59,7 +61,7 @@ public class TestUtils {
             RssItem rssItem = new RssItem("guid","title","link","descript","publish");
 
             public void getMainNotice(Context context) {
-                RssDatabase rssDatabase = new RssDatabase(context);
+
                 List<RssItem> rssItemList = rssDatabase.getMainNotice(NoticeProvider.NOTICE_SSU_ALL);
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
@@ -70,7 +72,6 @@ public class TestUtils {
             }
 
             public void addMainNotice(Context context) {
-                RssDatabase rssDatabase = new RssDatabase(context);
 
                 long result = rssDatabase.addMainNotice(rssItem);
 
@@ -82,7 +83,6 @@ public class TestUtils {
             }
 
             public void updateMainNotice(Context context) {
-                RssDatabase rssDatabase = new RssDatabase(context);
                 //테스트 케이스
                 RssItem rssItem = new RssItem("guid","update","update","update","update");
 
@@ -96,7 +96,6 @@ public class TestUtils {
             }
 
             public void deleteMainNotice(Context context) {
-                RssDatabase rssDatabase = new RssDatabase(context);
                 //테스트 케이스
                 int result = rssDatabase.deleteMainNotice("guid");
 
@@ -122,7 +121,6 @@ public class TestUtils {
             RssItem rssItem = new RssItem("guid","title","link","descript","publish");
 
             public void getLibraryNotice(Context context) {
-                RssDatabase rssDatabase = new RssDatabase(context);
                 List<RssItem> rssItemList = rssDatabase.getLibraryNotice();
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
@@ -133,8 +131,6 @@ public class TestUtils {
             }
 
             public void addLibraryNotice(Context context) {
-                RssDatabase rssDatabase = new RssDatabase(context);
-
                 long result = rssDatabase.addLibraryNotice(rssItem);
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
@@ -145,7 +141,6 @@ public class TestUtils {
             }
 
             public void updateLibraryNotice(Context context) {
-                RssDatabase rssDatabase = new RssDatabase(context);
                 //테스트 케이스
                 RssItem rssItem = new RssItem("guid","update","update","update","update");
 
@@ -159,7 +154,6 @@ public class TestUtils {
             }
 
             public void deleteLibraryNotice(Context context) {
-                RssDatabase rssDatabase = new RssDatabase(context);
                 //테스트 케이스
                 int result = rssDatabase.deleteLibraryNotice(rssItem.getGuid());
 
@@ -183,7 +177,6 @@ public class TestUtils {
             RssItem rssItem = new RssItem("guid","title","link","descript","publish");
 
             public void getStarred(Context context) {
-                RssDatabase rssDatabase = new RssDatabase(context);
                 List<RssItem> rssItemList = rssDatabase.getStarred();
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
@@ -194,9 +187,8 @@ public class TestUtils {
             }
 
             public void addStarred(Context context) {
-                RssDatabase rssDatabase = new RssDatabase(context);
 
-                long result = rssDatabase.addStarred(rssItem.getGuid());
+                long result = rssDatabase.addStarred(rssItem.getTitle());
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result == -1)
@@ -206,9 +198,8 @@ public class TestUtils {
             }
 
             public void deleteStarred(Context context) {
-                RssDatabase rssDatabase = new RssDatabase(context);
 
-                int result = rssDatabase.deleteStarred(rssItem.getGuid());
+                int result = rssDatabase.deleteStarred(rssItem.getTitle());
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result <= 0)
@@ -232,7 +223,6 @@ public class TestUtils {
             String testCase = "keyword";
 
             public boolean getKeywordData(Context context) {
-                RssDatabase rssDatabase = new RssDatabase(context);
                 List<RssItem> rssItemList = rssDatabase.getKeyword(testCase);
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
@@ -246,7 +236,6 @@ public class TestUtils {
             }
 
             public boolean getKeyword(Context context) {
-                RssDatabase rssDatabase = new RssDatabase(context);
                 List<String> rssItemList = rssDatabase.getKeyword();
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
@@ -260,7 +249,6 @@ public class TestUtils {
             }
 
             public void addKeyword(Context context) {
-                RssDatabase rssDatabase = new RssDatabase(context);
 
                 long result = rssDatabase.addKeyword(testCase);
 
@@ -272,7 +260,6 @@ public class TestUtils {
             }
 
             public void deleteKeyword(Context context) {
-                RssDatabase rssDatabase = new RssDatabase(context);
                 //테스트 케이스
                 int result = rssDatabase.deleteKeyword(testCase);
 

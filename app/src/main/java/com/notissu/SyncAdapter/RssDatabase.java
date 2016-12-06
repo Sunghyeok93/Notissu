@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.notissu.Model.RssItem;
-import com.notissu.Util.Str;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.List;
  */
 public class RssDatabase extends SQLiteOpenHelper{
     /** Schema version. */
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 5;
     /** Filename for SQLite file. */
     public static final String DATABASE_NAME = "MainNotice.db";
 
@@ -61,7 +60,7 @@ public class RssDatabase extends SQLiteOpenHelper{
             "CREATE TABLE " +
                     RssItem.Starred.TABLE_NAME + " (" +
                     RssItem.Starred.COLUMN_NAME_ID + " INTEGER PRIMARY KEY," +
-                    RssItem.Starred.COLUMN_NAME_NOTICE_GUID + TYPE_TEXT + ")";
+                    RssItem.Starred.COLUMN_NAME_TITLE + TYPE_TEXT + ")";
 
     //main_notice Table 삭제 SQL 코드
     private static final String SQL_DELETE_STARRED =
@@ -78,10 +77,23 @@ public class RssDatabase extends SQLiteOpenHelper{
     private static final String SQL_DELETE_KEYWORD =
             "DROP TABLE IF EXISTS " + RssItem.Keyword.TABLE_NAME;
 
-    
+    private SQLiteDatabase readDatabase;
+    private SQLiteDatabase writeDatabase;
 
-    public RssDatabase(Context context) {
+    private static RssDatabase instance = null;
+
+    public static void setInstance(Context context) {
+        instance = new RssDatabase(context);
+    }
+
+    public static RssDatabase getInstance() {
+        return instance;
+    }
+
+    private RssDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        readDatabase = this.getReadableDatabase();
+        writeDatabase = this.getWritableDatabase();
     }
 
     @Override
@@ -106,7 +118,6 @@ public class RssDatabase extends SQLiteOpenHelper{
 
     //DB에 있는 모든 RSS를 List형태로 반환하는 메소드
     public Cursor getCursor(String table, String selection, String[] selectionargs) {
-        SQLiteDatabase readDatabase = this.getReadableDatabase();
         Cursor results = readDatabase.query(table, null, selection, selectionargs, null, null, null, null);
         results.moveToFirst();
         return results;
@@ -115,7 +126,6 @@ public class RssDatabase extends SQLiteOpenHelper{
     // guid를 입력해서 Rssitem을 만드는 메소드
     public List<RssItem> getNotice(String selection, String[] selectionargs) {
         List<RssItem> rssItemList = new ArrayList<>();
-        SQLiteDatabase readDatabase = this.getReadableDatabase();
         String query = "select "+
                 RssItem.MainNotice.COLUMN_NAME_ID+","+
                 RssItem.MainNotice.COLUMN_NAME_GUID+","+
@@ -149,7 +159,6 @@ public class RssDatabase extends SQLiteOpenHelper{
             results.moveToNext();
         };
         results.close();
-        readDatabase.close();
         return rssItemList;
     }
 
@@ -187,7 +196,6 @@ public class RssDatabase extends SQLiteOpenHelper{
     //입력받은 RSS를 DB에 삽입하는 메소드
     //실패했을 때 -1 반환
     public long addMainNotice(RssItem isExist) {
-        SQLiteDatabase writeDatabase = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(RssItem.MainNotice.COLUMN_NAME_GUID,isExist.getGuid());
         values.put(RssItem.MainNotice.COLUMN_NAME_TITLE,isExist.getTitle());
@@ -202,7 +210,6 @@ public class RssDatabase extends SQLiteOpenHelper{
     //입력받은 RSS를 DB에 업데이트(수정)하는 메소드
     //일치하는 row가 없으면 0 반환
     public int updateMainNotice(RssItem isExist) {
-        SQLiteDatabase writeDatabase = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(RssItem.MainNotice.COLUMN_NAME_TITLE,isExist.getTitle());
         values.put(RssItem.MainNotice.COLUMN_NAME_LINK,isExist.getLink());
@@ -217,7 +224,6 @@ public class RssDatabase extends SQLiteOpenHelper{
     //인자로 넣은 GUID와 일치하는 RSS 삭제
     //일치하는 row가 없으면 0 반환
     public int deleteMainNotice(String guid) {
-        SQLiteDatabase writeDatabase = this.getWritableDatabase();
         //두번째 인자를 null로 채우면 모든 row 삭제
         return writeDatabase.delete(RssItem.MainNotice.TABLE_NAME,
                 RssItem.MainNotice.COLUMN_NAME_GUID+"=?",new String[]{guid});
@@ -251,7 +257,6 @@ public class RssDatabase extends SQLiteOpenHelper{
     //입력받은 RSS를 DB에 삽입하는 메소드
     //실패했을 때 -1 반환
     public long addLibraryNotice(RssItem isExist) {
-        SQLiteDatabase writeDatabase = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.put(RssItem.LibraryNotice.COLUMN_NAME_GUID,isExist.getGuid());
@@ -266,7 +271,6 @@ public class RssDatabase extends SQLiteOpenHelper{
     //입력받은 RSS를 DB에 업데이트(수정)하는 메소드
     //일치하는 row가 없으면 0 반환
     public int updateLibraryNotice(RssItem isExist) {
-        SQLiteDatabase writeDatabase = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(RssItem.LibraryNotice.COLUMN_NAME_TITLE,isExist.getTitle());
         values.put(RssItem.LibraryNotice.COLUMN_NAME_LINK,isExist.getLink());
@@ -280,7 +284,6 @@ public class RssDatabase extends SQLiteOpenHelper{
     //인자로 넣은 GUID와 일치하는 RSS 삭제
     //일치하는 row가 없으면 0 반환
     public int deleteLibraryNotice(String guid) {
-        SQLiteDatabase writeDatabase = this.getWritableDatabase();
         //두번째 인자를 null로 채우면 모든 row 삭제
         return writeDatabase.delete(RssItem.LibraryNotice.TABLE_NAME,
                 RssItem.LibraryNotice.COLUMN_NAME_GUID+"=?",new String[]{guid});
@@ -301,9 +304,9 @@ public class RssDatabase extends SQLiteOpenHelper{
         Cursor results = getCursor(RssItem.Starred.TABLE_NAME,null,null);
 
         while (!results.isAfterLast()){
-            int index = results.getColumnIndex(RssItem.Starred.COLUMN_NAME_NOTICE_GUID);
-            String guid = results.getString(index);
-            List<RssItem> rssItem = getNotice(RssItem.Common.COLUMN_NAME_GUID+"=?", new String[]{guid});
+            int index = results.getColumnIndex(RssItem.Starred.COLUMN_NAME_TITLE);
+            String title = results.getString(index);
+            List<RssItem> rssItem = getNotice(RssItem.Common.COLUMN_NAME_TITLE+"=?", new String[]{title});
             // Starred가 여러개 나올 가능성은 배제하고 무조건 첫번째 것만 취한다.
             // 코드에 버그가 없다면 1개는 꼭 나온다.
             if (rssItem.size() > 0) {
@@ -317,22 +320,20 @@ public class RssDatabase extends SQLiteOpenHelper{
     
     //입력받은 RSS를 DB에 삽입하는 메소드
     //실패했을 때 -1 반환
-    public long addStarred(String noticeGuId) {
-        SQLiteDatabase writeDatabase = this.getWritableDatabase();
+    public long addStarred(String noticeTitle) {
         ContentValues values = new ContentValues();
 
-        values.put(RssItem.Starred.COLUMN_NAME_NOTICE_GUID,noticeGuId);
+        values.put(RssItem.Starred.COLUMN_NAME_TITLE,noticeTitle);
 
         return writeDatabase.insert(RssItem.Starred.TABLE_NAME,null,values);
     }
 
     //인자로 넣은 GUID와 일치하는 RSS 삭제
     //일치하는 row가 없으면 0 반환
-    public int deleteStarred(String noticeGuid) {
-        SQLiteDatabase writeDatabase = this.getWritableDatabase();
+    public int deleteStarred(String noticeTitle) {
         //두번째 인자를 null로 채우면 모든 row 삭제
         return writeDatabase.delete(RssItem.Starred.TABLE_NAME,
-                RssItem.Starred.COLUMN_NAME_NOTICE_GUID +"=?",new String[]{noticeGuid});
+                RssItem.Starred.COLUMN_NAME_TITLE +"=?",new String[]{noticeTitle});
     }
 
     /*Keyword 기능들
@@ -372,7 +373,6 @@ public class RssDatabase extends SQLiteOpenHelper{
     //입력받은 RSS를 DB에 삽입하는 메소드
     //실패했을 때 -1 반환
     public long addKeyword(String keyword) {
-        SQLiteDatabase writeDatabase = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.put(RssItem.Keyword.COLUMN_NAME_KEYWORD,keyword);
@@ -383,7 +383,6 @@ public class RssDatabase extends SQLiteOpenHelper{
     //인자로 넣은 GUID와 일치하는 RSS 삭제
     //일치하는 row가 없으면 0 반환
     public int deleteKeyword(String keyword) {
-        SQLiteDatabase writeDatabase = this.getWritableDatabase();
         //두번째 인자를 null로 채우면 모든 row 삭제
         return writeDatabase.delete(RssItem.Keyword.TABLE_NAME,
                 RssItem.Keyword.COLUMN_NAME_KEYWORD+"=?",new String[]{keyword});

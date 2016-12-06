@@ -17,7 +17,7 @@ public class NoticeProviderImpl implements NoticeProvider {
     RssDatabase mRssDatabase;
 
     public NoticeProviderImpl(Context context) {
-        mRssDatabase = new RssDatabase(context);
+        mRssDatabase = RssDatabase.getInstance();
     }
 
     @Override
