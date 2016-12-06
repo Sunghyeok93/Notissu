@@ -118,7 +118,11 @@ public class RssDatabase extends SQLiteOpenHelper{
 
     //DB에 있는 모든 RSS를 List형태로 반환하는 메소드
     public Cursor getCursor(String table, String selection, String[] selectionargs) {
-        Cursor results = readDatabase.query(table, null, selection, selectionargs, null, null, null, null);
+        String orderBy = null;
+        if (table == RssItem.MainNotice.TABLE_NAME || table == RssItem.LibraryNotice.TABLE_NAME) {
+            orderBy = RssItem.Common.COLUMN_NAME_PUBLISH_DATE + " DESC ";
+        }
+        Cursor results = readDatabase.query(table, null, selection, selectionargs, null, null, orderBy);
         results.moveToFirst();
         return results;
     }
