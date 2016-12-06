@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,14 +16,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.notissu.Dialog.AddKeywordDialog;
 import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Fragment.NoticeTabFragment;
-import com.notissu.Model.NoticeRow;
+import com.notissu.Model.RssItem;
 import com.notissu.R;
+import com.notissu.SyncAdapter.NoticeProvider;
+import com.notissu.SyncAdapter.NoticeProviderImpl;
 import com.notissu.Util.ResString;
 import com.notissu.Util.Str;
 
@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity
 
         //string받아 푸쉬알림 띄우는 함수
         popAlarm("[키워드]");
-
 
     }
 
@@ -177,13 +176,14 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        NoticeProvider noticeProvider = new NoticeProviderImpl(getApplicationContext());
         if (id == R.id.nav_ssu_notice) {
             fragmentTransaction.replace(R.id.main_fragment_container,NoticeTabFragment.newInstance()).commit();
         } else if (id == R.id.nav_ssu_library) {
-            ArrayList<NoticeRow> noticeRows = Str.OASIS_SSU_NOTICES;
+            ArrayList<RssItem> noticeRows = new ArrayList<>(noticeProvider.getLibraryNotice());
             fragmentTransaction.replace(R.id.main_fragment_container,NoticeListFragment.newInstance(noticeRows)).commit();
         } else if (id == R.id.nav_starred) {
-            ArrayList<NoticeRow> noticeRows = Str.STARRED_SSU_NOTICES;
+            ArrayList<RssItem> noticeRows = new ArrayList<>(noticeProvider.getLibraryNotice());
             fragmentTransaction.replace(R.id.main_fragment_container,NoticeListFragment.newInstance(noticeRows)).commit();
         }
 

@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.notissu.Model.NoticeRow;
+import com.notissu.Model.RssItem;
 import com.notissu.R;
 
 import java.util.ArrayList;
@@ -17,12 +18,12 @@ import java.util.ArrayList;
  * Created by forhack on 2016-10-18.
  */
 
-public class NoticeAdapter extends ArrayAdapter<NoticeRow> {
+public class NoticeAdapter extends ArrayAdapter<RssItem> {
     Context context;
     ViewHolder viewHolder;
-    ArrayList<NoticeRow> noticeRows = new ArrayList<>();
+    ArrayList<RssItem> noticeRows = new ArrayList<>();
 
-    public NoticeAdapter(Context context, ArrayList<NoticeRow> noticeRows) {
+    public NoticeAdapter(Context context, ArrayList<RssItem> noticeRows) {
         super(context, android.R.layout.simple_expandable_list_item_2);
         this.context = context;
         this.noticeRows = noticeRows;
@@ -39,7 +40,7 @@ public class NoticeAdapter extends ArrayAdapter<NoticeRow> {
     }
 
     @Override
-    public NoticeRow getItem(int i) {
+    public RssItem getItem(int i) {
         return noticeRows.get(i);
     }
 
@@ -62,7 +63,7 @@ public class NoticeAdapter extends ArrayAdapter<NoticeRow> {
         }
 
         viewHolder.tvSubject.setText(getItem(i).getTitle());
-        viewHolder.tvTime.setText(getItem(i).getTime());
+        viewHolder.tvTime.setText(getItem(i).getPublishDate());
         viewHolder.cbStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +72,7 @@ public class NoticeAdapter extends ArrayAdapter<NoticeRow> {
         return view;
     }
 
-    public void add(NoticeRow noticeRow) {
+    public void add(RssItem noticeRow) {
         noticeRows.add(noticeRow);
     }
 

@@ -17,6 +17,7 @@ import com.notissu.Model.RssItem;
 import com.notissu.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class NoticeListFragment extends Fragment {
     private static final String KEY_NOTICE_ROWS = "KEY_NOTICE_ROWS";
@@ -24,9 +25,9 @@ public class NoticeListFragment extends Fragment {
     ListView noticeList;
     NoticeAdapter noticeAdapter;
     View rootView;
-    ArrayList<NoticeRow> noticeRows;
+    ArrayList<RssItem> noticeRows;
 
-    public static Fragment newInstance(ArrayList<NoticeRow> noticeRows) {
+    public static Fragment newInstance(ArrayList<RssItem> noticeRows) {
         Bundle bundle = new Bundle();
         //이름 제대로 지정해야한다..
         bundle.putParcelableArrayList(KEY_NOTICE_ROWS,noticeRows);
