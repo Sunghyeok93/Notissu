@@ -26,17 +26,17 @@ public class NoticeProviderImpl implements NoticeProvider {
     }
 
     @Override
-    public List<RssItem> getOasisNotice() {
-        return mRssDatabase.getOasisNotice();
+    public List<RssItem> getLibraryNotice() {
+        return mRssDatabase.getLibraryNotice();
     }
 
     @Override
     public List<RssItem> getStarredNotice() {
-        return mRssDatabase.getStarredNotice();
+        return mRssDatabase.getStarred();
     }
 
     @Override
     public List<RssItem> getKeywordNotice(String keyword) {
-        return null;
+        return mRssDatabase.getKeyword(keyword);
     }
 }

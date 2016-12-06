@@ -33,9 +33,6 @@ public class SplashActivity extends AppCompatActivity {
         //DB테스트코드
         new TestUtils.DB(getApplicationContext());
 
-        NoticeProvider noticeProvider = new NoticeProviderImpl(getApplicationContext());
-        noticeProvider.getMainNotice(NoticeProvider.NOTICE_SSU_ALL);
-
         handler = new Handler(){
             @Override
             public void handleMessage(Message msg) {
