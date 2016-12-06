@@ -55,7 +55,7 @@ public class RssItemDialog extends DialogFragment{
     private void settingWidget() {
         RssItem rssitem = getArguments().getParcelable(KEY_RSSITEM);
         tvTitle.setText(rssitem.getTitle());
-        tvTime.setText(rssitem.getPublishDate());
+        tvTime.setText(rssitem.getPublishDateString());
     }
 
     private void settingListener() {

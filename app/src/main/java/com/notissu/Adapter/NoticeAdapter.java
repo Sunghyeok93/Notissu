@@ -61,7 +61,7 @@ public class NoticeAdapter extends ArrayAdapter<RssItem> {
         }
 
         viewHolder.tvSubject.setText(getItem(i).getTitle());
-        viewHolder.tvTime.setText(getItem(i).getPublishDate());
+        viewHolder.tvTime.setText(getItem(i).getPublishDateString());
         viewHolder.cbStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

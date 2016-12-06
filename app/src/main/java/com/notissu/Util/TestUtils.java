@@ -58,7 +58,7 @@ public class TestUtils {
             }
 
             //테스트 케이스
-            RssItem rssItem = new RssItem("guid","title","link","descript","publish");
+            RssItem rssItem = new RssItem("guid","title","link","descript",123);
 
             public void getMainNotice(Context context) {
 
@@ -84,7 +84,7 @@ public class TestUtils {
 
             public void updateMainNotice(Context context) {
                 //테스트 케이스
-                RssItem rssItem = new RssItem("guid","update","update","update","update");
+                RssItem rssItem = new RssItem("guid","update","update","update",123);
 
                 int result = rssDatabase.updateMainNotice(rssItem);
 
@@ -118,7 +118,7 @@ public class TestUtils {
             }
 
             //테스트 케이스
-            RssItem rssItem = new RssItem("guid","title","link","descript","publish");
+            RssItem rssItem = new RssItem("guid","title","link","descript",123);
 
             public void getLibraryNotice(Context context) {
                 List<RssItem> rssItemList = rssDatabase.getLibraryNotice();
@@ -142,7 +142,7 @@ public class TestUtils {
 
             public void updateLibraryNotice(Context context) {
                 //테스트 케이스
-                RssItem rssItem = new RssItem("guid","update","update","update","update");
+                RssItem rssItem = new RssItem("guid","update","update","update",123);
 
                 int result = rssDatabase.updateLibraryNotice(rssItem);
 
@@ -174,7 +174,7 @@ public class TestUtils {
             }
 
             //테스트 케이스
-            RssItem rssItem = new RssItem("guid","title","link","descript","publish");
+            RssItem rssItem = new RssItem("guid","title","link","descript",123);
 
             public void getStarred(Context context) {
                 List<RssItem> rssItemList = rssDatabase.getStarred();

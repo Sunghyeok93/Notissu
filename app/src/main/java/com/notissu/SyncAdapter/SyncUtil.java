@@ -15,7 +15,7 @@ public class SyncUtil {
     public static final String ACCOUNT_TYPE = "com.notissu.account";
     private static final String PREF_SETUP_COMPLETE = "PREF_SETUP_COMPLETE";
     private static final String CONTENT_AUTHORITY = RSSProvider.AUTHORITIES;
-    private static final long SYNC_FREQUENCY = 6000;// 최소 1초부터라는데 1초는 안되고 최소 1분부터다
+    private static final long SYNC_FREQUENCY = 60;// 최소 1초부터라는데 1초는 안되고 최소 1분부터다
 
 
     public static void CreateSyncAccount(Context context) {

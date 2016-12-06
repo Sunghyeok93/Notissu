@@ -32,7 +32,7 @@ public class RssDatabase extends SQLiteOpenHelper{
                     RssItem.MainNotice.COLUMN_NAME_GUID + TYPE_TEXT + COMMA_SEP +
                     RssItem.MainNotice.COLUMN_NAME_TITLE + TYPE_TEXT + COMMA_SEP +
                     RssItem.MainNotice.COLUMN_NAME_LINK + TYPE_TEXT + COMMA_SEP +
-                    RssItem.MainNotice.COLUMN_NAME_PUBLISH_DATE + TYPE_TEXT + COMMA_SEP +
+                    RssItem.MainNotice.COLUMN_NAME_PUBLISH_DATE + TYPE_INTEGER + COMMA_SEP +
                     RssItem.MainNotice.COLUMN_NAME_DESCRIPTION + TYPE_TEXT + COMMA_SEP +
                     RssItem.MainNotice.COLUMN_NAME_CATEGORY + TYPE_TEXT + ")";
 
@@ -48,7 +48,7 @@ public class RssDatabase extends SQLiteOpenHelper{
                     RssItem.LibraryNotice.COLUMN_NAME_GUID + TYPE_TEXT + COMMA_SEP +
                     RssItem.LibraryNotice.COLUMN_NAME_TITLE + TYPE_TEXT + COMMA_SEP +
                     RssItem.LibraryNotice.COLUMN_NAME_LINK + TYPE_TEXT + COMMA_SEP +
-                    RssItem.LibraryNotice.COLUMN_NAME_PUBLISH_DATE + TYPE_TEXT + COMMA_SEP +
+                    RssItem.LibraryNotice.COLUMN_NAME_PUBLISH_DATE + TYPE_INTEGER + COMMA_SEP +
                     RssItem.LibraryNotice.COLUMN_NAME_DESCRIPTION + TYPE_TEXT + ")";
 
     //main_notice Table 삭제 SQL 코드

@@ -6,7 +6,9 @@ import android.os.Parcelable;
 
 import com.rometools.rome.feed.synd.SyndEntry;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,12 +23,12 @@ public class RssItem implements Parcelable{
     private String title;
     private String link;
     private String description;
-    private String publishDate;
+    private long publishDate;
     //MainNotice에서만 값을 가지고
     //Library에서는 값을 가지지 않는다.
     private String category;
 
-    public RssItem(String guid, String title, String link, String description, String publishDate) {
+    public RssItem(String guid, String title, String link, String description, long publishDate) {
         this.guid = guid;
         this.title = title;
         this.link = link;
@@ -45,7 +47,7 @@ public class RssItem implements Parcelable{
         index = results.getColumnIndex(Common.COLUMN_NAME_LINK);
         this.link = results.getString(index);
         index = results.getColumnIndex(Common.COLUMN_NAME_PUBLISH_DATE);
-        this.publishDate = results.getString(index);
+        this.publishDate = results.getLong(index);
         index = results.getColumnIndex(Common.COLUMN_NAME_DESCRIPTION);
         this.description = results.getString(index);
     }
@@ -57,7 +59,7 @@ public class RssItem implements Parcelable{
         title = in.readString();
         link = in.readString();
         description = in.readString();
-        publishDate = in.readString();
+        publishDate = in.readLong();
         category = in.readString();
     }
 
@@ -68,7 +70,7 @@ public class RssItem implements Parcelable{
         dest.writeString(title);
         dest.writeString(link);
         dest.writeString(description);
-        dest.writeString(publishDate);
+        dest.writeLong(publishDate);
         dest.writeString(category);
     }
 
@@ -89,8 +91,14 @@ public class RssItem implements Parcelable{
         }
     };
 
-    public String getPublishDate() {
+    public long getPublishDate() {
         return publishDate;
+    }
+
+    public String getPublishDateString() {
+        Date date = new Date(publishDate);
+        SimpleDateFormat format = new SimpleDateFormat("MM.dd");
+        return format.format(date);
     }
 
     public String getDescription() {
@@ -126,14 +134,15 @@ public class RssItem implements Parcelable{
         List<RssItem> rssItems = new ArrayList<>();
         for (int i = 0; i < syndEntries.size(); i++) {
             SyndEntry se = syndEntries.get(i);
-            String date;
-            if (se.getPublishedDate() == null)
-                date = "";
-            else
-                date = se.getPublishedDate().toString();
+            long publishDate;
+            if (se.getPublishedDate() == null) {
+                publishDate = 0;
+            } else {
+                publishDate = se.getPublishedDate().getTime();
+            }
 
             RssItem rssItem = new RssItem(se.getUri(),se.getTitle(),se.getLink(),
-                    se.getDescription().getValue(), date);
+                    se.getDescription().getValue(), publishDate);
             rssItems.add(rssItem);
         }
         return rssItems;

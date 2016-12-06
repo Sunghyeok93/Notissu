@@ -162,7 +162,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 if (existedItem.getGuid() != null && !existedItem.getGuid().equals(dbRssItem.getGuid()) ||
                         existedItem.getLink() != null && !existedItem.getLink().equals(dbRssItem.getLink()) ||
                         existedItem.getDescription() != null && !existedItem.getDescription().equals(dbRssItem.getDescription()) ||
-                        existedItem.getPublishDate() != null && !existedItem.getPublishDate().equals(dbRssItem.getPublishDate()) ||
+                        existedItem.getPublishDate() != 0 && existedItem.getPublishDate() != dbRssItem.getPublishDate() ||
                         existedItem.getCategory() != null && !existedItem.getCategory().equals(dbRssItem.getCategory())) {
                     //새로 들어온것이 업데이트 할 필요가 있으면 업데이트를 한다.
                     rssDatabase.updateMainNotice(existedItem);

@@ -68,7 +68,7 @@ public class NoticeListFragment extends Fragment {
                 FragmentManager manager = getFragmentManager();
                 RssItem rssitem = new RssItem("",
                         "[모집·채용]졸업 선배 멘토링 안내[현대상선/농협정보시스템]",
-                        "","","2016.11.09 09:24:01");
+                        "","",12341234);
                 DialogFragment mydialog = RssItemDialog.newInstance(rssitem);
                 mydialog.show(manager,"");
             }
