@@ -69,9 +69,7 @@ public class NoticeListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 FragmentManager manager = getFragmentManager();
-                RssItem rssitem = new RssItem("",
-                        "[모집·채용]졸업 선배 멘토링 안내[현대상선/농협정보시스템]",
-                        "","",12341234);
+                RssItem rssitem = noticeAdapter.getItem(i);
                 DialogFragment mydialog = RssItemDialog.newInstance(rssitem);
                 mydialog.show(manager,"");
             }

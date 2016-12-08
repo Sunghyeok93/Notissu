@@ -95,9 +95,15 @@ public class RssItem implements Parcelable{
         return publishDate;
     }
 
-    public String getPublishDateString() {
+    public String getPublishDateShort() {
         Date date = new Date(publishDate);
         SimpleDateFormat format = new SimpleDateFormat("MM.dd");
+        return format.format(date);
+    }
+
+    public String getPublishDateLong() {
+        Date date = new Date(publishDate);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
         return format.format(date);
     }
 

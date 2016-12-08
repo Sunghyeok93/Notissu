@@ -82,7 +82,7 @@ public class NoticeAdapter extends ArrayAdapter<RssItem> {
         final String title = getItem(index).getTitle();
 
         viewHolder.tvSubject.setText(title);
-        viewHolder.tvTime.setText(getItem(index).getPublishDateString());
+        viewHolder.tvTime.setText(getItem(index).getPublishDateShort());
         viewHolder.cbStar.setChecked(isChecked[index]);
         viewHolder.cbStar.setOnClickListener(new View.OnClickListener() {
             @Override
