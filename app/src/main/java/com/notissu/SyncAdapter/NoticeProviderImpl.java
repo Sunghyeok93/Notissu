@@ -14,11 +14,9 @@ import java.util.List;
 * 그냥 순수하게 분리, 그 이유 밖에 없는것 같다.*/
 
 public class NoticeProviderImpl implements NoticeProvider {
-    RssDatabase mRssDatabase;
+    RssDatabase mRssDatabase = RssDatabase.getInstance();
 
-    public NoticeProviderImpl(Context context) {
-        mRssDatabase = RssDatabase.getInstance();
-    }
+    public NoticeProviderImpl() {}
 
     @Override
     public List<RssItem> getMainNotice(String category) {

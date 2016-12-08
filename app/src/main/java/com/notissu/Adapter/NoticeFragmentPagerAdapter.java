@@ -40,7 +40,7 @@ public class NoticeFragmentPagerAdapter extends FragmentStatePagerAdapter{
     }
 
     public List<RssItem> getSsuNotice(String category) {
-        NoticeProvider noticeProvider = new NoticeProviderImpl(context);
+        NoticeProvider noticeProvider = new NoticeProviderImpl();
         noticeProvider.getMainNotice(NoticeProvider.NOTICE_SSU_ALL);
         switch (category) {
             case "전체":

@@ -154,6 +154,24 @@ public class RssItem implements Parcelable{
         return rssItems;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RssItem)) return false;
+
+        RssItem item = (RssItem) o;
+
+        if (getPublishDate() != item.getPublishDate()) return false;
+        if (getGuid() != null ? !getGuid().equals(item.getGuid()) : item.getGuid() != null)
+            return false;
+        if (getTitle() != null ? !getTitle().equals(item.getTitle()) : item.getTitle() != null)
+            return false;
+        if (getLink() != null ? !getLink().equals(item.getLink()) : item.getLink() != null)
+            return false;
+        return getDescription() != null ? getDescription().equals(item.getDescription()) : item.getDescription() == null;
+
+    }
+
     public static class Common {
         public static final String COLUMN_NAME_ID = "id";
         public static final String COLUMN_NAME_GUID = "guid";
@@ -208,8 +226,8 @@ public class RssItem implements Parcelable{
     */
     public static class Starred {
         public static final String TABLE_NAME = "starred";
-        public static final String COLUMN_NAME_ID = "id";
-        public static final String COLUMN_NAME_TITLE = "title";
+        public static final String COLUMN_NAME_ID = Common.COLUMN_NAME_ID;
+        public static final String COLUMN_NAME_TITLE = Common.COLUMN_NAME_TITLE;
     }
 
     /*
@@ -218,7 +236,7 @@ public class RssItem implements Parcelable{
     */
     public static class Keyword {
         public static final String TABLE_NAME = "keyword";
-        public static final String COLUMN_NAME_ID = "id";
+        public static final String COLUMN_NAME_ID = Common.COLUMN_NAME_ID;
         public static final String COLUMN_NAME_KEYWORD = "keyword";
     }
 }
