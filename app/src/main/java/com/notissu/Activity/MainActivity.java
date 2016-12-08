@@ -160,10 +160,9 @@ public class MainActivity extends AppCompatActivity
             ArrayList<RssItem> noticeRows = new ArrayList<>(noticeProvider.getLibraryNotice());
             fragmentTransaction.replace(R.id.main_fragment_container,NoticeListFragment.newInstance(noticeRows)).commit();
         } else if (id == R.id.nav_starred) {
-            ArrayList<RssItem> noticeRows = new ArrayList<>(noticeProvider.getLibraryNotice());
+            ArrayList<RssItem> noticeRows = new ArrayList<>(noticeProvider.getStarredNotice());
             fragmentTransaction.replace(R.id.main_fragment_container,NoticeListFragment.newInstance(noticeRows)).commit();
-        } else if(id == R.id.nav_option)
-        {
+        } else if(id == R.id.nav_option) {
             fragmentTransaction.replace(R.id.main_fragment_container,new OptionFragment()).commit();
         }
 

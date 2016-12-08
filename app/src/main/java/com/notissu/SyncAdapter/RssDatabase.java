@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class RssDatabase extends SQLiteOpenHelper{
     /** Schema version. */
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 7;
     /** Filename for SQLite file. */
     public static final String DATABASE_NAME = "MainNotice.db";
 
