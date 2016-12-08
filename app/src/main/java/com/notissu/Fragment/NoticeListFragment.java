@@ -14,6 +14,9 @@ import com.notissu.Adapter.NoticeAdapter;
 import com.notissu.Dialog.RssItemDialog;
 import com.notissu.Model.RssItem;
 import com.notissu.R;
+import com.notissu.SyncAdapter.NoticeProvider;
+import com.notissu.SyncAdapter.NoticeProviderImpl;
+import com.notissu.SyncAdapter.RssDatabase;
 
 import java.util.ArrayList;
 
@@ -23,11 +26,9 @@ public class NoticeListFragment extends Fragment {
     ListView noticeList;
     NoticeAdapter noticeAdapter;
     View rootView;
-    ArrayList<RssItem> noticeRows;
 
     public static Fragment newInstance(ArrayList<RssItem> noticeRows) {
         Bundle bundle = new Bundle();
-        //이름 제대로 지정해야한다..
         bundle.putParcelableArrayList(KEY_NOTICE_ROWS,noticeRows);
         Fragment fragment = new NoticeListFragment();
         fragment.setArguments(bundle);
@@ -49,16 +50,18 @@ public class NoticeListFragment extends Fragment {
 
     private void initWidget() {
         noticeList = (ListView) rootView.findViewById(R.id.notice_list);
-        noticeAdapter = new NoticeAdapter(getContext());
     }
 
     private void settingWidget() {
+
         Bundle bundle = getArguments();
-        this.noticeRows = bundle.getParcelableArrayList(KEY_NOTICE_ROWS);
-        noticeList.setAdapter(noticeAdapter);
-        for (int i=0;i<noticeRows.size();i++) {
-            noticeAdapter.add(noticeRows.get(i));
-        }
+        //ListView에 집어넣을 데이터 List
+        ArrayList<RssItem> noticeList = bundle.getParcelableArrayList(KEY_NOTICE_ROWS);
+        RssDatabase rssDatabase = RssDatabase.getInstance();
+        //즐겨찾기에 추가된 List
+        ArrayList<RssItem> starredList = new ArrayList<>(rssDatabase.getStarred());
+        noticeAdapter = new NoticeAdapter(getContext(),noticeList, starredList);
+        this.noticeList.setAdapter(noticeAdapter);
     }
 
     private void settingListener() {
@@ -66,9 +69,7 @@ public class NoticeListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 FragmentManager manager = getFragmentManager();
-                RssItem rssitem = new RssItem("",
-                        "[모집·채용]졸업 선배 멘토링 안내[현대상선/농협정보시스템]",
-                        "","",12341234);
+                RssItem rssitem = noticeAdapter.getItem(i);
                 DialogFragment mydialog = RssItemDialog.newInstance(rssitem);
                 mydialog.show(manager,"");
             }

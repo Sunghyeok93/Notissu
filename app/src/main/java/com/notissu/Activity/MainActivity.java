@@ -153,17 +153,21 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        NoticeProvider noticeProvider = new NoticeProviderImpl(getApplicationContext());
+        NoticeProvider noticeProvider = new NoticeProviderImpl();
+
         if (id == R.id.nav_ssu_notice) {
+            //Main 공지사항
             fragmentTransaction.replace(R.id.main_fragment_container,NoticeTabFragment.newInstance()).commit();
         } else if (id == R.id.nav_ssu_library) {
-            ArrayList<RssItem> noticeRows = new ArrayList<>(noticeProvider.getLibraryNotice());
-            fragmentTransaction.replace(R.id.main_fragment_container,NoticeListFragment.newInstance(noticeRows)).commit();
+            //도서관 공지사항
+            ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getLibraryNotice());
+            fragmentTransaction.replace(R.id.main_fragment_container,NoticeListFragment.newInstance(noticeList)).commit();
         } else if (id == R.id.nav_starred) {
-            ArrayList<RssItem> noticeRows = new ArrayList<>(noticeProvider.getLibraryNotice());
-            fragmentTransaction.replace(R.id.main_fragment_container,NoticeListFragment.newInstance(noticeRows)).commit();
-        } else if(id == R.id.nav_option)
-        {
+            //즐겨찾기
+            ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getStarredNotice());
+            fragmentTransaction.replace(R.id.main_fragment_container,NoticeListFragment.newInstance(noticeList)).commit();
+        } else if(id == R.id.nav_option) {
+            //설정 공지사항
             fragmentTransaction.replace(R.id.main_fragment_container,new OptionFragment()).commit();
         }
 
