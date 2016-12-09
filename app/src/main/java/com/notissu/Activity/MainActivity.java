@@ -213,7 +213,8 @@ public class MainActivity extends AppCompatActivity
 
         return true;
     }
-    public void drawKeyword()
+    // 앱 실행시 데이터베이스에서 키워드 아이템 받아오기
+    public void drawKeyword() 
     {
         Menu menu = navigationView.getMenu().getItem(2).getSubMenu();
         List<String> keywordList = rssDatabase.getKeyword();
@@ -224,12 +225,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
     public void delKeyword(String itemName, int DEL_ALL_KEWORD){
-        Log.e("Android", "delKeyword 실행");
 
         Menu menu = navigationView.getMenu().getItem(2).getSubMenu();
         int itemId = 0;
         // 내가 지우고자 하는 키워드의 이름으로 아이템을 찾고 아이디를 받아옴
-        Log.e("Android", "delKeyword For문 전");
 
         for(int i=0;i< menu.size();i++) {
             Log.e("Android", "delKeyword For문 if 문 실행 전");
@@ -238,9 +237,7 @@ public class MainActivity extends AppCompatActivity
              itemId = menu.getItem(i).getItemId();
             }
         }
-        Log.e("Android", "데이터베이스 삭제 전");
         rssDatabase.deleteKeyword(itemName);
-        Log.e("Android", "메뉴 삭제 전");
         menu.removeItem(itemId);
 
         // 키워드 전체삭제 코드
