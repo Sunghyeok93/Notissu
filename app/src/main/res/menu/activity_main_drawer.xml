@@ -22,7 +22,8 @@
                 android:title="즐겨찾기" />
         </menu>
     </item>
-    <item android:title="키워드"
+    <item
+        android:title="키워드"
         android:id="@+id/group_keyword">
         <menu>
         </menu>
