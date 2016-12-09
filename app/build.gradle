@@ -28,5 +28,5 @@ dependencies {
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:support-v4:24.2.1'
     testCompile 'junit:junit:4.12'
-    compile files('E:/program/android/NotiSSU/libs/rome-1.7.0.jar')
+    compile files('C:/Users/Sunghyeok/Documents/ssunotice/libs/rome-1.7.0.jar')
 }
