@@ -6,12 +6,10 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.notissu.Model.RssItem;
 import com.notissu.R;
+import com.notissu.SyncAdapter.RssDatabase;
 import com.notissu.SyncAdapter.SyncUtil;
 import com.notissu.Util.TestUtils;
-
-import java.util.List;
 
 import static com.notissu.Util.LogUtils.makeLogTag;
 
@@ -27,8 +25,10 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         SyncUtil.CreateSyncAccount(this);
+        RssDatabase.setInstance(getApplicationContext());
 
-        new TestUtils.DB(getApplicationContext());
+        //DB테스트코드
+        new TestUtils.DB();
 
         handler = new Handler(){
             @Override

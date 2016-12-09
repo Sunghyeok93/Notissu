@@ -6,7 +6,9 @@ import android.os.Parcelable;
 
 import com.rometools.rome.feed.synd.SyndEntry;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,9 +23,12 @@ public class RssItem implements Parcelable{
     private String title;
     private String link;
     private String description;
-    private String publishDate;
+    private long publishDate;
+    //MainNotice에서만 값을 가지고
+    //Library에서는 값을 가지지 않는다.
+    private String category;
 
-    public RssItem(String guid, String title, String link, String description, String publishDate) {
+    public RssItem(String guid, String title, String link, String description, long publishDate) {
         this.guid = guid;
         this.title = title;
         this.link = link;
@@ -31,36 +36,42 @@ public class RssItem implements Parcelable{
         this.publishDate = publishDate;
     }
 
+    //커서가 인자인 생성자는 DB이외에는 생성되지 않는다.
     public RssItem(Cursor results) {
-        int index = results.getColumnIndex(Rss.COLUMN_NAME_ID);
+        int index = results.getColumnIndex(Common.COLUMN_NAME_ID);
         this.id = results.getInt(index);
-        index = results.getColumnIndex(Rss.COLUMN_NAME_GUID);
+        index = results.getColumnIndex(Common.COLUMN_NAME_GUID);
         this.guid = results.getString(index);
-        index = results.getColumnIndex(Rss.COLUMN_NAME_TITLE);
+        index = results.getColumnIndex(Common.COLUMN_NAME_TITLE);
         this.title = results.getString(index);
-        index = results.getColumnIndex(Rss.COLUMN_NAME_LINK);
+        index = results.getColumnIndex(Common.COLUMN_NAME_LINK);
         this.link = results.getString(index);
-        index = results.getColumnIndex(Rss.COLUMN_NAME_PUBLISH_DATE);
-        this.publishDate = results.getString(index);
-        index = results.getColumnIndex(Rss.COLUMN_NAME_DESCRIPTION);
+        index = results.getColumnIndex(Common.COLUMN_NAME_PUBLISH_DATE);
+        this.publishDate = results.getLong(index);
+        index = results.getColumnIndex(Common.COLUMN_NAME_DESCRIPTION);
         this.description = results.getString(index);
     }
 
+
     protected RssItem(Parcel in) {
+        id = in.readInt();
         guid = in.readString();
         title = in.readString();
         link = in.readString();
         description = in.readString();
-        publishDate = in.readString();
+        publishDate = in.readLong();
+        category = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(guid);
         dest.writeString(title);
         dest.writeString(link);
         dest.writeString(description);
-        dest.writeString(publishDate);
+        dest.writeLong(publishDate);
+        dest.writeString(category);
     }
 
     @Override
@@ -80,8 +91,20 @@ public class RssItem implements Parcelable{
         }
     };
 
-    public String getPublishDate() {
+    public long getPublishDate() {
         return publishDate;
+    }
+
+    public String getPublishDateShort() {
+        Date date = new Date(publishDate);
+        SimpleDateFormat format = new SimpleDateFormat("MM.dd");
+        return format.format(date);
+    }
+
+    public String getPublishDateLong() {
+        Date date = new Date(publishDate);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy년 MM월 dd일 HH:mm");
+        return format.format(date);
     }
 
     public String getDescription() {
@@ -96,8 +119,20 @@ public class RssItem implements Parcelable{
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getGuid() {
         return guid;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     //인자로 넘어온 List<SyndEntry>를 List<RssItem>로 변환하는 메소드
@@ -105,12 +140,47 @@ public class RssItem implements Parcelable{
         List<RssItem> rssItems = new ArrayList<>();
         for (int i = 0; i < syndEntries.size(); i++) {
             SyndEntry se = syndEntries.get(i);
+            long publishDate;
+            if (se.getPublishedDate() == null) {
+                publishDate = 0;
+            } else {
+                publishDate = se.getPublishedDate().getTime();
+            }
+
             RssItem rssItem = new RssItem(se.getUri(),se.getTitle(),se.getLink(),
-                    se.getDescription().getValue(),se.getPublishedDate().toString());
+                    se.getDescription().getValue(), publishDate);
             rssItems.add(rssItem);
         }
         return rssItems;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof RssItem)) return false;
+
+        RssItem item = (RssItem) o;
+
+        if (getPublishDate() != item.getPublishDate()) return false;
+        if (getGuid() != null ? !getGuid().equals(item.getGuid()) : item.getGuid() != null)
+            return false;
+        if (getTitle() != null ? !getTitle().equals(item.getTitle()) : item.getTitle() != null)
+            return false;
+        if (getLink() != null ? !getLink().equals(item.getLink()) : item.getLink() != null)
+            return false;
+        return getDescription() != null ? getDescription().equals(item.getDescription()) : item.getDescription() == null;
+
+    }
+
+    public static class Common {
+        public static final String COLUMN_NAME_ID = "id";
+        public static final String COLUMN_NAME_GUID = "guid";
+        public static final String COLUMN_NAME_TITLE = "title";
+        public static final String COLUMN_NAME_LINK = "link";
+        public static final String COLUMN_NAME_PUBLISH_DATE = "published";
+        public static final String COLUMN_NAME_DESCRIPTION = "description";
+    }
+    
     
     /*
     COLUMN_NAME_ID : 테이블의 고유 숫자
@@ -119,15 +189,55 @@ public class RssItem implements Parcelable{
     COLUMN_NAME_LINK : 이동 링크
     COLUMN_NAME_PUBLISH_DATE : 작성된 시간
     COLUMN_NAME_DESCRIPTION : 설명
+    COLUMN_NAME_CATEGORY : 카테고리(전체,학사,장학 등)
     */
-    public static class Rss {
-        public static final String TABLE_NAME = "rss";
-        public static final String COLUMN_NAME_ID = "id";
-        public static final String COLUMN_NAME_GUID = "guid";
-        public static final String COLUMN_NAME_TITLE = "title";
-        public static final String COLUMN_NAME_LINK = "link";
-        public static final String COLUMN_NAME_PUBLISH_DATE = "published";
-        public static final String COLUMN_NAME_DESCRIPTION = "description";
+    public static class MainNotice {
+        public static final String TABLE_NAME = "main_notice";
+        public static final String COLUMN_NAME_ID = Common.COLUMN_NAME_ID;
+        public static final String COLUMN_NAME_GUID = Common.COLUMN_NAME_GUID;
+        public static final String COLUMN_NAME_TITLE = Common.COLUMN_NAME_TITLE;
+        public static final String COLUMN_NAME_LINK = Common.COLUMN_NAME_LINK;
+        public static final String COLUMN_NAME_PUBLISH_DATE = Common.COLUMN_NAME_PUBLISH_DATE;
+        public static final String COLUMN_NAME_DESCRIPTION = Common.COLUMN_NAME_DESCRIPTION;
+        public static final String COLUMN_NAME_CATEGORY = "category";
+    }
+
+    /*
+    COLUMN_NAME_ID : 테이블의 고유 숫자
+    COLUMN_NAME_GUID : Item 식별자
+    COLUMN_NAME_TITLE : item 제목
+    COLUMN_NAME_LINK : 이동 링크
+    COLUMN_NAME_PUBLISH_DATE : 작성된 시간
+    COLUMN_NAME_DESCRIPTION : 설명
+    */
+    public static class LibraryNotice {
+        public static final String TABLE_NAME = "library_notice";
+        public static final String COLUMN_NAME_ID = Common.COLUMN_NAME_ID;
+        public static final String COLUMN_NAME_GUID = Common.COLUMN_NAME_GUID;
+        public static final String COLUMN_NAME_TITLE = Common.COLUMN_NAME_TITLE;
+        public static final String COLUMN_NAME_LINK = Common.COLUMN_NAME_LINK;
+        public static final String COLUMN_NAME_PUBLISH_DATE = Common.COLUMN_NAME_PUBLISH_DATE;
+        public static final String COLUMN_NAME_DESCRIPTION = Common.COLUMN_NAME_DESCRIPTION;
+    }
+
+    /*
+    COLUMN_NAME_ID : 테이블의 고유 숫자
+    COLUMN_NAME_GUID : Item 식별자
+    */
+    public static class Starred {
+        public static final String TABLE_NAME = "starred";
+        public static final String COLUMN_NAME_ID = Common.COLUMN_NAME_ID;
+        public static final String COLUMN_NAME_TITLE = Common.COLUMN_NAME_TITLE;
+    }
+
+    /*
+    COLUMN_NAME_ID : 테이블의 고유 숫자
+    COLUMN_NAME_GUID : Item 식별자
+    */
+    public static class Keyword {
+        public static final String TABLE_NAME = "keyword";
+        public static final String COLUMN_NAME_ID = Common.COLUMN_NAME_ID;
+        public static final String COLUMN_NAME_KEYWORD = "keyword";
     }
 }
 

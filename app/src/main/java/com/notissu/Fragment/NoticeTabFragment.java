@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import com.notissu.Adapter.NoticeFragmentPagerAdapter;
 import com.notissu.R;
 import com.notissu.Util.ResString;
-import com.notissu.Util.Str;
 
 public class NoticeTabFragment extends Fragment {
     TabLayout tabLayout;
@@ -38,18 +37,19 @@ public class NoticeTabFragment extends Fragment {
     }
 
     private void settingWidget() {
-        String[] tabStringList = ResString.getInstance().getStringArray(Str.RES_SSU_NOTICES);
+        String[] tabStringList = ResString.getInstance().getStringArray(ResString.RES_SSU_NOTICES);
 
         for (int i=0;i<tabStringList.length;i++) {
             tabLayout.addTab(tabLayout.newTab().setText(tabStringList[i]));
         }
 
         NoticeFragmentPagerAdapter noticeFragmentPagerAdapter =
-                new NoticeFragmentPagerAdapter(getFragmentManager(),tabLayout.getTabCount(),tabStringList);
+                new NoticeFragmentPagerAdapter(getFragmentManager(), getContext(), tabLayout.getTabCount(), tabStringList);
         viewPager.setAdapter(noticeFragmentPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
     }
+
     private void settingListener() {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
             @Override

@@ -1,5 +1,7 @@
 package com.notissu.Dialog;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -17,10 +19,12 @@ import com.notissu.R;
 
 public class RssItemDialog extends DialogFragment{
     private static final String KEY_RSSITEM = "KEY_RSSITEM";
-    TextView tvTitle;
-    TextView tvTime;
-    Button btnVisit;
-    View rootView;
+    View mRootView;
+    TextView mTvTitle;
+    TextView mTvTime;
+    Button mBtnVisit;
+
+    RssItem mRssitem;
 
     public static RssItemDialog newInstance(RssItem rssitem) {
         Bundle args = new Bundle();
@@ -33,7 +37,7 @@ public class RssItemDialog extends DialogFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.dialog_rssitem, null, false);
+        mRootView = inflater.inflate(R.layout.dialog_rssitem, null, false);
 
 
         /*위젯을 초기화하는 함수*/
@@ -43,24 +47,31 @@ public class RssItemDialog extends DialogFragment{
         /*위젯에 리스터를 붙여주는 함수*/
         settingListener();
 
-        return rootView;
+        return mRootView;
     }
 
     private void initWidget() {
-        btnVisit = (Button) rootView.findViewById(R.id.rssitem_btn_visit_site);
-        tvTitle = (TextView) rootView.findViewById(R.id.rssitem_tv_title);
-        tvTime = (TextView) rootView.findViewById(R.id.rssitem_tv_time);
+        mBtnVisit = (Button) mRootView.findViewById(R.id.rssitem_btn_visit_site);
+        mTvTitle = (TextView) mRootView.findViewById(R.id.rssitem_tv_title);
+        mTvTime = (TextView) mRootView.findViewById(R.id.rssitem_tv_time);
     }
 
     private void settingWidget() {
-        RssItem rssitem = getArguments().getParcelable(KEY_RSSITEM);
-        tvTitle.setText(rssitem.getTitle());
-        tvTime.setText(rssitem.getPublishDate());
+        mRssitem = getArguments().getParcelable(KEY_RSSITEM);
+        mTvTitle.setText(mRssitem.getTitle());
+        mTvTime.setText(mRssitem.getPublishDateLong());
     }
 
     private void settingListener() {
-
+        mBtnVisit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(mRssitem.getLink()));
+                startActivity(intent);
+                dismiss();
+            }
+        });
     }
-
-
 }

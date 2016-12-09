@@ -25,6 +25,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:textSize="16sp"
+        android:maxLength="5"
         android:text="11.09" />
 
     <LinearLayout

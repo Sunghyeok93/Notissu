@@ -16,12 +16,13 @@ import android.view.View;
 import com.notissu.Dialog.AddKeywordDialog;
 import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Fragment.NoticeTabFragment;
+import com.notissu.Model.RssItem;
 import com.notissu.Fragment.OptionFragment;
-import com.notissu.Model.NoticeRow;
 import com.notissu.Notification.Alarm;
 import com.notissu.R;
+import com.notissu.SyncAdapter.NoticeProvider;
+import com.notissu.SyncAdapter.NoticeProviderImpl;
 import com.notissu.Util.ResString;
-import com.notissu.Util.Str;
 
 import java.util.ArrayList;
 
@@ -42,22 +43,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-       fab.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               AddKeywordDialog dialogFragment = AddKeywordDialog.newInstance();
-               dialogFragment.setOnAddKeywordListner(new AddKeywordDialog.OnAddKeywordListner() {
-                   @Override
-                   public void onAdd(Bundle bundle) {
-                       String name = bundle.getString(AddKeywordDialog.KEY_KEYWORD);
-                       if (name != null)
-                           addNewItem(name);
-                   }
-               });
-               dialogFragment.show(getSupportFragmentManager(),"");
-           }
-       });
         
         /*위젯을 초기화하는 함수*/
         initWidget();
@@ -81,6 +66,7 @@ public class MainActivity extends AppCompatActivity
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
 
     }
 
@@ -95,6 +81,21 @@ public class MainActivity extends AppCompatActivity
     private void settingListener() {
         drawer.setDrawerListener(toggle);
         navigationView.setNavigationItemSelectedListener(this);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddKeywordDialog dialogFragment = AddKeywordDialog.newInstance();
+                dialogFragment.setOnAddKeywordListner(new AddKeywordDialog.OnAddKeywordListner() {
+                    @Override
+                    public void onAdd(Bundle bundle) {
+                        String name = bundle.getString(AddKeywordDialog.KEY_KEYWORD);
+                        if (name != null)
+                            addNewItem(name);
+                    }
+                });
+                dialogFragment.show(getSupportFragmentManager(),"");
+            }
+        });
     }
 
 
@@ -152,16 +153,21 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        NoticeProvider noticeProvider = new NoticeProviderImpl();
+
         if (id == R.id.nav_ssu_notice) {
+            //Main 공지사항
             fragmentTransaction.replace(R.id.main_fragment_container,NoticeTabFragment.newInstance()).commit();
         } else if (id == R.id.nav_ssu_library) {
-            ArrayList<NoticeRow> noticeRows = Str.OASIS_SSU_NOTICES;
-            fragmentTransaction.replace(R.id.main_fragment_container,NoticeListFragment.newInstance(noticeRows)).commit();
+            //도서관 공지사항
+            ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getLibraryNotice());
+            fragmentTransaction.replace(R.id.main_fragment_container,NoticeListFragment.newInstance(noticeList)).commit();
         } else if (id == R.id.nav_starred) {
-            ArrayList<NoticeRow> noticeRows = Str.STARRED_SSU_NOTICES;
-            fragmentTransaction.replace(R.id.main_fragment_container,NoticeListFragment.newInstance(noticeRows)).commit();
-        } else if(id == R.id.nav_option)
-        {
+            //즐겨찾기
+            ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getStarredNotice());
+            fragmentTransaction.replace(R.id.main_fragment_container,NoticeListFragment.newInstance(noticeList)).commit();
+        } else if(id == R.id.nav_option) {
+            //설정 공지사항
             fragmentTransaction.replace(R.id.main_fragment_container,new OptionFragment()).commit();
         }
 
@@ -172,9 +178,8 @@ public class MainActivity extends AppCompatActivity
 
     // itemName을 키워드 이름 받아와서 네비게이션에 메뉴 추가
     public boolean addNewItem(String itemName){
-        Menu menu = navigationView.getMenu();
-        menu.getItem(2).getSubMenu().add(R.id.group_keyword,Menu.NONE,1,itemName).setIcon(R.drawable.ic_menu_send);
-        //menu.add(R.id.group_keyword,Menu.NONE,1,itemName).setIcon(R.drawable.ic_menu_send);
+        Menu menu = navigationView.getMenu().getItem(2).getSubMenu();
+        menu.add(R.id.group_keyword,Menu.NONE,1,itemName).setIcon(R.drawable.ic_menu_send);
 
         return true;
     }

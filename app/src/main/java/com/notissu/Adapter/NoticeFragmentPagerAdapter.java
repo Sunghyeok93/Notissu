@@ -1,14 +1,17 @@
 package com.notissu.Adapter;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.notissu.Fragment.NoticeListFragment;
-import com.notissu.Model.NoticeRow;
-import com.notissu.Util.Str;
+import com.notissu.Model.RssItem;
+import com.notissu.SyncAdapter.NoticeProvider;
+import com.notissu.SyncAdapter.NoticeProviderImpl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.notissu.Util.LogUtils.makeLogTag;
 
@@ -18,40 +21,46 @@ import static com.notissu.Util.LogUtils.makeLogTag;
 
 public class NoticeFragmentPagerAdapter extends FragmentStatePagerAdapter{
     private static final String TAG = makeLogTag(NoticeFragmentPagerAdapter.class);
+    private Context context;
     private int tabCount;
     private String[] tabStringList;
-    public NoticeFragmentPagerAdapter(FragmentManager fm, int tabCount, String[] tabStringList) {
+
+
+    public NoticeFragmentPagerAdapter(FragmentManager fm, Context context, int tabCount, String[] tabStringList) {
         super(fm);
+        this.context = context;
         this.tabCount = tabCount;
         this.tabStringList = tabStringList;
     }
 
     @Override
     public Fragment getItem(int position) {
-        ArrayList<NoticeRow> noticeRows = getSsuNotice(tabStringList[position]);
+        ArrayList<RssItem> noticeRows = new ArrayList<>(getSsuNotice(tabStringList[position]));
         return NoticeListFragment.newInstance(noticeRows);
     }
 
-    public ArrayList<NoticeRow> getSsuNotice(String category) {
+    public List<RssItem> getSsuNotice(String category) {
+        NoticeProvider noticeProvider = new NoticeProviderImpl();
+        noticeProvider.getMainNotice(NoticeProvider.NOTICE_SSU_ALL);
         switch (category) {
             case "전체":
-                return Str.ALL_SSU_NOTICES;
+                return noticeProvider.getMainNotice(NoticeProvider.NOTICE_SSU_ALL);
             case "학사":
-                return Str.HACKSA_SSU_NOTICES;
+                return noticeProvider.getMainNotice(NoticeProvider.NOTICE_SSU_HACKSA);
             case "장학":
-                return Str.JANGHACK_SSU_NOTICES;
+                return noticeProvider.getMainNotice(NoticeProvider.NOTICE_SSU_JANGHACK);
             case "국제교류":
-                return Str.KUCKJE_SSU_NOTICES;
+                return noticeProvider.getMainNotice(NoticeProvider.NOTICE_SSU_KUCKJE);
             case "모집,채용":
-                return Str.MOJIP_SSU_NOTICES;
+                return noticeProvider.getMainNotice(NoticeProvider.NOTICE_SSU_MOJIP);
             case "교내행사":
-                return Str.KYONE_SSU_NOTICES;
+                return noticeProvider.getMainNotice(NoticeProvider.NOTICE_SSU_KYONE);
             case "교외행사":
-                return Str.KYOWAE_SSU_NOTICES;
+                return noticeProvider.getMainNotice(NoticeProvider.NOTICE_SSU_KYOWAE);
             case "봉사":
-                return Str.BONGSA_SSU_NOTICES;
+                return noticeProvider.getMainNotice(NoticeProvider.NOTICE_SSU_BONGSA);
             default:
-                return Str.ALL_SSU_NOTICES;
+                return noticeProvider.getMainNotice(NoticeProvider.NOTICE_SSU_ALL);
         }
     }
 
