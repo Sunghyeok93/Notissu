@@ -20,8 +20,10 @@
     android:layout_margin="@dimen/fab_margin"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center">
+    android:gravity="center"
+    android:weightSum="3">
     <Button
+        android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
@@ -30,6 +32,7 @@
         android:onClick = "YesKeywordClick"
 />
     <Button
+        android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"

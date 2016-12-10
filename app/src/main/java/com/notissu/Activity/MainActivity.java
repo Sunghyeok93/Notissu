@@ -9,14 +9,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.notissu.Dialog.AddKeywordDialog;
-import com.notissu.Dialog.DelKeywordDialog;
 import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Fragment.NoticeTabFragment;
 import com.notissu.Fragment.OptionFragment;
@@ -103,6 +101,12 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    public void hideFloatingActionButton() {
+        fab.hide();
+    };
+    public void showFloatingActionButton() {
+        fab.show();
+    };
 
     @Override
     public void onBackPressed() {
@@ -133,20 +137,7 @@ public class MainActivity extends AppCompatActivity
 
         if(id == R.id.item_add_keyword)
         {
-            DelKeywordDialog dialogFragment = DelKeywordDialog.newInstance();
-            dialogFragment.setOnDelKeywordListner(new DelKeywordDialog.OnAddKeywordListner() {
-                @Override
-                public void onDel(Bundle bundle) {
-                    String name = bundle.getString(DelKeywordDialog.DEL_KEY_KEYWORD);
-                    if (name != null) {
 
-                        Menu menu = navigationView.getMenu().getItem(2).getSubMenu();
-                        delKeyword((String)menu.getItem(0).getTitle(),0);
-                    }
-                }
-            });
-            dialogFragment.show(getSupportFragmentManager(),"");
-            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -159,10 +150,15 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+
+        fab.show();
+
         int id = item.getItemId();
         int groupid = item.getGroupId(); // keyword 그룹아이디 가져오기
         String keywordName = (String) item.getTitle(); // keyword 구분을 위한 제목 가져오기
+
         Toast.makeText(getApplicationContext(),"  "+keywordName,Toast.LENGTH_LONG).show();
+
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         NoticeProvider noticeProvider = new NoticeProviderImpl();
 
@@ -223,27 +219,5 @@ public class MainActivity extends AppCompatActivity
                 menu.add(R.id.group_keyword, i, 1, keywordList.get(i - 1)).setIcon(R.drawable.ic_menu_send);
             }
         }
-    }
-    public void delKeyword(String itemName, int DEL_ALL_KEWORD){
-
-        Menu menu = navigationView.getMenu().getItem(2).getSubMenu();
-        int itemId = 0;
-        // 내가 지우고자 하는 키워드의 이름으로 아이템을 찾고 아이디를 받아옴
-
-        for(int i=0;i< menu.size();i++) {
-            Log.e("Android", "delKeyword For문 if 문 실행 전");
-            if ( itemName.equals((String) menu.getItem(i).getTitle()) == true)
-            {
-             itemId = menu.getItem(i).getItemId();
-            }
-        }
-        rssDatabase.deleteKeyword(itemName);
-        menu.removeItem(itemId);
-
-        // 키워드 전체삭제 코드
-        if(DEL_ALL_KEWORD == 1) {
-            menu.removeGroup(R.id.group_keyword);
-        }
-
     }
 }

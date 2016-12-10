@@ -15,8 +15,8 @@ import com.notissu.R;
  */
 
 public class DelKeywordDialog extends DialogFragment {
-    public static final String DEL_KEY_KEYWORD = "Yes";
-    public static final String NO_DEL_KEY_KEYWORD = "No";
+    public static final String DEL_KEY_KEYWORD = "1";
+    public static final String NO_DEL_KEY_KEYWORD = "0";
     View rootView;
     Button btnYes;
     Button btnNo;
@@ -25,7 +25,6 @@ public class DelKeywordDialog extends DialogFragment {
 
     public static DelKeywordDialog newInstance() {
         Bundle args = new Bundle();
-
         DelKeywordDialog fragment = new DelKeywordDialog();
         fragment.setArguments(args);
         return fragment;
@@ -47,8 +46,7 @@ public class DelKeywordDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                    String answer =  "DEL_KEY_KEYWORD";
-                bundle.putString(DEL_KEY_KEYWORD,answer);
+                bundle.putInt(DEL_KEY_KEYWORD,1);
                 onDelKeywordListner.onDel(bundle);
                 dismiss();
             }
@@ -57,8 +55,7 @@ public class DelKeywordDialog extends DialogFragment {
             @Override
             public void onClick(View v){
             Bundle bundle = new Bundle();
-            String answer =  "NO_DEL_KEY_KEYWORD";
-            bundle.putString(NO_DEL_KEY_KEYWORD,answer);
+            bundle.putInt(NO_DEL_KEY_KEYWORD,0);
             onDelKeywordListner.onDel(bundle);
             dismiss();
         }
