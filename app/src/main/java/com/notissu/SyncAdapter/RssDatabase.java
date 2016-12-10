@@ -365,6 +365,7 @@ public class RssDatabase extends SQLiteOpenHelper{
         String selection = RssItem.Common.COLUMN_NAME_TITLE + " LIKE ?";
         String selectionarg = "%"+keyword+"%";
         return getNotice(selection, new String[]{selectionarg});
+
     }
 
     //Keyword 목록 가져오기
@@ -389,7 +390,6 @@ public class RssDatabase extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
 
         values.put(RssItem.Keyword.COLUMN_NAME_KEYWORD,keyword);
-
         return writeDatabase.insert(RssItem.Keyword.TABLE_NAME,null,values);
     }
 

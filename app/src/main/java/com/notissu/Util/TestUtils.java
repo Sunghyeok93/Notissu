@@ -403,7 +403,6 @@ public class TestUtils {
 
             //테스트 케이스
             String testCase = "keyword";
-
             public boolean getKeywordData() {
                 List<RssItem> rssItemList = rssDatabase.getKeyword(testCase);
 
