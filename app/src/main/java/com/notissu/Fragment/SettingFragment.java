@@ -16,13 +16,14 @@ import android.widget.Toast;
 import com.notissu.Activity.MainActivity;
 import com.notissu.R;
 import com.notissu.SyncAdapter.RssDatabase;
+import com.notissu.Util.LogUtils;
 
 /**
  * Created by Sunghyeok on 2016-12-04.
  */
 
-public class OptionFragment extends Fragment{
-    private static final String KEY_STATE_BUNDLE = "OptionFragment";
+public class SettingFragment extends Fragment{
+    private static final String TAG = LogUtils.makeLogTag(SettingFragment.class);
     static final String[] LIST_MENU = {"업데이트 주기 설정", "키워드 설정 편집", "ㅎㅎ"} ;
     View rootView;
     RssDatabase rssDatabase;
@@ -35,7 +36,6 @@ public class OptionFragment extends Fragment{
         ListView listview = (ListView) rootView.findViewById(R.id.setting_list) ;
         listview.setDividerHeight(2);
         listview.setAdapter(adapter) ;
-        Log.e("superdroid", "optionfrag 실행");
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

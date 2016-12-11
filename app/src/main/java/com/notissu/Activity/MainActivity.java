@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.notissu.Dialog.AddKeywordDialog;
 import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Fragment.NoticeTabFragment;
-import com.notissu.Fragment.OptionFragment;
+import com.notissu.Fragment.SettingFragment;
 import com.notissu.Model.RssItem;
 import com.notissu.Notification.Alarm;
 import com.notissu.R;
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(noticeList)).commit();
         } else if (id == R.id.nav_option) {
             //설정 공지사항
-            fragmentTransaction.replace(R.id.main_fragment_container, new OptionFragment()).commit();
+            fragmentTransaction.replace(R.id.main_fragment_container, new SettingFragment()).commit();
         } else if (groupid == R.id.group_keyword) {
             ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getKeywordNotice(keywordName));
             fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(noticeList)).commit();
