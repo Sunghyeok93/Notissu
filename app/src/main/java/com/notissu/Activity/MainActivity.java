@@ -12,13 +12,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.notissu.Dialog.AddKeywordDialog;
 import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Fragment.NoticeTabFragment;
 import com.notissu.Fragment.SettingFragment;
+import com.notissu.Model.NavigationMenu;
 import com.notissu.Model.RssItem;
 import com.notissu.Notification.Alarm;
 import com.notissu.R;
@@ -73,8 +73,11 @@ public class MainActivity extends AppCompatActivity
 
     private void settingWidget() {
         toggle.syncState();
+        NavigationMenu navigationMenu = NavigationMenu.getInstance();
+        navigationMenu.setMenu(navigationView);
         drawKeyword();
-        String title = navigationView.getMenu().getItem(0).getSubMenu().getItem(0).getTitle().toString();
+
+        String title = NavigationMenu.getInstance().getFristItemTitle();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.main_fragment_container,NoticeTabFragment.newInstance(title)).commit();
     }
@@ -160,7 +163,7 @@ public class MainActivity extends AppCompatActivity
 
     // itemName을 키워드 이름 받아와서 네비게이션에 메뉴 추가
     public boolean addNewItem(String itemName){
-        Menu menu = navigationView.getMenu().getItem(2).getSubMenu();
+        Menu menu = NavigationMenu.getInstance().getKeywordMenu();
         // 같은 이름의 Keyword를 받았을때 문제 처리해야됨
         int i=0;
         if(menu.size() != 0) {
@@ -182,7 +185,7 @@ public class MainActivity extends AppCompatActivity
     // 앱 실행시 데이터베이스에서 키워드 아이템 받아오기
     public void drawKeyword() 
     {
-        Menu menu = navigationView.getMenu().getItem(2).getSubMenu();
+        Menu menu = NavigationMenu.getInstance().getKeywordMenu();
         RssDatabase rssDatabase = RssDatabase.getInstance();
         List<String> keywordList = rssDatabase.getKeyword();
         if(keywordList.size() != 0) {
@@ -196,4 +199,5 @@ public class MainActivity extends AppCompatActivity
     public void setTitle(CharSequence title) {
         getSupportActionBar().setTitle(title);
     }
+
 }

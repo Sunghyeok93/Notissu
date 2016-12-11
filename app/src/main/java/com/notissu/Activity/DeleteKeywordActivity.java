@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import android.widget.RelativeLayout;
 
 import com.notissu.Adapter.DeleteKeywordAdapter;
 import com.notissu.Fragment.SettingFragment;
+import com.notissu.Model.NavigationMenu;
 import com.notissu.R;
 import com.notissu.SyncAdapter.RssDatabase;
 import com.notissu.Util.LogUtils;
@@ -114,8 +116,18 @@ public class DeleteKeywordActivity extends AppCompatActivity {
         //1. DB에서 지워져야한다.
         rssDatabase.deleteKeyword(title);
         //2. Menu에서 지워져야한다.
-
-
+        Menu menu = NavigationMenu.getInstance().getKeywordMenu();
+        int menuSize = menu.size();
+        // 내가 지우고자 하는 키워드의 이름으로 아이템을 찾고 아이디를 받아옴
+        for(int i=0;i< menuSize;i++) {
+            String menuTitle = menu.getItem(i).getTitle().toString();
+            if (title.equals(menuTitle) == true) {
+                //지워버릴 Item의 아이디 얻어옴
+                int itemId = menu.getItem(i).getItemId();
+                menu.removeItem(itemId);
+                break;
+            }
+        }
         //3. 화면을 갱신해야한다.
         deleteKeywordAdapter.remove(title);
         deleteKeywordAdapter.notifyDataSetChanged();
@@ -123,16 +135,7 @@ public class DeleteKeywordActivity extends AppCompatActivity {
             mRlList.setVisibility(View.GONE);
         }
 
-        /*Menu menu = navigationView.getMenu().getItem(2).getSubMenu();
-        int itemId = 0;
-        // 내가 지우고자 하는 키워드의 이름으로 아이템을 찾고 아이디를 받아옴
-        Log.e(TAG,"itemName 받아옴 : " +title);
-        for(int i=0;i< menu.size();i++) {
-            if ( title.equals((String) menu.getItem(i).getTitle()) == true)
-            {
-                itemId = menu.getItem(i).getItemId();
-            }
-        }*/
+
     }
 
 }

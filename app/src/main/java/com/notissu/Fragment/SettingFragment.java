@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -113,6 +114,7 @@ public class SettingFragment extends Fragment{
     public void setKeyword(String title){
         Intent intent = new Intent(getContext(), DeleteKeywordActivity.class);
         intent.putExtra(KEY_DELETE_KEYWORD_TITLE,title);
+
         startActivity(intent);
     }
 }
