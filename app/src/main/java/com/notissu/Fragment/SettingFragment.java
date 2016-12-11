@@ -17,6 +17,7 @@ import com.notissu.Activity.DeleteKeywordActivity;
 import com.notissu.Activity.MainActivity;
 import com.notissu.R;
 import com.notissu.Util.LogUtils;
+import com.notissu.Util.ResString;
 
 /**
  * Created by Sunghyeok on 2016-12-04.
@@ -25,9 +26,22 @@ import com.notissu.Util.LogUtils;
 public class SettingFragment extends Fragment{
     private static final String TAG = LogUtils.makeLogTag(SettingFragment.class);
     private static final String KEY_TITLE = "KEY_TITLE";
+
     public static final String KEY_DELETE_KEYWORD_TITLE = "KEY_DELETE_KEYWORD_TITLE";
 
-    static final String[] LIST_MENU = {"업데이트 주기 설정", "키워드 설정 편집", "ㅎㅎ"} ;
+    private static final String CONTENT_UPDATE_PERIOD;
+    private static final String CONTENT_DELETE_KEYWORD;
+    private static final String CONTENT_WITH_US;
+    private static final String CONTENT_SUPPORT;
+    private static final String[] mSettingList;
+    static {
+        mSettingList = ResString.getInstance().getStringArray(ResString.RES_SETTINGS_LIST);
+        CONTENT_UPDATE_PERIOD = mSettingList[0];
+        CONTENT_DELETE_KEYWORD = mSettingList[1];
+        CONTENT_WITH_US = mSettingList[2];
+        CONTENT_SUPPORT = mSettingList[3];
+    }
+
     View rootView;
 
     ArrayAdapter mAdapter;
@@ -54,7 +68,6 @@ public class SettingFragment extends Fragment{
     }
 
     private void initWidget() {
-        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, LIST_MENU) ;
         mListView = (ListView) rootView.findViewById(R.id.setting_list) ;
     }
 
@@ -62,6 +75,9 @@ public class SettingFragment extends Fragment{
         //타이틀 설정
         String title = getArguments().getString(KEY_TITLE);
         getActivity().setTitle(title);
+
+
+        mAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, mSettingList) ;
 
         ((MainActivity) getActivity()).hideFloatingActionButton();
         mListView.setDividerHeight(2);
@@ -73,16 +89,14 @@ public class SettingFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView parent, View v, int position, long id) {
                 String strText = (String) parent.getItemAtPosition(position) ;
-                switch (strText){
-                    case "업데이트 주기 설정" :
-                        setUpdateTime();
-                        break;
-                    case "키워드 설정 편집" :
-                        setKeyword(strText);
-                        break;
-                    case "List 3" :
-                        Toast.makeText(getContext(), "미구현", Toast.LENGTH_LONG).show();
-                        break;
+                if (strText.equals(CONTENT_UPDATE_PERIOD)) {
+                    setUpdateTime();
+                } else if (strText.equals(CONTENT_DELETE_KEYWORD)) {
+                    setKeyword(strText);
+                } else if (strText.equals(CONTENT_WITH_US)) {
+
+                } else if (strText.equals(CONTENT_SUPPORT)) {
+
                 }
             }
         }) ;
