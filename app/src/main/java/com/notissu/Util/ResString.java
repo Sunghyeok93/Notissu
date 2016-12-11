@@ -11,6 +11,7 @@ import com.notissu.R;
 public class ResString {
     //숭실대 공지사항 String array의 name
     public static final String RES_SSU_NOTICES = "ssu_notices";
+    public static final String RES_SETTINGS_LIST = "settings_list";
 
     private static final String RESOURCE_STRING = "string";
     private static final String RESOURCE_STRING_ARRAY = "array";

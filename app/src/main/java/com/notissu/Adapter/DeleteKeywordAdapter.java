@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Created by dnfld on 2016-12-10.
  */
 
-public class KeywordAdapter extends ArrayAdapter<String> {
+public class DeleteKeywordAdapter extends ArrayAdapter<String> {
     Context context;
     ViewHolder viewHolder;
     //ListView에 보여줄 Item
@@ -23,7 +23,7 @@ public class KeywordAdapter extends ArrayAdapter<String> {
     //ArrayList<String> keywordList = new ArrayList<>();
     //노드들 CheckBox 체크되어있는지 저장하기.
 
-    public KeywordAdapter(Context context,ArrayList<String> keywordList) {
+    public DeleteKeywordAdapter(Context context, ArrayList<String> keywordList) {
         super(context, android.R.layout.simple_expandable_list_item_2);
         this.context = context;
         this.keywordList = keywordList;
@@ -50,24 +50,25 @@ public class KeywordAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if(view == null) {
-            view = View.inflate(context, R.layout.fragment_keyword_list, null);
-            viewHolder = new KeywordAdapter.ViewHolder();
-            viewHolder.tvKeyword = (TextView) view.findViewById(R.id.fragment_keyword);
-
+            view = View.inflate(context, R.layout.row_delete_keyword, null);
+            viewHolder = new DeleteKeywordAdapter.ViewHolder();
+            viewHolder.tvKeyword = (TextView) view.findViewById(R.id.delete_keyword_tv_title);
             view.setTag(viewHolder);
         }else{
-            viewHolder = (KeywordAdapter.ViewHolder) view.getTag();
+            viewHolder = (ViewHolder) view.getTag();
         }
 
-        final int index = i;
-        final String title = getItem(index);
-
-        viewHolder.tvKeyword.setText(title);
+        viewHolder.tvKeyword.setText(getItem(i));
 
         return view;
     }
 
-    static class ViewHolder{
-            TextView tvKeyword;
-        }
+    @Override
+    public void remove(String object) {
+        keywordList.remove(object);
     }
+
+    static class ViewHolder {
+        TextView tvKeyword;
+    }
+}

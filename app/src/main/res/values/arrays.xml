@@ -10,4 +10,11 @@
         <item>교외행사</item>
         <item>봉사</item>
     </string-array>
+
+    <string-array name="settings_list">
+        <item>업데이트 주기 설정</item>
+        <item>키워드 삭제</item>
+        <item>기여한 사람들</item>
+        <item>고객센터</item>
+    </string-array>
 </resources>

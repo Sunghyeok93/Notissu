@@ -10,16 +10,24 @@ import android.view.ViewGroup;
 
 import com.notissu.Adapter.NoticeFragmentPagerAdapter;
 import com.notissu.R;
+import com.notissu.Util.LogUtils;
 import com.notissu.Util.ResString;
 
 public class NoticeTabFragment extends Fragment {
+    private static final String TAG= LogUtils.makeLogTag(NoticeTabFragment.class);
+    private static final String KEY_TITLE= "KEY_TITLE";
     TabLayout tabLayout;
     ViewPager viewPager;
     View rootView;
 
-    public static NoticeTabFragment newInstance() {
-        return new NoticeTabFragment();
+    public static NoticeTabFragment newInstance(String title) {
+        Bundle args = new Bundle();
+        args.putString(KEY_TITLE,title);
+        NoticeTabFragment fragment = new NoticeTabFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -37,6 +45,9 @@ public class NoticeTabFragment extends Fragment {
     }
 
     private void settingWidget() {
+        //타이틀 변경
+        String title = getArguments().getString(KEY_TITLE);
+
         String[] tabStringList = ResString.getInstance().getStringArray(ResString.RES_SSU_NOTICES);
 
         for (int i=0;i<tabStringList.length;i++) {
@@ -44,7 +55,7 @@ public class NoticeTabFragment extends Fragment {
         }
 
         NoticeFragmentPagerAdapter noticeFragmentPagerAdapter =
-                new NoticeFragmentPagerAdapter(getFragmentManager(), getContext(), tabLayout.getTabCount(), tabStringList);
+                new NoticeFragmentPagerAdapter(getFragmentManager(), title, tabLayout.getTabCount(), tabStringList);
         viewPager.setAdapter(noticeFragmentPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 

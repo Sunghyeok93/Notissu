@@ -17,14 +17,14 @@ import android.widget.Toast;
 import com.notissu.Dialog.AddKeywordDialog;
 import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Fragment.NoticeTabFragment;
-import com.notissu.Fragment.OptionFragment;
+import com.notissu.Fragment.SettingFragment;
+import com.notissu.Model.NavigationMenu;
 import com.notissu.Model.RssItem;
 import com.notissu.Notification.Alarm;
 import com.notissu.R;
 import com.notissu.SyncAdapter.NoticeProvider;
 import com.notissu.SyncAdapter.NoticeProviderImpl;
 import com.notissu.SyncAdapter.RssDatabase;
-import com.notissu.Util.ResString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,12 +40,15 @@ public class MainActivity extends AppCompatActivity
     FloatingActionButton fab;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         /*위젯을 초기화하는 함수*/
         initWidget();
@@ -60,11 +63,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initWidget() {
-        /*앱이 실행되면 가장 먼저 호출되어야 할 기능이다.
-        resource에서 문자열 읽어들기 편하게 하기위해 만든 Util.
-        singleton으로 되어있기에 최초에 context를 넘겨줘야함.*/
-        ResString.getInstance().setContext(getApplicationContext());
-
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -74,11 +72,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void settingWidget() {
-
         toggle.syncState();
+        NavigationMenu navigationMenu = NavigationMenu.getInstance();
+        navigationMenu.setMenu(navigationView);
         drawKeyword();
+
+        String title = NavigationMenu.getInstance().getFristItemTitle();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.main_fragment_container,NoticeTabFragment.newInstance()).commit();
+        fragmentTransaction.add(R.id.main_fragment_container,NoticeTabFragment.newInstance(title)).commit();
     }
 
     private void settingListener() {
@@ -118,31 +119,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    /*
-    Actionbar Item을 선택했을 때 생기는 Event 구현
-    */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        if(id == R.id.item_add_keyword)
-        {
-
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     /*
     Navigation의 메뉴가 클릭 됐을 때 생기는 Event 구현
     */
@@ -155,30 +131,29 @@ public class MainActivity extends AppCompatActivity
 
         int id = item.getItemId();
         int groupid = item.getGroupId(); // keyword 그룹아이디 가져오기
-        String keywordName = (String) item.getTitle(); // keyword 구분을 위한 제목 가져오기
-
-        Toast.makeText(getApplicationContext(),"  "+keywordName,Toast.LENGTH_LONG).show();
+        String itemTitle = item.getTitle().toString(); // keyword 구분을 위한 제목 가져오기
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         NoticeProvider noticeProvider = new NoticeProviderImpl();
 
         if (id == R.id.nav_ssu_notice) {
             //Main 공지사항
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeTabFragment.newInstance()).commit();
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeTabFragment.newInstance(itemTitle)).commit();
         } else if (id == R.id.nav_ssu_library) {
             //도서관 공지사항
             ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getLibraryNotice());
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(noticeList)).commit();
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(itemTitle, noticeList)).commit();
         } else if (id == R.id.nav_starred) {
             //즐겨찾기
             ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getStarredNotice());
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(noticeList)).commit();
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(itemTitle, noticeList)).commit();
+        } else if (groupid == R.id.group_keyword) {
+            String keyword = itemTitle;
+            ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getKeywordNotice(keyword));
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(itemTitle, noticeList)).commit();
         } else if (id == R.id.nav_option) {
             //설정 공지사항
-            fragmentTransaction.replace(R.id.main_fragment_container, new OptionFragment()).commit();
-        } else if (groupid == R.id.group_keyword) {
-            ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getKeywordNotice(keywordName));
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(noticeList)).commit();
+            fragmentTransaction.replace(R.id.main_fragment_container, SettingFragment.newInstance(itemTitle)).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -188,7 +163,8 @@ public class MainActivity extends AppCompatActivity
 
     // itemName을 키워드 이름 받아와서 네비게이션에 메뉴 추가
     public boolean addNewItem(String itemName){
-        Menu menu = navigationView.getMenu().getItem(2).getSubMenu();
+        NavigationMenu navigationMenu = NavigationMenu.getInstance();
+        Menu menu = navigationMenu.getKeywordMenu();
         // 같은 이름의 Keyword를 받았을때 문제 처리해야됨
         int i=0;
         if(menu.size() != 0) {
@@ -201,22 +177,29 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        menu.add(R.id.group_keyword, menu.size()+1,1,itemName).setIcon(R.drawable.ic_menu_send);
+        menu.add(R.id.group_keyword, navigationMenu.getNewId(),1,itemName).setIcon(R.drawable.ic_menu_send);
         RssDatabase rssDatabase = RssDatabase.getInstance();
         rssDatabase.addKeyword(itemName);
 
         return true;
     }
+
     // 앱 실행시 데이터베이스에서 키워드 아이템 받아오기
-    public void drawKeyword() 
-    {
-        Menu menu = navigationView.getMenu().getItem(2).getSubMenu();
+    public void drawKeyword() {
+        NavigationMenu navigationMenu = NavigationMenu.getInstance();
+        Menu menu = navigationMenu.getKeywordMenu();
         RssDatabase rssDatabase = RssDatabase.getInstance();
         List<String> keywordList = rssDatabase.getKeyword();
-        if(keywordList.size() != 0) {
+        if (keywordList.size() != 0) {
             for (int i = 0; i < keywordList.size(); i++) {
-                menu.add(R.id.group_keyword, i + 1, 1, keywordList.get(i)).setIcon(R.drawable.ic_menu_send);
+                menu.add(R.id.group_keyword, navigationMenu.getNewId(), 1, keywordList.get(i)).setIcon(R.drawable.ic_menu_send);
             }
         }
     }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        getSupportActionBar().setTitle(title);
+    }
+
 }
