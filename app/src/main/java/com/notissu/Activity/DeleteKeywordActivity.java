@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -12,7 +11,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.notissu.Adapter.DeleteKeywordAdapter;
-import com.notissu.Fragment.DeleteKeywordFragment;
 import com.notissu.R;
 import com.notissu.SyncAdapter.RssDatabase;
 import com.notissu.Util.LogUtils;
@@ -20,7 +18,7 @@ import com.notissu.Util.LogUtils;
 import java.util.ArrayList;
 
 public class DeleteKeywordActivity extends AppCompatActivity {
-    private static final String TAG = LogUtils.makeLogTag(DeleteKeywordFragment.class);
+    private static final String TAG = LogUtils.makeLogTag(DeleteKeywordActivity.class);
     DeleteKeywordAdapter deleteKeywordAdapter;
     RelativeLayout mRlList;
     ListView mLvKeyword;
