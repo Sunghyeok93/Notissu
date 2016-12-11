@@ -1,6 +1,7 @@
 package com.notissu.Activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.notissu.Adapter.DeleteKeywordAdapter;
+import com.notissu.Fragment.SettingFragment;
 import com.notissu.R;
 import com.notissu.SyncAdapter.RssDatabase;
 import com.notissu.Util.LogUtils;
@@ -41,6 +43,9 @@ public class DeleteKeywordActivity extends AppCompatActivity {
     }
 
     private void settingWidget() {
+        Intent dataIntent = getIntent();
+        String title = dataIntent.getStringExtra(SettingFragment.KEY_DELETE_KEYWORD_TITLE);
+        setTitle(title);
 
         RssDatabase rssDatabase = RssDatabase.getInstance();
         ArrayList<String> keywordListDB = new ArrayList<String>(rssDatabase.getKeyword());

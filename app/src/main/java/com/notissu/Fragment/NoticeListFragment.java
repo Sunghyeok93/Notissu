@@ -22,13 +22,15 @@ import java.util.ArrayList;
 
 public class NoticeListFragment extends Fragment {
     private static final String KEY_NOTICE_ROWS = "KEY_NOTICE_ROWS";
+    private static final String KEY_TITLE= "KEY_TITLE";
 
     ListView noticeList;
     NoticeAdapter noticeAdapter;
     View rootView;
 
-    public static Fragment newInstance(ArrayList<RssItem> noticeRows) {
+    public static Fragment newInstance(String title, ArrayList<RssItem> noticeRows) {
         Bundle bundle = new Bundle();
+        bundle.putString(KEY_TITLE,title);
         bundle.putParcelableArrayList(KEY_NOTICE_ROWS,noticeRows);
         Fragment fragment = new NoticeListFragment();
         fragment.setArguments(bundle);
@@ -53,8 +55,8 @@ public class NoticeListFragment extends Fragment {
     }
 
     private void settingWidget() {
-
         Bundle bundle = getArguments();
+        getActivity().setTitle(bundle.getString(KEY_TITLE));
         //ListView에 집어넣을 데이터 List
         ArrayList<RssItem> noticeList = bundle.getParcelableArrayList(KEY_NOTICE_ROWS);
         RssDatabase rssDatabase = RssDatabase.getInstance();

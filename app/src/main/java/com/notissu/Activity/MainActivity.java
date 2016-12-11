@@ -24,7 +24,6 @@ import com.notissu.R;
 import com.notissu.SyncAdapter.NoticeProvider;
 import com.notissu.SyncAdapter.NoticeProviderImpl;
 import com.notissu.SyncAdapter.RssDatabase;
-import com.notissu.Util.ResString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,11 +68,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void settingWidget() {
-
         toggle.syncState();
         drawKeyword();
+        String title = navigationView.getMenu().getItem(0).getSubMenu().getItem(0).getTitle().toString();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.main_fragment_container,NoticeTabFragment.newInstance()).commit();
+        fragmentTransaction.add(R.id.main_fragment_container,NoticeTabFragment.newInstance(title)).commit();
     }
 
     private void settingListener() {
@@ -152,21 +151,21 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_ssu_notice) {
             //Main 공지사항
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeTabFragment.newInstance()).commit();
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeTabFragment.newInstance(item.getTitle().toString())).commit();
         } else if (id == R.id.nav_ssu_library) {
             //도서관 공지사항
             ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getLibraryNotice());
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(noticeList)).commit();
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(item.getTitle().toString(), noticeList)).commit();
         } else if (id == R.id.nav_starred) {
             //즐겨찾기
             ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getStarredNotice());
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(noticeList)).commit();
-        } else if (id == R.id.nav_option) {
-            //설정 공지사항
-            fragmentTransaction.replace(R.id.main_fragment_container, new SettingFragment()).commit();
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(item.getTitle().toString(), noticeList)).commit();
         } else if (groupid == R.id.group_keyword) {
             ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getKeywordNotice(keywordName));
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(noticeList)).commit();
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(item.getTitle().toString(), noticeList)).commit();
+        } else if (id == R.id.nav_option) {
+            //설정 공지사항
+            fragmentTransaction.replace(R.id.main_fragment_container, SettingFragment.newInstance(item.getTitle().toString())).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
