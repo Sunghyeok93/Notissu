@@ -6,16 +6,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.notissu.Activity.DeleteKeywordActivity;
 import com.notissu.Activity.MainActivity;
+import com.notissu.Activity.UpdatePeriodActivity;
 import com.notissu.R;
 import com.notissu.Util.LogUtils;
 import com.notissu.Util.ResString;
@@ -29,6 +28,7 @@ public class SettingFragment extends Fragment{
     private static final String KEY_TITLE = "KEY_TITLE";
 
     public static final String KEY_DELETE_KEYWORD_TITLE = "KEY_DELETE_KEYWORD_TITLE";
+    public static final String KEY_UPDATE_PERIOD_TITLE = "KEY_UPDATE_PERIOD_TITLE";
 
     private static final String CONTENT_UPDATE_PERIOD;
     private static final String CONTENT_DELETE_KEYWORD;
@@ -91,7 +91,7 @@ public class SettingFragment extends Fragment{
             public void onItemClick(AdapterView parent, View v, int position, long id) {
                 String strText = (String) parent.getItemAtPosition(position) ;
                 if (strText.equals(CONTENT_UPDATE_PERIOD)) {
-                    setUpdateTime();
+                    setUpdateTime(strText);
                 } else if (strText.equals(CONTENT_DELETE_KEYWORD)) {
                     setKeyword(strText);
                 } else if (strText.equals(CONTENT_WITH_US)) {
@@ -103,18 +103,14 @@ public class SettingFragment extends Fragment{
         }) ;
     }
 
-    public void setUpdateTime(){
-        EditKeywordFragment fragment = new EditKeywordFragment();
-
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_fragment_container, fragment);
-        fragmentTransaction.commit();
+    public void setUpdateTime(String title){
+        Intent intent = new Intent(getContext(), UpdatePeriodActivity.class);
+        intent.putExtra(KEY_UPDATE_PERIOD_TITLE,title);
+        startActivity(intent);
     }
     public void setKeyword(String title){
         Intent intent = new Intent(getContext(), DeleteKeywordActivity.class);
         intent.putExtra(KEY_DELETE_KEYWORD_TITLE,title);
-
         startActivity(intent);
     }
 }
