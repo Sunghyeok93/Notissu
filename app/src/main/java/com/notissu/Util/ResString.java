@@ -16,6 +16,8 @@ public class ResString {
     public static final String RES_WITH_US_NAME= "with_us_name";
     public static final String RES_WITH_US_POSITION= "with_us_position";
     public static final String RES_WITH_US_EMAIL= "with_us_email";
+    public static final String RES_ALARM_TICKER= "alarm_ticker";
+    public static final String RES_ALARM_TITLE= "alarm_title";
 
     private static final String RESOURCE_STRING = "string";
     private static final String RESOURCE_STRING_ARRAY = "array";

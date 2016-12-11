@@ -12,6 +12,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.notissu.Model.RssItem;
+import com.notissu.Notification.Alarm;
 import com.notissu.R;
 import com.notissu.Util.IOUtils;
 import com.rometools.rome.feed.synd.SyndEntry;
@@ -26,7 +27,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -35,7 +38,8 @@ import java.util.List;
 
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String TAG = SyncAdapter.class.getName();
-    private static final String MAIN_NOTICE_URL = "https://leesanghyeok.github.io/feed.xml"; //내 블로그 임시
+//    private static final String MAIN_NOTICE_URL = "https://leesanghyeok.github.io/feed.xml"; //내 블로그 임시
+    private static final String MAIN_NOTICE_URL = "http://192.168.37.140:4000/feed.xml"; //내 블로그 임시
     private static final String LIBRARY_NOTICE_URL = "http://oasis.ssu.ac.kr/API/BBS/1"; //도서관 공지사항
 //    private static final String MAIN_NOTICE_URL = "http://www.ssu.ac.kr/web/kor/plaza_d_01;jsessionid=yIPyJDhVJSyGG1SWk3kZeQ5qXfdbVfqihsikvlZZVAILUn5tgH2HjcX4fiQFXD40?p_p_id=EXT_MIRRORBBS&p_p_lifecycle=0&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_pos=1&p_p_col_count=2&_EXT_MIRRORBBS_struts_action=%2Fext%2Fmirrorbbs%2Frss"; //내 블로그 임시
     ContentResolver mContentResolver;
@@ -100,8 +104,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             새롭게 입련된 것들의 Title과 키워드를 비교해본다.
             매칭된다면 푸시메시지 보낸다.
             */
-            compareTitle(mainMap,keywordList);
-            compareTitle(libraryMap,keywordList);
+            //매칭되는 키워드를 하나의 ArrayList에 종합한다.
+            ArrayList<String> pushKeyword = new ArrayList<>();
+            pushKeyword.addAll(compareTitle(mainMap,keywordList));
+            pushKeyword.addAll(compareTitle(libraryMap,keywordList));
+            // 매칭되는 키워드가 하나라도 있다면
+            if (pushKeyword.size() > 0) {
+                ArrayList<String> uniquePushKeyword= new ArrayList<>(new HashSet<>(pushKeyword));
+                Alarm.showAlarm(getContext(),uniquePushKeyword);
+            }
+
 
             // Main을 DB에 넣는다.
             for (RssItem item : mainMap.values()) {
@@ -132,18 +144,22 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     /*
     새롭게 입련된 것들의 Title과 키워드를 비교해본다.
-    매칭된다면 푸시메시지 보낸다.
+    매칭되는 keyword들을 반환한다.
     */
-    private void compareTitle(HashMap<String,RssItem> map, List<String> keywordList) {
+    private ArrayList<String> compareTitle(HashMap<String,RssItem> map, List<String> keywordList) {
+        ArrayList<String> pushKeyword = new ArrayList<>();
         for (String keyword : keywordList) {
             for (RssItem item : map.values()) {
                 String mapTitle = item.getTitle();
                 if (mapTitle.contains(keyword)) { // 매칭된다면
                     // 푸시알림을 한다.
                     Log.d(TAG,"push push");
+                    pushKeyword.add(keyword);
+
                 }
             }
         }
+        return pushKeyword;
     }
 
     /*

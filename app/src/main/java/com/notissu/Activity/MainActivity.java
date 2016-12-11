@@ -57,12 +57,10 @@ public class MainActivity extends AppCompatActivity
         /*위젯에 리스터를 붙여주는 함수*/
         settingListener();
 
-        Alarm alarm = new Alarm(this);
-        alarm.popString("ㅎㅎ");
-
     }
 
     private void initWidget() {
+        Alarm.cancel(getApplicationContext());
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
