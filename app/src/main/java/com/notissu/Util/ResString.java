@@ -12,6 +12,10 @@ public class ResString {
     //숭실대 공지사항 String array의 name
     public static final String RES_SSU_NOTICES = "ssu_notices";
     public static final String RES_SETTINGS_LIST = "settings_list";
+    public static final String RES_WITH_US_IMG_NAME= "with_us_img_name";
+    public static final String RES_WITH_US_NAME= "with_us_name";
+    public static final String RES_WITH_US_POSITION= "with_us_position";
+    public static final String RES_WITH_US_EMAIL= "with_us_email";
 
     private static final String RESOURCE_STRING = "string";
     private static final String RESOURCE_STRING_ARRAY = "array";

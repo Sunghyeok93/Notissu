@@ -62,7 +62,8 @@
         </service>
 
         <activity android:name=".Activity.DeleteKeywordActivity" />
-        <activity android:name=".Activity.UpdatePeriodActivity"></activity>
+        <activity android:name=".Activity.UpdatePeriodActivity" />
+        <activity android:name=".WithUs.WithUsActivity"></activity>
     </application>
 
 </manifest>

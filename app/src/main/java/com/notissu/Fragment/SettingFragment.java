@@ -3,8 +3,6 @@ package com.notissu.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +16,7 @@ import com.notissu.Activity.UpdatePeriodActivity;
 import com.notissu.R;
 import com.notissu.Util.LogUtils;
 import com.notissu.Util.ResString;
+import com.notissu.WithUs.WithUsActivity;
 
 /**
  * Created by Sunghyeok on 2016-12-04.
@@ -29,6 +28,7 @@ public class SettingFragment extends Fragment{
 
     public static final String KEY_DELETE_KEYWORD_TITLE = "KEY_DELETE_KEYWORD_TITLE";
     public static final String KEY_UPDATE_PERIOD_TITLE = "KEY_UPDATE_PERIOD_TITLE";
+    public static final String KEY_WITH_US_TITLE = "KEY_WITH_US_TITLE";
 
     private static final String CONTENT_UPDATE_PERIOD;
     private static final String CONTENT_DELETE_KEYWORD;
@@ -91,11 +91,11 @@ public class SettingFragment extends Fragment{
             public void onItemClick(AdapterView parent, View v, int position, long id) {
                 String strText = (String) parent.getItemAtPosition(position) ;
                 if (strText.equals(CONTENT_UPDATE_PERIOD)) {
-                    setUpdateTime(strText);
+                    goUpdatePeriod(strText);
                 } else if (strText.equals(CONTENT_DELETE_KEYWORD)) {
-                    setKeyword(strText);
+                    goDeleteKeyword(strText);
                 } else if (strText.equals(CONTENT_WITH_US)) {
-
+                    goWithUs(strText);
                 } else if (strText.equals(CONTENT_SUPPORT)) {
 
                 }
@@ -103,14 +103,21 @@ public class SettingFragment extends Fragment{
         }) ;
     }
 
-    public void setUpdateTime(String title){
+    public void goUpdatePeriod(String title){
         Intent intent = new Intent(getContext(), UpdatePeriodActivity.class);
         intent.putExtra(KEY_UPDATE_PERIOD_TITLE,title);
         startActivity(intent);
     }
-    public void setKeyword(String title){
+
+    public void goDeleteKeyword(String title){
         Intent intent = new Intent(getContext(), DeleteKeywordActivity.class);
         intent.putExtra(KEY_DELETE_KEYWORD_TITLE,title);
+        startActivity(intent);
+    }
+
+    public void goWithUs(String title){
+        Intent intent = new Intent(getContext(), WithUsActivity.class);
+        intent.putExtra(KEY_WITH_US_TITLE,title);
         startActivity(intent);
     }
 }

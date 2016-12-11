@@ -17,4 +17,27 @@
         <item>기여한 사람들</item>
         <item>고객센터</item>
     </string-array>
+
+    <string-array name="with_us_img_name">
+        <item>leesanghyeok</item>
+        <item>empty_avater</item>
+        <item>empty_avater</item>
+    </string-array>
+    <string-array name="with_us_name">
+        <item>이상혁</item>
+        <item>이유정</item>
+        <item>강성혁</item>
+    </string-array>
+    <string-array name="with_us_position">
+        <item>숭실대학교 컴퓨터학부 13학번</item>
+        <item>숭실대학교 컴퓨터학부 13학번</item>
+        <item>숭실대학교 컴퓨터학부 13학번</item>
+    </string-array>
+    <string-array name="with_us_email">
+        <item>1004xlsrn@gmail.com</item>
+        <item>ujung@gmail.com</item>
+        <item>sunghyeok@gmail.com</item>
+    </string-array>
+
+
 </resources>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="88dp"
+    android:minHeight="88dp">
+
+    <RelativeLayout
+        android:layout_width="72dp"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/with_us_iv_picture"
+            android:src="@drawable/leesanghyeok"
+            android:layout_centerInParent="true"
+            android:layout_width="60dp"
+            android:layout_height="60dp" />
+    </RelativeLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:paddingRight="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/with_us_tv_name"
+            android:text="이상혁"
+            android:maxLines="1"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/with_us_tv_position"
+            android:text="숭실대학교 컴퓨터학부 13학번"
+            android:maxLines="1"
+            android:textColor="@android:color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/with_us_tv_email"
+            android:text="1004xlsrn@gmail.com"
+            android:maxLines="1"
+            android:textColor="@android:color/black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

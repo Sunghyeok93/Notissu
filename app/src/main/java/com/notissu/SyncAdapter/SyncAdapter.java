@@ -232,7 +232,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 rssMap.remove(dbRssItem.getGuid());
                 if (isExist.getTitle() != null && !isExist.getTitle().equals(dbRssItem.getTitle()) ||
                         isExist.getLink() != null && !isExist.getLink().equals(dbRssItem.getLink()) ||
-                        isExist.getDescription() != null && !isExist.getDescription().equals(dbRssItem.getDescription()) ||
+                        isExist.getEmail() != null && !isExist.getEmail().equals(dbRssItem.getEmail()) ||
                         isExist.getPublishDate() != null && !isExist.getPublishDate().equals(dbRssItem.getPublishDate())) {
                     //새로 들어온것이 업데이트 할 필요가 있으면 업데이트를 한다.
                     rssDatabase.updateMainNotice(isExist);
