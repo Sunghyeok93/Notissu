@@ -1,68 +1,52 @@
-package com.notissu.Fragment;
+package com.notissu.Activity;
 
 import android.content.DialogInterface;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.notissu.Adapter.DeleteKeywordAdapter;
+import com.notissu.Fragment.DeleteKeywordFragment;
 import com.notissu.R;
 import com.notissu.SyncAdapter.RssDatabase;
 import com.notissu.Util.LogUtils;
 
 import java.util.ArrayList;
 
-/**
- * Created by dnfld on 2016-12-10.
- */
-
-public class DeleteKeywordFragment extends Fragment {
+public class DeleteKeywordActivity extends AppCompatActivity {
     private static final String TAG = LogUtils.makeLogTag(DeleteKeywordFragment.class);
-    View mRootView;
     DeleteKeywordAdapter deleteKeywordAdapter;
     RelativeLayout mRlList;
     ListView mLvKeyword;
     Button mBtnRemoveAll;
 
-
-    public static DeleteKeywordFragment newInstance() {
-        Bundle bundle = new Bundle();
-        DeleteKeywordFragment fragment = new DeleteKeywordFragment();
-        fragment.setArguments(bundle);
-
-        return fragment;
-    }
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.activity_delete_keyword, container, false);
-
-        View view = inflater.inflate(R.layout.activity_main, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_delete_keyword);
 
         initWidget();
         settingWidget();
         settingListener();
-
-        return mRootView;
-
     }
+
     private void initWidget() {
-        mLvKeyword = (ListView) mRootView.findViewById(R.id.delete_keyword_lv_keyword);
-        mRlList = (RelativeLayout) mRootView.findViewById(R.id.delete_keyword_rl_list);
-        mBtnRemoveAll = (Button) mRootView.findViewById(R.id.delete_keyword_btn_remove_all);
+        mLvKeyword = (ListView) findViewById(R.id.delete_keyword_lv_keyword);
+        mRlList = (RelativeLayout) findViewById(R.id.delete_keyword_rl_list);
+        mBtnRemoveAll = (Button) findViewById(R.id.delete_keyword_btn_remove_all);
     }
 
     private void settingWidget() {
+
         RssDatabase rssDatabase = RssDatabase.getInstance();
         ArrayList<String> keywordListDB = new ArrayList<String>(rssDatabase.getKeyword());
-        deleteKeywordAdapter = new DeleteKeywordAdapter(getContext(), keywordListDB);
+        deleteKeywordAdapter = new DeleteKeywordAdapter(this, keywordListDB);
         mLvKeyword.setAdapter(deleteKeywordAdapter);
 
         if (deleteKeywordAdapter.getCount() == 0) {
@@ -100,7 +84,7 @@ public class DeleteKeywordFragment extends Fragment {
     }
 
     private void showDeleteDialog(DialogInterface.OnClickListener onClickListener) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setPositiveButton("삭제", onClickListener);
         alert.setNegativeButton("취소", new DialogInterface.OnClickListener() {
             @Override
@@ -147,4 +131,5 @@ public class DeleteKeywordFragment extends Fragment {
             }
         }*/
     }
+
 }

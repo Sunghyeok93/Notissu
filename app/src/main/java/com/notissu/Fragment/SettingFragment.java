@@ -1,5 +1,6 @@
 package com.notissu.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.notissu.Activity.DeleteKeywordActivity;
 import com.notissu.Activity.MainActivity;
 import com.notissu.R;
 import com.notissu.SyncAdapter.RssDatabase;
@@ -60,12 +62,8 @@ public class SettingFragment extends Fragment{
         fragmentTransaction.commit();
     }
     public void setKeyword(){
-        DeleteKeywordFragment fragment = DeleteKeywordFragment.newInstance();
-
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.main_fragment_container, fragment);
-        fragmentTransaction.commit();
-
+        Intent intent = new Intent(getContext(), DeleteKeywordActivity.class);
+        startActivity(intent);
     }
 }
 
