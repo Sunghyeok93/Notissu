@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
     NavigationView navigationView;
     Toolbar toolbar;
     FloatingActionButton fab;
-    RssDatabase rssDatabase = RssDatabase.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,19 +192,17 @@ public class MainActivity extends AppCompatActivity
         // 같은 이름의 Keyword를 받았을때 문제 처리해야됨
         int i=0;
         if(menu.size() != 0) {
-            {
-                for (i=0; i<menu.size();i++) {
-                    String name = (String) menu.getItem(i).getTitle();
-                    if (name.equals(itemName) ==  true) {
-                        Toast.makeText(getApplicationContext(), "같은 이름의 키워드가 있습니다.", Toast.LENGTH_LONG).show();
-                        return false;
-                    }
+            for (i=0; i<menu.size();i++) {
+                String name = (String) menu.getItem(i).getTitle();
+                if (name.equals(itemName) ==  true) {
+                    Toast.makeText(getApplicationContext(), "같은 이름의 키워드가 있습니다.", Toast.LENGTH_LONG).show();
+                    return false;
                 }
             }
         }
 
         menu.add(R.id.group_keyword, menu.size()+1,1,itemName).setIcon(R.drawable.ic_menu_send);
- //       rssDatabase.addKeyword(itemName,Integer.parseInt(itemName));
+        RssDatabase rssDatabase = RssDatabase.getInstance();
         rssDatabase.addKeyword(itemName);
 
         return true;
@@ -213,10 +211,11 @@ public class MainActivity extends AppCompatActivity
     public void drawKeyword() 
     {
         Menu menu = navigationView.getMenu().getItem(2).getSubMenu();
+        RssDatabase rssDatabase = RssDatabase.getInstance();
         List<String> keywordList = rssDatabase.getKeyword();
         if(keywordList.size() != 0) {
-            for (int i = 1; i <= keywordList.size(); i++) {
-                menu.add(R.id.group_keyword, i, 1, keywordList.get(i - 1)).setIcon(R.drawable.ic_menu_send);
+            for (int i = 0; i < keywordList.size(); i++) {
+                menu.add(R.id.group_keyword, i + 1, 1, keywordList.get(i)).setIcon(R.drawable.ic_menu_send);
             }
         }
     }
