@@ -4,14 +4,22 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.PeriodicSync;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.notissu.Util.LogUtils;
+
+import java.util.List;
 
 /**
  * Created by forhack on 2016-11-26.
  */
 
 public class SyncUtil {
+    private static final String TAG = LogUtils.makeLogTag(SyncUtil.class);
+
     public static final String ACCOUNT_TYPE = "com.notissu.account";
     private static final String PREF_SETUP_COMPLETE = "PREF_SETUP_COMPLETE";
     private static final String CONTENT_AUTHORITY = RSSProvider.AUTHORITIES;
@@ -35,6 +43,7 @@ public class SyncUtil {
             // on other scheduled syncs and network utilization.
             ContentResolver.addPeriodicSync(
                     account, CONTENT_AUTHORITY, new Bundle(),SYNC_FREQUENCY);
+
             newAccount = true;
         }
         // Schedule an initial sync if we detect problems with either our account or our local
@@ -46,6 +55,35 @@ public class SyncUtil {
                     .putBoolean(PREF_SETUP_COMPLETE, true).commit();
         }
     }
+
+    public static void updateSyncFrequency(long period) {
+        Account account = AuthenticatorService.getAccount(ACCOUNT_TYPE);
+
+        ContentResolver.addPeriodicSync(
+                account, CONTENT_AUTHORITY, new Bundle(),period);
+        /*asdf = ContentResolver.getPeriodicSyncs(account, CONTENT_AUTHORITY);
+        Log.d(TAG,"size() : " + asdf.size());
+        for (int i = 0; i < asdf.size(); i++) {
+            Log.d(TAG,i +" period : " +asdf.get(i).period);
+        }
+
+        ContentResolver.removePeriodicSync(account, CONTENT_AUTHORITY, new Bundle());
+        asdf = ContentResolver.getPeriodicSyncs(account, CONTENT_AUTHORITY);
+        Log.d(TAG,"size() : " + asdf.size());
+        for (int i = 0; i < asdf.size(); i++) {
+            Log.d(TAG,i +" period : " +asdf.get(i).period);
+        }
+
+        ContentResolver.addPeriodicSync(
+                account, CONTENT_AUTHORITY, new Bundle(),SYNC_FREQUENCY);
+        asdf = ContentResolver.getPeriodicSyncs(account, CONTENT_AUTHORITY);
+        Log.d(TAG,"size() : " + asdf.size());
+        for (int i = 0; i < asdf.size(); i++) {
+            Log.d(TAG,i +" period : " +asdf.get(i).period);
+        }*/
+
+    }
+
 
     /**
      * Helper method to trigger an immediate sync ("refresh").

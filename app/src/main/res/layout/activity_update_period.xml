@@ -35,13 +35,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <com.shawnlin.numberpicker.NumberPicker
-                android:id="@+id/update_period_np_minute"
+                android:id="@+id/update_period_np_hour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:np_width="64dp"
                 app:np_height="180dp"
                 app:np_dividerColor="@color/colorPrimary"
-                app:np_max="59"
+                app:np_max="24"
                 app:np_min="0"
                 app:np_textColor="@color/colorPrimary"
                 />
@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <com.shawnlin.numberpicker.NumberPicker
-                android:id="@+id/update_period_np_second"
+                android:id="@+id/update_period_np_minute"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:np_width="64dp"
