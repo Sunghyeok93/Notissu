@@ -1,5 +1,6 @@
 package com.notissu.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -57,12 +58,10 @@ public class MainActivity extends AppCompatActivity
         /*위젯에 리스터를 붙여주는 함수*/
         settingListener();
 
-        Alarm alarm = new Alarm(this);
-        alarm.popString("ㅎㅎ");
-
     }
 
     private void initWidget() {
+        Alarm.cancel(getApplicationContext());
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -77,9 +76,20 @@ public class MainActivity extends AppCompatActivity
         navigationMenu.setMenu(navigationView);
         drawKeyword();
 
-        String title = NavigationMenu.getInstance().getFristItemTitle();
+        Intent intent = getIntent();
+        boolean isAlarm = intent.getBooleanExtra(Alarm.KEY_IS_ALRAM,false);
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.main_fragment_container,NoticeTabFragment.newInstance(title)).commit();
+
+        if (!isAlarm) {
+            String title = NavigationMenu.getInstance().getFristItemTitle();
+            fragmentTransaction.add(R.id.main_fragment_container,NoticeTabFragment.newInstance(title)).commit();
+        } else {
+            NoticeProvider noticeProvider = new NoticeProviderImpl();
+            String title = intent.getStringExtra(Alarm.KEY_FIRST_KEYWORD);
+            ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getKeywordNotice(title));
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(title, noticeList)).commit();
+        }
+
     }
 
     private void settingListener() {
@@ -120,8 +130,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     /*
-    Navigation의 메뉴가 클릭 됐을 때 생기는 Event 구현
-    */
+        Navigation의 메뉴가 클릭 됐을 때 생기는 Event 구현
+        */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

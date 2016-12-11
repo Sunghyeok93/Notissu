@@ -9,4 +9,10 @@
     <string name="action_search">검색하기</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="alarm_ticker">새로운 공지사항이 도착했습니다!</string>
+    <string name="alarm_title">NOTISSU 공지사항 업데이트</string>
+
+
 </resources>
