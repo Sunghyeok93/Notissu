@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.notissu.R;
+import com.notissu.SyncAdapter.SyncUtil;
 import com.shawnlin.numberpicker.NumberPicker;
 
 public class UpdatePeriodActivity extends AppCompatActivity {
@@ -70,6 +71,7 @@ public class UpdatePeriodActivity extends AppCompatActivity {
         int minute = mNpMinute.getValue();
         long period = (hour*60*60) + (minute*60);
 
+        SyncUtil.updateSyncFrequency(period);
 
 
         PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit()
