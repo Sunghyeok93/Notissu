@@ -2,12 +2,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item
-        android:title="setKeyword"
-        android:id="@+id/item_add_keyword"
-        android:orderInCategory="200"
-        android:icon="@android:drawable/ic_menu_add"
-        app:showAsAction="always"
-        />
-
 </menu>

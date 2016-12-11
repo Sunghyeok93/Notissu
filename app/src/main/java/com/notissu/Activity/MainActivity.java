@@ -135,11 +135,6 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if(id == R.id.item_add_keyword)
-        {
-
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
