@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.notissu.Fragment.NoticeListFragment">
+
+    <RelativeLayout
+        android:id="@+id/delete_keyword_rl_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ListView
+            android:id="@+id/delete_keyword_lv_keyword"
+            android:layout_above="@+id/delete_keyword_ll_footer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+        <LinearLayout
+            android:layout_alignParentBottom="true"
+            android:id="@+id/delete_keyword_ll_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:text="모든 키워드 삭제"
+                android:id="@+id/delete_keyword_btn_remove_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </RelativeLayout>
+
+
+    <TextView
+            android:text="등록된 키워드가 없습니다."
+            android:id = "@+id/delete_keyword_all"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+</LinearLayout>

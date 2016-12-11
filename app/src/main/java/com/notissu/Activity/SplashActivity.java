@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.notissu.R;
 import com.notissu.SyncAdapter.RssDatabase;
 import com.notissu.SyncAdapter.SyncUtil;
+import com.notissu.Util.ResString;
 import com.notissu.Util.TestUtils;
 
 import static com.notissu.Util.LogUtils.makeLogTag;
@@ -24,6 +25,10 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        /*앱이 실행되면 가장 먼저 호출되어야 할 기능이다.
+        resource에서 문자열 읽어들기 편하게 하기위해 만든 Util.
+        singleton으로 되어있기에 최초에 context를 넘겨줘야함.*/
+        ResString.getInstance().setContext(getApplicationContext());
         SyncUtil.CreateSyncAccount(this);
         RssDatabase.setInstance(getApplicationContext());
 

@@ -60,11 +60,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initWidget() {
-        /*앱이 실행되면 가장 먼저 호출되어야 할 기능이다.
-        resource에서 문자열 읽어들기 편하게 하기위해 만든 Util.
-        singleton으로 되어있기에 최초에 context를 넘겨줘야함.*/
-        ResString.getInstance().setContext(getApplicationContext());
-
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
