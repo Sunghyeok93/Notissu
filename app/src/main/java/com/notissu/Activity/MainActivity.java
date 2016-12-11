@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.notissu.Dialog.AddKeywordDialog;
@@ -39,12 +40,15 @@ public class MainActivity extends AppCompatActivity
     FloatingActionButton fab;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         /*위젯을 초기화하는 함수*/
         initWidget();
@@ -112,26 +116,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    /*
-    Actionbar Item을 선택했을 때 생기는 Event 구현
-    */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        return super.onOptionsItemSelected(item);
-    }
-
     /*
     Navigation의 메뉴가 클릭 됐을 때 생기는 Event 구현
     */
@@ -144,28 +128,29 @@ public class MainActivity extends AppCompatActivity
 
         int id = item.getItemId();
         int groupid = item.getGroupId(); // keyword 그룹아이디 가져오기
-        String keywordName = (String) item.getTitle(); // keyword 구분을 위한 제목 가져오기
+        String itemTitle = item.getTitle().toString(); // keyword 구분을 위한 제목 가져오기
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         NoticeProvider noticeProvider = new NoticeProviderImpl();
 
         if (id == R.id.nav_ssu_notice) {
             //Main 공지사항
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeTabFragment.newInstance(item.getTitle().toString())).commit();
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeTabFragment.newInstance(itemTitle)).commit();
         } else if (id == R.id.nav_ssu_library) {
             //도서관 공지사항
             ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getLibraryNotice());
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(item.getTitle().toString(), noticeList)).commit();
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(itemTitle, noticeList)).commit();
         } else if (id == R.id.nav_starred) {
             //즐겨찾기
             ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getStarredNotice());
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(item.getTitle().toString(), noticeList)).commit();
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(itemTitle, noticeList)).commit();
         } else if (groupid == R.id.group_keyword) {
-            ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getKeywordNotice(keywordName));
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(item.getTitle().toString(), noticeList)).commit();
+            String keyword = itemTitle;
+            ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getKeywordNotice(keyword));
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(itemTitle, noticeList)).commit();
         } else if (id == R.id.nav_option) {
             //설정 공지사항
-            fragmentTransaction.replace(R.id.main_fragment_container, SettingFragment.newInstance(item.getTitle().toString())).commit();
+            fragmentTransaction.replace(R.id.main_fragment_container, SettingFragment.newInstance(itemTitle)).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -205,5 +190,10 @@ public class MainActivity extends AppCompatActivity
                 menu.add(R.id.group_keyword, i + 1, 1, keywordList.get(i)).setIcon(R.drawable.ic_menu_send);
             }
         }
+    }
+
+    @Override
+    public void setTitle(CharSequence title) {
+        getSupportActionBar().setTitle(title);
     }
 }
