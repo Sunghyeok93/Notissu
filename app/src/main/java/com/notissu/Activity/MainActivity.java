@@ -147,8 +147,6 @@ public class MainActivity extends AppCompatActivity
         int groupid = item.getGroupId(); // keyword 그룹아이디 가져오기
         String keywordName = (String) item.getTitle(); // keyword 구분을 위한 제목 가져오기
 
-        Toast.makeText(getApplicationContext(),"  "+keywordName,Toast.LENGTH_LONG).show();
-
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         NoticeProvider noticeProvider = new NoticeProviderImpl();
 

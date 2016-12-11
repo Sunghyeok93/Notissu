@@ -1,37 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/drawer_group_notice">
+        <item android:title="공지사항">
+            <menu>
+                <item
+                    android:id="@+id/nav_ssu_notice"
+                    android:icon="@drawable/ic_menu_share"
+                    android:title="학교 공지사항" />
+                <item
+                    android:id="@+id/nav_ssu_library"
+                    android:icon="@drawable/ic_menu_share"
+                    android:title="도서관" />
+            </menu>
+        </item>
+    </group>
 
-    <item android:title="공지사항">
-        <menu>
-            <item
-                android:id="@+id/nav_ssu_notice"
-                android:icon="@drawable/ic_menu_share"
-                android:title="학교 공지사항" />
-            <item
-                android:id="@+id/nav_ssu_library"
-                android:icon="@drawable/ic_menu_share"
-                android:title="도서관" />
-        </menu>
-    </item>
-    <item android:title="기능">
-        <menu>
-            <item
-                android:id="@+id/nav_starred"
-                android:icon="@drawable/ic_drawer_starred_24dp"
-                android:title="즐겨찾기" />
-        </menu>
-    </item>
-    <item
-        android:title="키워드"
-        android:id="@+id/group_keyword">
-        <menu>
-        </menu>
-    </item>
-    <item
-        android:orderInCategory="2"
-        android:id="@+id/nav_option"
-        android:icon="@drawable/ic_drawer_settings_24dp"
-        android:title="설정" />
+    <group android:id="@+id/drawer_group_feature">
+        <item android:title="기능">
+            <menu>
+                <item
+                    android:id="@+id/nav_starred"
+                    android:icon="@drawable/ic_drawer_starred_24dp"
+                    android:title="즐겨찾기" />
+            </menu>
+        </item>
+    </group>
+
+    <group android:id="@+id/drawer_group_keyword">
+        <item
+            android:title="키워드"
+            android:id="@+id/group_keyword">
+            <menu>
+            </menu>
+        </item>
+    </group>
+
+    <group android:id="@+id/drawer_group_setting">
+        <item
+            android:orderInCategory="2"
+            android:id="@+id/nav_option"
+            android:icon="@drawable/ic_drawer_settings_24dp"
+            android:title="설정" />
+    </group>
 </menu>
 
