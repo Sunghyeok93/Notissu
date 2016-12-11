@@ -163,7 +163,8 @@ public class MainActivity extends AppCompatActivity
 
     // itemName을 키워드 이름 받아와서 네비게이션에 메뉴 추가
     public boolean addNewItem(String itemName){
-        Menu menu = NavigationMenu.getInstance().getKeywordMenu();
+        NavigationMenu navigationMenu = NavigationMenu.getInstance();
+        Menu menu = navigationMenu.getKeywordMenu();
         // 같은 이름의 Keyword를 받았을때 문제 처리해야됨
         int i=0;
         if(menu.size() != 0) {
@@ -176,21 +177,22 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        menu.add(R.id.group_keyword, menu.size()+1,1,itemName).setIcon(R.drawable.ic_menu_send);
+        menu.add(R.id.group_keyword, navigationMenu.getNewId(),1,itemName).setIcon(R.drawable.ic_menu_send);
         RssDatabase rssDatabase = RssDatabase.getInstance();
         rssDatabase.addKeyword(itemName);
 
         return true;
     }
+
     // 앱 실행시 데이터베이스에서 키워드 아이템 받아오기
-    public void drawKeyword() 
-    {
-        Menu menu = NavigationMenu.getInstance().getKeywordMenu();
+    public void drawKeyword() {
+        NavigationMenu navigationMenu = NavigationMenu.getInstance();
+        Menu menu = navigationMenu.getKeywordMenu();
         RssDatabase rssDatabase = RssDatabase.getInstance();
         List<String> keywordList = rssDatabase.getKeyword();
-        if(keywordList.size() != 0) {
+        if (keywordList.size() != 0) {
             for (int i = 0; i < keywordList.size(); i++) {
-                menu.add(R.id.group_keyword, i + 1, 1, keywordList.get(i)).setIcon(R.drawable.ic_menu_send);
+                menu.add(R.id.group_keyword, navigationMenu.getNewId(), 1, keywordList.get(i)).setIcon(R.drawable.ic_menu_send);
             }
         }
     }

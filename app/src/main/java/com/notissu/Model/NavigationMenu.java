@@ -14,7 +14,8 @@ public class NavigationMenu {
     private static NavigationMenu navigationMenu = new NavigationMenu();
     private NavigationView menu;
     private NavigationMenu() {}
-    
+    private int id;
+
     public static NavigationMenu getInstance() {
         return navigationMenu;
     }
@@ -31,5 +32,9 @@ public class NavigationMenu {
     public String getFristItemTitle() {
         String title = menu.getMenu().getItem(0).getSubMenu().getItem(0).getTitle().toString();
         return title;
+    }
+
+    public int getNewId() {
+        return id++;
     }
 }
