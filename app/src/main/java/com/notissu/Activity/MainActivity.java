@@ -82,12 +82,12 @@ public class MainActivity extends AppCompatActivity
 
         if (!isAlarm) {
             String title = NavigationMenu.getInstance().getFristItemTitle();
-            fragmentTransaction.add(R.id.main_fragment_container,NoticeTabFragment.newInstance(title)).commit();
+            fragmentTransaction.add(R.id.main_fragment_container,NoticeTabFragment.newInstance(NoticeListFragment.KEY_MAIN_NOTICE, title)).commit();
         } else {
             NoticeProvider noticeProvider = new NoticeProviderImpl();
             String title = intent.getStringExtra(Alarm.KEY_FIRST_KEYWORD);
             ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getKeywordNotice(title));
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(title, noticeList)).commit();
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.KEY_MAIN_NOTICE, title, noticeList)).commit();
         }
 
     }
@@ -148,19 +148,19 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_ssu_notice) {
             //Main 공지사항
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeTabFragment.newInstance(itemTitle)).commit();
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeTabFragment.newInstance(NoticeListFragment.KEY_MAIN_NOTICE, itemTitle)).commit();
         } else if (id == R.id.nav_ssu_library) {
             //도서관 공지사항
             ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getLibraryNotice());
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(itemTitle, noticeList)).commit();
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.KEY_LIBRARY_NOTICE, itemTitle, noticeList)).commit();
         } else if (id == R.id.nav_starred) {
             //즐겨찾기
             ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getStarredNotice());
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(itemTitle, noticeList)).commit();
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.KEY_STARRED, itemTitle, noticeList)).commit();
         } else if (groupid == R.id.group_keyword) {
             String keyword = itemTitle;
             ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getKeywordNotice(keyword));
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(itemTitle, noticeList)).commit();
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.KEY_KEYWORD, itemTitle, noticeList)).commit();
         } else if (id == R.id.nav_option) {
             //설정 공지사항
             fragmentTransaction.replace(R.id.main_fragment_container, SettingFragment.newInstance(itemTitle)).commit();
