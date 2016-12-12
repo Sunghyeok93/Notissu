@@ -52,14 +52,14 @@ public class NoticeTabFragment extends Fragment {
         String title = getArguments().getString(KEY_TITLE);
         int flag = getArguments().getInt(KEY_FLAG);
 
-        String[] tabStringList = ResString.getInstance().getStringArray(ResString.RES_SSU_NOTICES);
+        String[] categoryList = ResString.getInstance().getStringArray(ResString.RES_SSU_NOTICES);
 
-        for (int i=0;i<tabStringList.length;i++) {
-            tabLayout.addTab(tabLayout.newTab().setText(tabStringList[i]));
+        for (int i=0;i<categoryList.length;i++) {
+            tabLayout.addTab(tabLayout.newTab().setText(categoryList[i]));
         }
 
         NoticeFragmentPagerAdapter noticeFragmentPagerAdapter =
-                new NoticeFragmentPagerAdapter(getFragmentManager(), flag, title, tabLayout.getTabCount(), tabStringList);
+                new NoticeFragmentPagerAdapter(getFragmentManager(), flag, title, tabLayout.getTabCount(), categoryList);
         viewPager.setAdapter(noticeFragmentPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 

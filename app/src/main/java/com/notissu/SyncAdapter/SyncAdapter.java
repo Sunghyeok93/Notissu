@@ -8,9 +8,12 @@ import android.content.Context;
 import android.content.OperationApplicationException;
 import android.content.SyncResult;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Model.RssItem;
 import com.notissu.Notification.Alarm;
 import com.notissu.R;
@@ -127,6 +130,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 syncResult.stats.numInserts++;
             }
 
+
         } catch (MalformedURLException e) {
             Log.e(TAG, "Feed URL is malformed", e);
             syncResult.stats.numParseExceptions++;
@@ -216,54 +220,4 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
     }
 
-    /*private void updateLocalRssData(final SyncResult syncResult)
-            throws IOException, XmlPullParserException, RemoteException,
-            OperationApplicationException, ParseException, FeedException{
-
-        InputStream feedStream = IOUtils.URLToInputStream(feedUrl);
-
-        SyndFeedInput input = new SyndFeedInput();
-        SyndFeed feed = input.build(new XmlReader(feedStream));
-
-        //서버에서 읽어온 RssItem hashMap에 집어넣는다. <id, value>
-        List<SyndEntry> syndEntries = feed.getEntries();
-        final List<RssItem> receiveRssItemList = RssItem.toRssList(syndEntries);
-
-        HashMap<String, RssItem> rssMap = new HashMap<String, RssItem>();
-        for (int i = 0; i < receiveRssItemList.size(); i++) {
-            RssItem item = receiveRssItemList.get(i);
-            rssMap.put(item.getGuid(), item);
-        }
-
-        //DB에 저장되어 있는 모든 RssItem을 불러들인다.
-        RssDatabase rssDatabase = new RssDatabase(getContext());
-        final List<RssItem> DBRssItemList = rssDatabase.getCursor();
-
-        //서버에서 읽어온 RssItem과 localDB에 저장된 RssItem과 비교해서 있는지 확인한다.
-        for (int i = 0; i < DBRssItemList.size(); i++) {
-            syncResult.stats.numEntries++;
-            RssItem dbRssItem = DBRssItemList.get(i);
-            RssItem isExist = rssMap.get(dbRssItem.getGuid());
-            if (isExist != null) {  //같은게 있으면
-                rssMap.remove(dbRssItem.getGuid());
-                if (isExist.getTitle() != null && !isExist.getTitle().equals(dbRssItem.getTitle()) ||
-                        isExist.getLink() != null && !isExist.getLink().equals(dbRssItem.getLink()) ||
-                        isExist.getEmail() != null && !isExist.getEmail().equals(dbRssItem.getEmail()) ||
-                        isExist.getPublishDate() != null && !isExist.getPublishDate().equals(dbRssItem.getPublishDate())) {
-                    //새로 들어온것이 업데이트 할 필요가 있으면 업데이트를 한다.
-                    rssDatabase.updateMainNotice(isExist);
-                    syncResult.stats.numUpdates++;
-                } else {
-                    //업데이트할 필요가 없으면 아무것도 안한다.
-                }
-            } else {    //같은게 없으면
-                //냅둔다
-            }
-        }
-        for (RssItem item : rssMap.values()) {
-            //DB에 추가한다.
-            rssDatabase.addMainNotice(item);
-            syncResult.stats.numInserts++;
-        }
-    }*/
 }
