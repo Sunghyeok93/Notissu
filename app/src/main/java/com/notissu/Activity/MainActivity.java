@@ -7,8 +7,10 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,15 +41,19 @@ public class MainActivity extends AppCompatActivity
     NavigationView navigationView;
     Toolbar toolbar;
     FloatingActionButton fab;
-
-
+    SearchView mSearchView;
+    SwipeRefreshLayout refreshLayout;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
 
 
@@ -70,6 +76,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+
     private void settingWidget() {
         toggle.syncState();
         NavigationMenu navigationMenu = NavigationMenu.getInstance();
@@ -89,7 +96,6 @@ public class MainActivity extends AppCompatActivity
             ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getKeywordNotice(title));
             fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.KEY_MAIN_NOTICE, title, noticeList)).commit();
         }
-
     }
 
     private void settingListener() {
@@ -120,14 +126,44 @@ public class MainActivity extends AppCompatActivity
     };
 
     @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+    public void onBackPressed(){
+     DrawerLayout drawer = (DrawerLayout)  findViewById(R.id.drawer_layout);
+        if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }
+        else {
             super.onBackPressed();
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        toolbar.inflateMenu(R.menu.main);
+        mSearchView = (SearchView) toolbar.getMenu().findItem(R.id.menu_search).getActionView();
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                NoticeProvider noticeProvider = new NoticeProviderImpl();
+                ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getKeywordNotice(s));
+                fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.KEY_KEYWORD, s, noticeList));
+                fragmentTransaction.addToBackStack(null).commit();
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String s) {
+
+                return false;
+            }
+        });
+        mSearchView.setQueryHint("검색 입력");
+        mSearchView.clearFocus();
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
 
     /*
         Navigation의 메뉴가 클릭 됐을 때 생기는 Event 구현

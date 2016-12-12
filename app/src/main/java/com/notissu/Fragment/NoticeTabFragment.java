@@ -59,10 +59,10 @@ public class NoticeTabFragment extends Fragment {
         }
 
         NoticeFragmentPagerAdapter noticeFragmentPagerAdapter =
-                new NoticeFragmentPagerAdapter(getFragmentManager(), flag, title, tabLayout.getTabCount(), categoryList);
+        new NoticeFragmentPagerAdapter(getChildFragmentManager(), flag, title, tabLayout.getTabCount(), categoryList);
+
         viewPager.setAdapter(noticeFragmentPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
     }
 
     private void settingListener() {
@@ -83,5 +83,6 @@ public class NoticeTabFragment extends Fragment {
             }
         });
     }
+
 
 }

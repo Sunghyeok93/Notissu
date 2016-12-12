@@ -24,13 +24,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
+
+    <Button
+        android:id="@+id/update_period_btn_update"
+        android:text="설정하기"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <LinearLayout
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_above="@+id/update_period_btn_update"
-        android:layout_below="@+id/update_period_ll_header"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/update_period_ll_header"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -38,6 +47,7 @@
                 android:id="@+id/update_period_np_hour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:np_textSize="@dimen/fab_margin"
                 app:np_width="64dp"
                 app:np_height="180dp"
                 app:np_dividerColor="@color/colorPrimary"
@@ -61,6 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:np_width="64dp"
+                app:np_textSize="@dimen/fab_margin"
                 app:np_height="180dp"
                 app:np_dividerColor="@color/colorPrimary"
                 app:np_max="59"
@@ -75,12 +86,5 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
     </LinearLayout>
-
-    <Button
-        android:id="@+id/update_period_btn_update"
-        android:text="설정하기"
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
 </RelativeLayout>
