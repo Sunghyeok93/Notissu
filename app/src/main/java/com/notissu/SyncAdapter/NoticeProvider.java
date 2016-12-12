@@ -36,6 +36,6 @@ public interface NoticeProvider {
     //키워드로 등록한 공지사항을 불러온다.
     List<RssItem> getKeywordNotice(String keyword);
 
-
+    List<RssItem> getSsuNotice(String category);
 
 }

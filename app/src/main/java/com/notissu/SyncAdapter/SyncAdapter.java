@@ -8,9 +8,12 @@ import android.content.Context;
 import android.content.OperationApplicationException;
 import android.content.SyncResult;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Model.RssItem;
 import com.notissu.Notification.Alarm;
 import com.notissu.R;
@@ -39,9 +42,9 @@ import java.util.List;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String TAG = SyncAdapter.class.getName();
 //    private static final String MAIN_NOTICE_URL = "https://leesanghyeok.github.io/feed.xml"; //내 블로그 임시
-//    private static final String MAIN_NOTICE_URL = "http://192.168.37.140:4000/feed.xml"; //내 블로그 임시
+    private static final String MAIN_NOTICE_URL = "http://192.168.37.140:4000/feed.xml"; //내 블로그 임시
     private static final String LIBRARY_NOTICE_URL = "http://oasis.ssu.ac.kr/API/BBS/1"; //도서관 공지사항
-    private static final String MAIN_NOTICE_URL = "http://www.ssu.ac.kr/web/kor/plaza_d_01;jsessionid=yIPyJDhVJSyGG1SWk3kZeQ5qXfdbVfqihsikvlZZVAILUn5tgH2HjcX4fiQFXD40?p_p_id=EXT_MIRRORBBS&p_p_lifecycle=0&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_pos=1&p_p_col_count=2&_EXT_MIRRORBBS_struts_action=%2Fext%2Fmirrorbbs%2Frss"; //내 블로그 임시
+//    private static final String MAIN_NOTICE_URL = "http://www.ssu.ac.kr/web/kor/plaza_d_01;jsessionid=yIPyJDhVJSyGG1SWk3kZeQ5qXfdbVfqihsikvlZZVAILUn5tgH2HjcX4fiQFXD40?p_p_id=EXT_MIRRORBBS&p_p_lifecycle=0&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_pos=1&p_p_col_count=2&_EXT_MIRRORBBS_struts_action=%2Fext%2Fmirrorbbs%2Frss"; //내 블로그 임시
     ContentResolver mContentResolver;
 
     public SyncAdapter(Context context, boolean autoInitialize) {
@@ -126,6 +129,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 rssDatabase.addLibraryNotice(item);
                 syncResult.stats.numInserts++;
             }
+
 
         } catch (MalformedURLException e) {
             Log.e(TAG, "Feed URL is malformed", e);
@@ -216,54 +220,4 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
     }
 
-    /*private void updateLocalRssData(final SyncResult syncResult)
-            throws IOException, XmlPullParserException, RemoteException,
-            OperationApplicationException, ParseException, FeedException{
-
-        InputStream feedStream = IOUtils.URLToInputStream(feedUrl);
-
-        SyndFeedInput input = new SyndFeedInput();
-        SyndFeed feed = input.build(new XmlReader(feedStream));
-
-        //서버에서 읽어온 RssItem hashMap에 집어넣는다. <id, value>
-        List<SyndEntry> syndEntries = feed.getEntries();
-        final List<RssItem> receiveRssItemList = RssItem.toRssList(syndEntries);
-
-        HashMap<String, RssItem> rssMap = new HashMap<String, RssItem>();
-        for (int i = 0; i < receiveRssItemList.size(); i++) {
-            RssItem item = receiveRssItemList.get(i);
-            rssMap.put(item.getGuid(), item);
-        }
-
-        //DB에 저장되어 있는 모든 RssItem을 불러들인다.
-        RssDatabase rssDatabase = new RssDatabase(getContext());
-        final List<RssItem> DBRssItemList = rssDatabase.getCursor();
-
-        //서버에서 읽어온 RssItem과 localDB에 저장된 RssItem과 비교해서 있는지 확인한다.
-        for (int i = 0; i < DBRssItemList.size(); i++) {
-            syncResult.stats.numEntries++;
-            RssItem dbRssItem = DBRssItemList.get(i);
-            RssItem isExist = rssMap.get(dbRssItem.getGuid());
-            if (isExist != null) {  //같은게 있으면
-                rssMap.remove(dbRssItem.getGuid());
-                if (isExist.getTitle() != null && !isExist.getTitle().equals(dbRssItem.getTitle()) ||
-                        isExist.getLink() != null && !isExist.getLink().equals(dbRssItem.getLink()) ||
-                        isExist.getEmail() != null && !isExist.getEmail().equals(dbRssItem.getEmail()) ||
-                        isExist.getPublishDate() != null && !isExist.getPublishDate().equals(dbRssItem.getPublishDate())) {
-                    //새로 들어온것이 업데이트 할 필요가 있으면 업데이트를 한다.
-                    rssDatabase.updateMainNotice(isExist);
-                    syncResult.stats.numUpdates++;
-                } else {
-                    //업데이트할 필요가 없으면 아무것도 안한다.
-                }
-            } else {    //같은게 없으면
-                //냅둔다
-            }
-        }
-        for (RssItem item : rssMap.values()) {
-            //DB에 추가한다.
-            rssDatabase.addMainNotice(item);
-            syncResult.stats.numInserts++;
-        }
-    }*/
 }

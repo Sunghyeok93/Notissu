@@ -12,7 +12,7 @@ import com.notissu.SyncAdapter.SyncUtil;
 import com.shawnlin.numberpicker.NumberPicker;
 
 public class UpdatePeriodActivity extends AppCompatActivity {
-    private static final String KEY_PERIOD = "KEY_PERIOD";
+    public static final String KEY_PERIOD = "KEY_PERIOD";
 
     Button mBtnUpdate;
     TextView mTvPeriod;

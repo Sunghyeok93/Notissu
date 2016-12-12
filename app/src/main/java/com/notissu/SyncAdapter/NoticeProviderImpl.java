@@ -37,4 +37,28 @@ public class NoticeProviderImpl implements NoticeProvider {
     public List<RssItem> getKeywordNotice(String keyword) {
         return mRssDatabase.getKeyword(keyword);
     }
+
+    @Override
+    public List<RssItem> getSsuNotice(String category) {
+        switch (category) {
+            case "전체":
+                return getMainNotice(NoticeProvider.NOTICE_SSU_ALL);
+            case "학사":
+                return getMainNotice(NoticeProvider.NOTICE_SSU_HACKSA);
+            case "장학":
+                return getMainNotice(NoticeProvider.NOTICE_SSU_JANGHACK);
+            case "국제교류":
+                return getMainNotice(NoticeProvider.NOTICE_SSU_KUCKJE);
+            case "모집,채용":
+                return getMainNotice(NoticeProvider.NOTICE_SSU_MOJIP);
+            case "교내행사":
+                return getMainNotice(NoticeProvider.NOTICE_SSU_KYONE);
+            case "교외행사":
+                return getMainNotice(NoticeProvider.NOTICE_SSU_KYOWAE);
+            case "봉사":
+                return getMainNotice(NoticeProvider.NOTICE_SSU_BONGSA);
+            default:
+                return getMainNotice(NoticeProvider.NOTICE_SSU_ALL);
+        }
+    }
 }
