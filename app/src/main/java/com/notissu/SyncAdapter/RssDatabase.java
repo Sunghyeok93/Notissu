@@ -151,8 +151,9 @@ public class RssDatabase extends SQLiteOpenHelper{
         List<RssItem> rssItemList = new ArrayList<>();
         String query = getSelectString(RssItem.MainNotice.TABLE_NAME,selection) +
                 " union all " +
-                getSelectString(RssItem.LibraryNotice.TABLE_NAME,selection);
-
+                getSelectString(RssItem.LibraryNotice.TABLE_NAME,selection) +
+                " order by " +
+                RssItem.Common.COLUMN_NAME_PUBLISH_DATE + " DESC ";
         //select문을 2개로 만들다보니 selectionargs도 두배로 복사해야한다.
         String[] doubleArgs = null;
         if (selectionargs != null) {
