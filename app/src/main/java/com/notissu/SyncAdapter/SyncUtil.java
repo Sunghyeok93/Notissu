@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.notissu.Activity.UpdatePeriodActivity;
 import com.notissu.Util.LogUtils;
 
 import java.util.List;
@@ -52,6 +53,8 @@ public class SyncUtil {
         if (newAccount || !setupComplete) {
             TriggerRefresh();
             PreferenceManager.getDefaultSharedPreferences(context).edit()
+                    .putLong(UpdatePeriodActivity.KEY_PERIOD, SYNC_FREQUENCY).commit();
+            PreferenceManager.getDefaultSharedPreferences(context).edit()
                     .putBoolean(PREF_SETUP_COMPLETE, true).commit();
         }
     }
@@ -61,26 +64,6 @@ public class SyncUtil {
 
         ContentResolver.addPeriodicSync(
                 account, CONTENT_AUTHORITY, new Bundle(),period);
-        /*asdf = ContentResolver.getPeriodicSyncs(account, CONTENT_AUTHORITY);
-        Log.d(TAG,"size() : " + asdf.size());
-        for (int i = 0; i < asdf.size(); i++) {
-            Log.d(TAG,i +" period : " +asdf.get(i).period);
-        }
-
-        ContentResolver.removePeriodicSync(account, CONTENT_AUTHORITY, new Bundle());
-        asdf = ContentResolver.getPeriodicSyncs(account, CONTENT_AUTHORITY);
-        Log.d(TAG,"size() : " + asdf.size());
-        for (int i = 0; i < asdf.size(); i++) {
-            Log.d(TAG,i +" period : " +asdf.get(i).period);
-        }
-
-        ContentResolver.addPeriodicSync(
-                account, CONTENT_AUTHORITY, new Bundle(),SYNC_FREQUENCY);
-        asdf = ContentResolver.getPeriodicSyncs(account, CONTENT_AUTHORITY);
-        Log.d(TAG,"size() : " + asdf.size());
-        for (int i = 0; i < asdf.size(); i++) {
-            Log.d(TAG,i +" period : " +asdf.get(i).period);
-        }*/
 
     }
 
