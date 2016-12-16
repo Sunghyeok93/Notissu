@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="define_int_numberpicker"></string>
+    <!-- Author section -->
+    <string name="library_numberpicker_author">ShawnLin013(Shawn Lin)</string>
+    <string name="library_numberpicker_authorWebsite">https://github.com/ShawnLin013/NumberPicker</string>
+    <!-- Library section -->
+    <string name="library_numberpicker_libraryName">NumberPicker</string>
+    <string name="library_numberpicker_libraryDescription">The android library that provides a simple and customizable NumberPicker. Its based on android.widget.NumberPicker.</string>
+    <string name="library_numberpicker_libraryWebsite">https://github.com/ShawnLin013/NumberPicker</string>
+    <string name="library_numberpicker_libraryVersion">2.3.0</string>
+    <!-- OpenSource section -->
+    <string name="library_numberpicker_isOpenSource">true</string>
+    <string name="library_numberpicker_repositoryLink">https://github.com/ShawnLin013/NumberPicker</string>
+    <!-- ClassPath for autoDetect section -->
+    <string name="library_numberpicker_classPath">com.shawnlin.numberpicker</string>
+    <!-- License section -->
+    <string name="library_numberpicker_licenseId">apache_2_0</string>
+    <!-- Custom variables section -->
+</resources>

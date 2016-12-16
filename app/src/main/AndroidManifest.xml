@@ -22,7 +22,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Activity.SplashActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/AppThemeNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -61,10 +61,15 @@
                 android:resource="@xml/syncadapter" />
         </service>
 
-        <activity android:name=".Activity.DeleteKeywordActivity" />
-        <activity android:name=".Activity.UpdatePeriodActivity" />
-        <activity android:name=".WithUs.WithUsActivity" />
-        <activity android:name=".Support.SupportActivity"></activity>
+
+        <activity android:name=".Activity.UpdatePeriodActivity"
+            android:theme="@style/AppThemeNoActionBar"/>
+        <activity android:name=".Activity.DeleteKeywordActivity"
+            android:theme="@style/AppThemeNoActionBar"/>
+        <activity android:name=".WithUs.WithUsActivity"
+            android:theme="@style/AppThemeNoActionBar"/>
+        <activity android:name=".AboutLibraries.AboutLibrariesActivity"
+            android:theme="@style/AppThemeNoActionBar"/>
     </application>
 
 </manifest>

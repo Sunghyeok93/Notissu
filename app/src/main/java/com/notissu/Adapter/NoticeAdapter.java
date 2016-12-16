@@ -1,15 +1,18 @@
 package com.notissu.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.notissu.Model.RssItem;
 import com.notissu.R;
 import com.notissu.SyncAdapter.RssDatabase;
+import com.notissu.Util.LogUtils;
 
 import java.util.ArrayList;
 
@@ -18,6 +21,7 @@ import java.util.ArrayList;
  */
 
 public class NoticeAdapter extends ArrayAdapter<RssItem> {
+    private static final String TAG = LogUtils.makeLogTag(NoticeAdapter.class);
     Context context;
     ViewHolder viewHolder;
     //ListView에 보여줄 Item
@@ -72,6 +76,7 @@ public class NoticeAdapter extends ArrayAdapter<RssItem> {
             viewHolder = new ViewHolder();
             viewHolder.tvSubject = (TextView) view.findViewById(R.id.notice_tv_subject);
             viewHolder.tvTime = (TextView) view.findViewById(R.id.notice_tv_time);
+            viewHolder.llWrapper = (LinearLayout) view.findViewById(R.id.notice_ll_cb_wrapper);
             viewHolder.cbStar = (CheckBox) view.findViewById(R.id.notice_cb_star);
             view.setTag(viewHolder);
         }else{
@@ -84,19 +89,24 @@ public class NoticeAdapter extends ArrayAdapter<RssItem> {
         viewHolder.tvSubject.setText(title);
         viewHolder.tvTime.setText(getItem(index).getPublishDateShort());
         viewHolder.cbStar.setChecked(isChecked[index]);
-        viewHolder.cbStar.setOnClickListener(new View.OnClickListener() {
+        viewHolder.llWrapper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RssDatabase rssDatabase = RssDatabase.getInstance();
-                CheckBox checkBox = (CheckBox) v;
+                CheckBox cb = (CheckBox)v.findViewById(R.id.notice_cb_star);
 
                 //클릭되고 난 다음이라 isChecked는 체크되는 순간이다.
-                if (checkBox.isChecked()) {
-                    rssDatabase.addStarred(title);
-                    isChecked[index] = true;
-                } else {
+                if (cb.isChecked()) {
+                    Log.d(TAG,"isChecked() : false");
+                    cb.setChecked(false);
                     rssDatabase.deleteStarred(title);
                     isChecked[index] = false;
+                } else {
+                    Log.d(TAG,"isChecked() : true");
+                    cb.setChecked(true);
+                    rssDatabase.addStarred(title);
+                    isChecked[index] = true;
+
                 }
             }
         });
@@ -107,6 +117,7 @@ public class NoticeAdapter extends ArrayAdapter<RssItem> {
         TextView tvSubject;
         TextView tvTime;
         CheckBox cbStar;
+        LinearLayout llWrapper;
     }
 
 }

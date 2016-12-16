@@ -14,5 +14,13 @@
     <string name="alarm_ticker">새로운 공지사항이 도착했습니다!</string>
     <string name="alarm_title">NOTISSU 공지사항 업데이트</string>
 
+    <string name="setting_title_update_period">업데이트 주기 설정</string>
+    <string name="setting_title_delete_keyword">키워드 삭제</string>
+    <string name="setting_title_with_us">도움 준 사람들</string>
+    <string name="setting_title_about_libraries">오픈소스 라이브러리</string>
+    <string name="setting_title_send_email">개발자에게 메일 보내기</string>
+
+
+
 
 </resources>
