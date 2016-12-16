@@ -1,4 +1,4 @@
-package com.notissu.SyncAdapter;
+package com.notissu.Database;
 
 import com.notissu.Model.RssItem;
 

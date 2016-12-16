@@ -6,11 +6,10 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Model.RssItem;
-import com.notissu.SyncAdapter.NoticeProvider;
-import com.notissu.SyncAdapter.NoticeProviderImpl;
+import com.notissu.Database.NoticeProvider;
+import com.notissu.Database.NoticeProviderImpl;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.notissu.Util.LogUtils.makeLogTag;
 

@@ -27,9 +27,9 @@ import com.notissu.Model.NavigationMenu;
 import com.notissu.Model.RssItem;
 import com.notissu.Notification.Alarm;
 import com.notissu.R;
-import com.notissu.SyncAdapter.NoticeProvider;
-import com.notissu.SyncAdapter.NoticeProviderImpl;
-import com.notissu.SyncAdapter.RssDatabase;
+import com.notissu.Database.NoticeProvider;
+import com.notissu.Database.NoticeProviderImpl;
+import com.notissu.Database.RssDatabase;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,8 +1,6 @@
 package com.notissu.Fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,9 +15,9 @@ import com.notissu.Adapter.NoticeAdapter;
 import com.notissu.Dialog.RssItemDialog;
 import com.notissu.Model.RssItem;
 import com.notissu.R;
-import com.notissu.SyncAdapter.NoticeProvider;
-import com.notissu.SyncAdapter.NoticeProviderImpl;
-import com.notissu.SyncAdapter.RssDatabase;
+import com.notissu.Database.NoticeProvider;
+import com.notissu.Database.NoticeProviderImpl;
+import com.notissu.Database.RssDatabase;
 import com.notissu.SyncAdapter.SyncUtil;
 
 import java.util.ArrayList;

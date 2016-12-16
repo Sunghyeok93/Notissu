@@ -1,6 +1,4 @@
-package com.notissu.SyncAdapter;
-
-import android.content.Context;
+package com.notissu.Database;
 
 import com.notissu.Model.RssItem;
 
@@ -42,23 +40,23 @@ public class NoticeProviderImpl implements NoticeProvider {
     public List<RssItem> getSsuNotice(String category) {
         switch (category) {
             case "전체":
-                return getMainNotice(NoticeProvider.NOTICE_SSU_ALL);
+                return getMainNotice(NOTICE_SSU_ALL);
             case "학사":
-                return getMainNotice(NoticeProvider.NOTICE_SSU_HACKSA);
+                return getMainNotice(NOTICE_SSU_HACKSA);
             case "장학":
-                return getMainNotice(NoticeProvider.NOTICE_SSU_JANGHACK);
+                return getMainNotice(NOTICE_SSU_JANGHACK);
             case "국제교류":
-                return getMainNotice(NoticeProvider.NOTICE_SSU_KUCKJE);
+                return getMainNotice(NOTICE_SSU_KUCKJE);
             case "모집,채용":
-                return getMainNotice(NoticeProvider.NOTICE_SSU_MOJIP);
+                return getMainNotice(NOTICE_SSU_MOJIP);
             case "교내행사":
-                return getMainNotice(NoticeProvider.NOTICE_SSU_KYONE);
+                return getMainNotice(NOTICE_SSU_KYONE);
             case "교외행사":
-                return getMainNotice(NoticeProvider.NOTICE_SSU_KYOWAE);
+                return getMainNotice(NOTICE_SSU_KYOWAE);
             case "봉사":
-                return getMainNotice(NoticeProvider.NOTICE_SSU_BONGSA);
+                return getMainNotice(NOTICE_SSU_BONGSA);
             default:
-                return getMainNotice(NoticeProvider.NOTICE_SSU_ALL);
+                return getMainNotice(NOTICE_SSU_ALL);
         }
     }
 }

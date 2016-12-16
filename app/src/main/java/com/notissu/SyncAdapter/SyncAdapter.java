@@ -5,18 +5,14 @@ import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.OperationApplicationException;
 import android.content.SyncResult;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.RemoteException;
 import android.util.Log;
 
-import com.notissu.Fragment.NoticeListFragment;
+import com.notissu.Database.NoticeProvider;
+import com.notissu.Database.RssDatabase;
 import com.notissu.Model.RssItem;
 import com.notissu.Notification.Alarm;
-import com.notissu.R;
 import com.notissu.Util.IOUtils;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
@@ -24,12 +20,9 @@ import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 
-import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;

@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.notissu.Model.RssItem;
 import com.notissu.R;
-import com.notissu.SyncAdapter.RssDatabase;
+import com.notissu.Database.RssDatabase;
 import com.notissu.Util.LogUtils;
 
 import java.util.ArrayList;

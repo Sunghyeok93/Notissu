@@ -4,8 +4,8 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.notissu.Model.RssItem;
-import com.notissu.SyncAdapter.NoticeProvider;
-import com.notissu.SyncAdapter.RssDatabase;
+import com.notissu.Database.NoticeProvider;
+import com.notissu.Database.RssDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
