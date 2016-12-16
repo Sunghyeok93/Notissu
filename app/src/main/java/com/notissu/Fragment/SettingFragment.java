@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.notissu.AboutLibraries.AboutLibrariesActivity;
 import com.notissu.Activity.DeleteKeywordActivity;
 import com.notissu.Activity.MainActivity;
 import com.notissu.Activity.UpdatePeriodActivity;
@@ -30,19 +31,23 @@ public class SettingFragment extends Fragment{
     public static final String KEY_DELETE_KEYWORD_TITLE = "KEY_DELETE_KEYWORD_TITLE";
     public static final String KEY_UPDATE_PERIOD_TITLE = "KEY_UPDATE_PERIOD_TITLE";
     public static final String KEY_WITH_US_TITLE = "KEY_WITH_US_TITLE";
+    public static final String KEY_ABOUT_LIBRARIES_TITLE = "KEY_ABOUT_LIBRARIES_TITLE";
     public static final String KEY_SUPPORT_TITLE = "KEY_SUPPORT_TITLE";
 
     private static final String CONTENT_UPDATE_PERIOD;
     private static final String CONTENT_DELETE_KEYWORD;
     private static final String CONTENT_WITH_US;
+    private static final String CONTENT_ABOUT_LIBRARIES;
     private static final String CONTENT_SUPPORT;
+
     private static final String[] mSettingList;
     static {
         mSettingList = ResString.getInstance().getStringArray(ResString.RES_SETTINGS_LIST);
         CONTENT_UPDATE_PERIOD = mSettingList[0];
         CONTENT_DELETE_KEYWORD = mSettingList[1];
         CONTENT_WITH_US = mSettingList[2];
-        CONTENT_SUPPORT = mSettingList[3];
+        CONTENT_ABOUT_LIBRARIES = mSettingList[3];
+        CONTENT_SUPPORT = mSettingList[4];
     }
 
     View rootView;
@@ -98,12 +103,16 @@ public class SettingFragment extends Fragment{
                     goDeleteKeyword(title);
                 } else if (title.equals(CONTENT_WITH_US)) {
                     goWithUs(title);
+                } else if (title.equals(CONTENT_ABOUT_LIBRARIES)) {
+                    goAboutLibraries(title);
                 } else if (title.equals(CONTENT_SUPPORT)) {
                     goSupport(title);
                 }
             }
         }) ;
     }
+
+
 
     public void goUpdatePeriod(String title){
         Intent intent = new Intent(getContext(), UpdatePeriodActivity.class);
@@ -120,6 +129,12 @@ public class SettingFragment extends Fragment{
     public void goWithUs(String title){
         Intent intent = new Intent(getContext(), WithUsActivity.class);
         intent.putExtra(KEY_WITH_US_TITLE,title);
+        startActivity(intent);
+    }
+
+    private void goAboutLibraries(String title) {
+        Intent intent = new Intent(getContext(), AboutLibrariesActivity.class);
+        intent.putExtra(KEY_ABOUT_LIBRARIES_TITLE,title);
         startActivity(intent);
     }
 
