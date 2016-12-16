@@ -5,14 +5,14 @@
         android:title="기능 설정">
         <android.support.v7.preference.Preference
             android:key="pf_folder_display_option"
-            android:title="업데이트 주기 설정">
+            android:title="@string/setting_title_update_period">
             <intent
                 android:targetClass="com.notissu.Activity.UpdatePeriodActivity"
                 android:targetPackage="com.notissu" />
         </android.support.v7.preference.Preference>
 
         <android.support.v7.preference.Preference
-            android:title="키워드 삭제">
+            android:title="@string/setting_title_delete_keyword">
             <intent
                 android:targetClass="com.notissu.Activity.DeleteKeywordActivity"
                 android:targetPackage="com.notissu" />
@@ -23,21 +23,21 @@
     <android.support.v7.preference.PreferenceCategory
         android:title="앱">
         <android.support.v7.preference.Preference
-            android:title="도움 준 사람들">
+            android:title="@string/setting_title_with_us">
             <intent
                 android:targetClass="com.notissu.WithUs.WithUsActivity"
                 android:targetPackage="com.notissu" />
             </android.support.v7.preference.Preference>
 
         <android.support.v7.preference.Preference
-            android:title="오픈소스 라이브러리">
+            android:title="@string/setting_title_about_libraries">
             <intent
                 android:targetClass="com.notissu.AboutLibraries.AboutLibrariesActivity"
                 android:targetPackage="com.notissu" />
         </android.support.v7.preference.Preference>
 
         <android.support.v7.preference.Preference
-            android:title="개발자에게 메일보내기"
+            android:title="@string/setting_title_send_email"
             android:summary="문의사항이 있으면 연락주세요~^^" >
             <intent
                 android:action="android.intent.action.SENDTO"

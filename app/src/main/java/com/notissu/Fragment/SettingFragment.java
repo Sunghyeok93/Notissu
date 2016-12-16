@@ -16,7 +16,6 @@ import com.notissu.Activity.DeleteKeywordActivity;
 import com.notissu.Activity.MainActivity;
 import com.notissu.Activity.UpdatePeriodActivity;
 import com.notissu.R;
-import com.notissu.Support.SupportActivity;
 import com.notissu.Util.LogUtils;
 import com.notissu.Util.ResString;
 import com.notissu.WithUs.WithUsActivity;
@@ -112,7 +111,7 @@ public class SettingFragment extends PreferenceFragmentCompat {
                 } else if (title.equals(CONTENT_ABOUT_LIBRARIES)) {
                     goAboutLibraries(title);
                 } else if (title.equals(CONTENT_SUPPORT)) {
-                    goSupport(title);
+//                    /goSupport(title);
                 }
             }
         }) ;
@@ -143,11 +142,11 @@ public class SettingFragment extends PreferenceFragmentCompat {
         intent.putExtra(KEY_ABOUT_LIBRARIES_TITLE,title);
         startActivity(intent);
     }
-
+/*
     private void goSupport(String title) {
         Intent intent = new Intent(getContext(), SupportActivity.class);
         intent.putExtra(KEY_SUPPORT_TITLE,title);
         startActivity(intent);
-    }
+    }*/
 }
 

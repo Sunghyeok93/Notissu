@@ -9,7 +9,7 @@
         <item name="preferenceTheme">@style/PreferenceLocalTheme</item>
     </style>
 
-    <style name="AppThemePreference" parent="AppTheme">
+    <style name="AppThemePreference" >
         <item name="android:listSeparatorTextViewStyle">@style/ListSeparatorTextView</item>
         <item name="android:textAppearanceLarge">@style/LargeText</item>
         <item name="android:textAppearanceMedium">@style/MediumText</item>
@@ -35,9 +35,12 @@
     </style>
 
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
+    <style name="AppThemeNoActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
     </style>
 
     <style name="ListTitle">

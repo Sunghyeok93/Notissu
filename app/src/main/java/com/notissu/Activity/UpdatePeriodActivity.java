@@ -3,6 +3,7 @@ package com.notissu.Activity;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import com.shawnlin.numberpicker.NumberPicker;
 
 public class UpdatePeriodActivity extends AppCompatActivity {
     public static final String KEY_PERIOD = "KEY_PERIOD";
+    Toolbar toolbar;
 
     Button mBtnUpdate;
     TextView mTvPeriod;
@@ -22,6 +24,8 @@ public class UpdatePeriodActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_period);
+        toolbar = (Toolbar) findViewById(R.id.update_period_toolbar);
+        setSupportActionBar(toolbar);
 
         /*위젯을 초기화하는 함수*/
         initWidget();
@@ -39,6 +43,8 @@ public class UpdatePeriodActivity extends AppCompatActivity {
     }
 
     private void settingWidget() {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         //저장된 시간 불러오기
         long preferencePeriod = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext()).getLong(KEY_PERIOD, 0);
@@ -57,6 +63,12 @@ public class UpdatePeriodActivity extends AppCompatActivity {
     }
 
     private void settingListener() {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         mBtnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
