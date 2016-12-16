@@ -10,7 +10,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        style="@style/ListTitle"
+        style="@style/ListTitle.ListNotRead"
         android:text="[모집·채용]실전창업프로젝트 [내가 CEO라면 이렇게 마케팅한다!] 참가자 모집"
         android:layout_toLeftOf="@+id/notice_tv_time"
         />

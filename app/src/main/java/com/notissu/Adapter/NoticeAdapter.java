@@ -1,6 +1,8 @@
 package com.notissu.Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,6 +90,13 @@ public class NoticeAdapter extends ArrayAdapter<RssItem> {
         final String title = getItem(index).getTitle();
 
         viewHolder.tvSubject.setText(title);
+        if (getItem(index).getIsRead() == RssItem.READ) {
+            viewHolder.tvSubject.setTextColor(Color.parseColor("#aaaaaa"));
+            viewHolder.tvSubject.setTypeface(Typeface.DEFAULT);
+        } else if (getItem(index).getIsRead() == RssItem.NOT_READ) {
+            viewHolder.tvSubject.setTextColor(Color.parseColor("#000000"));
+            viewHolder.tvSubject.setTypeface(Typeface.DEFAULT_BOLD);
+        }
         viewHolder.tvTime.setText(getItem(index).getPublishDateShort());
         viewHolder.cbStar.setChecked(isChecked[index]);
         viewHolder.llWrapper.setOnClickListener(new View.OnClickListener() {
