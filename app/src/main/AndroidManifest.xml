@@ -65,9 +65,11 @@
         <activity android:name=".Activity.UpdatePeriodActivity"
             android:theme="@style/AppThemeNoActionBar"/>
         <activity android:name=".Activity.DeleteKeywordActivity"
-            />
-        <activity android:name=".WithUs.WithUsActivity" />
-        <activity android:name=".AboutLibraries.AboutLibrariesActivity"></activity>
+            android:theme="@style/AppThemeNoActionBar"/>
+        <activity android:name=".WithUs.WithUsActivity"
+            android:theme="@style/AppThemeNoActionBar"/>
+        <activity android:name=".AboutLibraries.AboutLibrariesActivity"
+            android:theme="@style/AppThemeNoActionBar"/>
     </application>
 
 </manifest>
