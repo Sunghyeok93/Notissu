@@ -58,11 +58,11 @@ public class TestUtils {
         static KeywordProvider keywordProvider;
         static LowDBProvider lowDBProvider;
         public DB(Context context) {
-            mainProvider = new RssDatabase(context);
-            libraryProvider = new RssDatabase(context);
-            starredProvider = new RssDatabase(context);
-            keywordProvider = new RssDatabase(context);
-            lowDBProvider = new RssDatabase(context);
+            mainProvider = RssDatabase.getInstance();
+            libraryProvider = RssDatabase.getInstance();
+            starredProvider = RssDatabase.getInstance();
+            keywordProvider = RssDatabase.getInstance();
+            lowDBProvider = RssDatabase.getInstance();
             Etc.getCursor();
             Etc.getNotice();
             new Main();

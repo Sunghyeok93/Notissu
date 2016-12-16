@@ -97,7 +97,7 @@ public class NoticeListFragment extends Fragment {
         category = bundle.getString(KEY_CATEGORY);
         //ListView에 집어넣을 데이터 List
         ArrayList<RssItem> noticeList = bundle.getParcelableArrayList(KEY_NOTICE_ROWS);
-        StarredProvider starredProvider = new RssDatabase(getContext());
+        StarredProvider starredProvider = RssDatabase.getInstance();
         //즐겨찾기에 추가된 List
         ArrayList<RssItem> starredList = new ArrayList<>(starredProvider.getStarred());
         mNoticeAdapter = new NoticeAdapter(getContext(),noticeList, starredList);
@@ -124,23 +124,23 @@ public class NoticeListFragment extends Fragment {
     }
 
     private void refresh() {
-        StarredProvider starredProvider = new RssDatabase(getContext());
+        StarredProvider starredProvider = RssDatabase.getInstance();
         ArrayList<RssItem> noticeList = null;
         ArrayList<RssItem> starredList = new ArrayList<>(starredProvider.getStarred());
         if (flag == KEY_MAIN_NOTICE || flag == KEY_LIBRARY_NOTICE) {
             SyncUtil.TriggerRefresh();
             if (flag == KEY_MAIN_NOTICE) {
-                MainProvider mainProvider = new RssDatabase(getContext());
+                MainProvider mainProvider = RssDatabase.getInstance();
                 noticeList = new ArrayList<>(mainProvider.getSsuNotice(category));
             } else if (flag == KEY_LIBRARY_NOTICE) {
-                LibraryProvider libraryProvider = new RssDatabase(getContext());
+                LibraryProvider libraryProvider = RssDatabase.getInstance();
                 noticeList = new ArrayList<>(libraryProvider.getLibraryNotice());
             }
         } else if (flag == KEY_STARRED || flag == KEY_KEYWORD) {
             if (flag == KEY_STARRED) {
                 noticeList = starredList;
             } else if (flag == KEY_KEYWORD) {
-                KeywordProvider keywordProvider = new RssDatabase(getContext());
+                KeywordProvider keywordProvider = RssDatabase.getInstance();
                 noticeList = new ArrayList<>(keywordProvider.getKeyword(title));
             }
         }

@@ -43,7 +43,7 @@ public class DeleteKeywordActivity extends AppCompatActivity {
     }
 
     private void initWidget() {
-        mKeywordProvider = new RssDatabase(getApplicationContext());
+        mKeywordProvider = RssDatabase.getInstance();
         mLvKeyword = (ListView) findViewById(R.id.delete_keyword_lv_keyword);
         mRlList = (RelativeLayout) findViewById(R.id.delete_keyword_rl_list);
         mBtnRemoveAll = (Button) findViewById(R.id.delete_keyword_btn_remove_all);

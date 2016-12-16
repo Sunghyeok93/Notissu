@@ -81,7 +81,7 @@ public class RssDatabase extends SQLiteOpenHelper implements
     private SQLiteDatabase readDatabase;
     private SQLiteDatabase writeDatabase;
 
-    /*private static RssDatabase instance = null;
+    private static RssDatabase instance = null;
 
     public static void setInstance(Context context) {
         instance = new RssDatabase(context);
@@ -89,9 +89,9 @@ public class RssDatabase extends SQLiteOpenHelper implements
 
     public static RssDatabase getInstance() {
         return instance;
-    }*/
+    }
 
-    public RssDatabase(Context context) {
+    private RssDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         readDatabase = this.getReadableDatabase();
         writeDatabase = this.getWritableDatabase();

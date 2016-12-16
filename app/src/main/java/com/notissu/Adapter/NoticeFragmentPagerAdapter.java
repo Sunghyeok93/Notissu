@@ -40,7 +40,7 @@ public class NoticeFragmentPagerAdapter extends FragmentStatePagerAdapter{
 
     @Override
     public Fragment getItem(int position) {
-        MainProvider mainProvider = new RssDatabase(mContext);
+        MainProvider mainProvider = RssDatabase.getInstance();
         ArrayList<RssItem> noticeRows = new ArrayList<>(mainProvider.getSsuNotice(categoryList[position]));
         return NoticeListFragment.newInstance(flag, mTitle, categoryList[position], noticeRows);
     }

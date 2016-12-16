@@ -93,17 +93,15 @@ public class NoticeAdapter extends ArrayAdapter<RssItem> {
         viewHolder.llWrapper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StarredProvider starredProvider = new RssDatabase(context);
+                StarredProvider starredProvider = RssDatabase.getInstance();
                 CheckBox cb = (CheckBox)v.findViewById(R.id.notice_cb_star);
 
                 //클릭되고 난 다음이라 isChecked는 체크되는 순간이다.
                 if (cb.isChecked()) {
-                    Log.d(TAG,"isChecked() : false");
                     cb.setChecked(false);
                     starredProvider.deleteStarred(title);
                     isChecked[index] = false;
                 } else {
-                    Log.d(TAG,"isChecked() : true");
                     cb.setChecked(true);
                     starredProvider.addStarred(title);
                     isChecked[index] = true;

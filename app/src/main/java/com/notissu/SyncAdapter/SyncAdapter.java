@@ -86,8 +86,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             HashMap<String, RssItem> libraryMap = transToMap(receiveLibraryNotices);
 
             //DB에 저장되어 있는 MainNotice, LibraryNotice RssItem을 불러들인다.
-            MainProvider mainProvider = new RssDatabase(getContext());
-            LibraryProvider libraryProvider = new RssDatabase(getContext());
+            MainProvider mainProvider = RssDatabase.getInstance();
+            LibraryProvider libraryProvider = RssDatabase.getInstance();
             final List<RssItem> DBMainNotice = mainProvider.getMainNotice(MainProvider.NOTICE_SSU_ALL);
             final List<RssItem> DBLibararyNotice = libraryProvider.getLibraryNotice();
 
@@ -99,7 +99,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             updateNotice(DBLibararyNotice,libraryMap,libraryProvider,syncResult);
 
             // 키워드에 등록된 모든 값을 가져온다.
-            KeywordProvider keywordProvider = new RssDatabase(getContext());
+            KeywordProvider keywordProvider = RssDatabase.getInstance();
             final List<String> keywordList = keywordProvider.getKeyword();
 
             /*
