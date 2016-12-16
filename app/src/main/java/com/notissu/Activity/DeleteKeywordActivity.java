@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 
 public class DeleteKeywordActivity extends AppCompatActivity {
     private static final String TAG = LogUtils.makeLogTag(DeleteKeywordActivity.class);
+    Toolbar mToolbar;
     DeleteKeywordAdapter deleteKeywordAdapter;
     RelativeLayout mRlList;
     ListView mLvKeyword;
@@ -32,6 +34,8 @@ public class DeleteKeywordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_keyword);
+        mToolbar = (Toolbar) findViewById(R.id.delete_keyword_toolbar);
+        setSupportActionBar(mToolbar);
 
         initWidget();
         settingWidget();
@@ -39,12 +43,15 @@ public class DeleteKeywordActivity extends AppCompatActivity {
     }
 
     private void initWidget() {
+
         mLvKeyword = (ListView) findViewById(R.id.delete_keyword_lv_keyword);
         mRlList = (RelativeLayout) findViewById(R.id.delete_keyword_rl_list);
         mBtnRemoveAll = (Button) findViewById(R.id.delete_keyword_btn_remove_all);
     }
 
     private void settingWidget() {
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Intent dataIntent = getIntent();
         String title = dataIntent.getStringExtra(SettingFragment.KEY_DELETE_KEYWORD_TITLE);
         setTitle(title);
@@ -59,6 +66,12 @@ public class DeleteKeywordActivity extends AppCompatActivity {
         }
     }
     private void settingListener() {
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         //리스트 중 하나 삭제
         mLvKeyword.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
