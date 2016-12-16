@@ -14,7 +14,8 @@ import java.util.List;
 /**
  * Created by forhack on 2016-12-04.
  */
-public class RssDatabase extends SQLiteOpenHelper{
+public class RssDatabase extends SQLiteOpenHelper implements
+        MainProvider, LibraryProvider, StarredProvider, KeywordProvider, LowDBProvider{
     /** Schema version. */
     public static final int DATABASE_VERSION = 7;
     /** Filename for SQLite file. */
@@ -80,7 +81,7 @@ public class RssDatabase extends SQLiteOpenHelper{
     private SQLiteDatabase readDatabase;
     private SQLiteDatabase writeDatabase;
 
-    private static RssDatabase instance = null;
+    /*private static RssDatabase instance = null;
 
     public static void setInstance(Context context) {
         instance = new RssDatabase(context);
@@ -88,9 +89,9 @@ public class RssDatabase extends SQLiteOpenHelper{
 
     public static RssDatabase getInstance() {
         return instance;
-    }
+    }*/
 
-    private RssDatabase(Context context) {
+    public RssDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         readDatabase = this.getReadableDatabase();
         writeDatabase = this.getWritableDatabase();
@@ -117,6 +118,7 @@ public class RssDatabase extends SQLiteOpenHelper{
 
 
     //DB에 있는 모든 RSS를 List형태로 반환하는 메소드
+    @Override
     public Cursor getCursor(String table, String selection, String[] selectionargs) {
         String orderBy = null;
         if (table == RssItem.MainNotice.TABLE_NAME || table == RssItem.LibraryNotice.TABLE_NAME) {
@@ -147,6 +149,7 @@ public class RssDatabase extends SQLiteOpenHelper{
     }
 
     // Main,Library 두 곳에서 지정한 조건에 해당하는 리스트를 모두 반환한다.
+    @Override
     public List<RssItem> getNotice(String selection, String[] selectionargs) {
         List<RssItem> rssItemList = new ArrayList<>();
         String query = getSelectString(RssItem.MainNotice.TABLE_NAME,selection) +
@@ -188,10 +191,11 @@ public class RssDatabase extends SQLiteOpenHelper{
     * */
 
     //Main 공지사항 가져오기
+    @Override
     public List<RssItem> getMainNotice(String category) {
         List<RssItem> rssItemList = new ArrayList<>();
         Cursor results = null;
-        if (category == NoticeProvider.NOTICE_SSU_ALL) {
+        if (category == NOTICE_SSU_ALL) {
             results = getCursor(RssItem.MainNotice.TABLE_NAME,null,null);
         } else {
             results = getCursor(RssItem.MainNotice.TABLE_NAME,
@@ -209,6 +213,7 @@ public class RssDatabase extends SQLiteOpenHelper{
 
     //입력받은 RSS를 DB에 삽입하는 메소드
     //실패했을 때 -1 반환
+    @Override
     public long addMainNotice(RssItem isExist) {
         ContentValues values = new ContentValues();
         values.put(RssItem.MainNotice.COLUMN_NAME_GUID,isExist.getGuid());
@@ -223,6 +228,7 @@ public class RssDatabase extends SQLiteOpenHelper{
 
     //입력받은 RSS를 DB에 업데이트(수정)하는 메소드
     //일치하는 row가 없으면 0 반환
+    @Override
     public int updateMainNotice(RssItem isExist) {
         ContentValues values = new ContentValues();
         values.put(RssItem.MainNotice.COLUMN_NAME_TITLE,isExist.getTitle());
@@ -237,11 +243,37 @@ public class RssDatabase extends SQLiteOpenHelper{
 
     //인자로 넣은 GUID와 일치하는 RSS 삭제
     //일치하는 row가 없으면 0 반환
+    @Override
     public int deleteMainNotice(String guid) {
         //두번째 인자를 null로 채우면 모든 row 삭제
         return writeDatabase.delete(RssItem.MainNotice.TABLE_NAME,
                 RssItem.MainNotice.COLUMN_NAME_GUID+"=?",new String[]{guid});
     }
+
+    @Override
+    public List<RssItem> getSsuNotice(String category) {
+        switch (category) {
+            case "전체":
+                return getMainNotice(NOTICE_SSU_ALL);
+            case "학사":
+                return getMainNotice(NOTICE_SSU_HACKSA);
+            case "장학":
+                return getMainNotice(NOTICE_SSU_JANGHACK);
+            case "국제교류":
+                return getMainNotice(NOTICE_SSU_KUCKJE);
+            case "모집,채용":
+                return getMainNotice(NOTICE_SSU_MOJIP);
+            case "교내행사":
+                return getMainNotice(NOTICE_SSU_KYONE);
+            case "교외행사":
+                return getMainNotice(NOTICE_SSU_KYOWAE);
+            case "봉사":
+                return getMainNotice(NOTICE_SSU_BONGSA);
+            default:
+                return getMainNotice(NOTICE_SSU_ALL);
+        }
+    }
+
 
     /*Library 공지사항들의 기능들
     * Library 테이블을 불러오기
@@ -255,6 +287,7 @@ public class RssDatabase extends SQLiteOpenHelper{
     * */
 
     //Library 공지사항 가져오기
+    @Override
     public List<RssItem> getLibraryNotice() {
         List<RssItem> rssItemList = new ArrayList<>();
         Cursor results = getCursor(RssItem.LibraryNotice.TABLE_NAME,null,null);
@@ -270,6 +303,7 @@ public class RssDatabase extends SQLiteOpenHelper{
 
     //입력받은 RSS를 DB에 삽입하는 메소드
     //실패했을 때 -1 반환
+    @Override
     public long addLibraryNotice(RssItem isExist) {
         ContentValues values = new ContentValues();
 
@@ -284,6 +318,7 @@ public class RssDatabase extends SQLiteOpenHelper{
 
     //입력받은 RSS를 DB에 업데이트(수정)하는 메소드
     //일치하는 row가 없으면 0 반환
+    @Override
     public int updateLibraryNotice(RssItem isExist) {
         ContentValues values = new ContentValues();
         values.put(RssItem.LibraryNotice.COLUMN_NAME_TITLE,isExist.getTitle());
@@ -297,6 +332,7 @@ public class RssDatabase extends SQLiteOpenHelper{
 
     //인자로 넣은 GUID와 일치하는 RSS 삭제
     //일치하는 row가 없으면 0 반환
+    @Override
     public int deleteLibraryNotice(String guid) {
         //두번째 인자를 null로 채우면 모든 row 삭제
         return writeDatabase.delete(RssItem.LibraryNotice.TABLE_NAME,
@@ -313,6 +349,7 @@ public class RssDatabase extends SQLiteOpenHelper{
     * */
 
     //Starred 가져오기
+    @Override
     public List<RssItem> getStarred() {
         List<RssItem> rssItemList = new ArrayList<>();
         Cursor results = getCursor(RssItem.Starred.TABLE_NAME,null,null);
@@ -334,6 +371,7 @@ public class RssDatabase extends SQLiteOpenHelper{
     
     //입력받은 RSS를 DB에 삽입하는 메소드
     //실패했을 때 -1 반환
+    @Override
     public long addStarred(String noticeTitle) {
         ContentValues values = new ContentValues();
 
@@ -344,6 +382,7 @@ public class RssDatabase extends SQLiteOpenHelper{
 
     //인자로 넣은 GUID와 일치하는 RSS 삭제
     //일치하는 row가 없으면 0 반환
+    @Override
     public int deleteStarred(String noticeTitle) {
         //두번째 인자를 null로 채우면 모든 row 삭제
         return writeDatabase.delete(RssItem.Starred.TABLE_NAME,
@@ -362,6 +401,7 @@ public class RssDatabase extends SQLiteOpenHelper{
     * */
 
     //지정 Keyword의 item들 가져오기
+    @Override
     public List<RssItem> getKeyword(String keyword) {
         String selection = RssItem.Common.COLUMN_NAME_TITLE + " LIKE ?";
         String selectionarg = "%"+keyword+"%";
@@ -370,6 +410,7 @@ public class RssDatabase extends SQLiteOpenHelper{
     }
 
     //Keyword 목록 가져오기
+    @Override
     public List<String> getKeyword() {
         List<String> keywordList = new ArrayList<>();
         Cursor results = getCursor(RssItem.Keyword.TABLE_NAME,null,null);
@@ -387,6 +428,7 @@ public class RssDatabase extends SQLiteOpenHelper{
 
     //입력받은 RSS를 DB에 삽입하는 메소드
     //실패했을 때 -1 반환
+    @Override
     public long addKeyword(String keyword) {
         ContentValues values = new ContentValues();
 
@@ -396,6 +438,7 @@ public class RssDatabase extends SQLiteOpenHelper{
 
     //인자로 넣은 GUID와 일치하는 RSS 삭제
     //일치하는 row가 없으면 0 반환
+    @Override
     public int deleteKeyword(String keyword) {
         //두번째 인자를 null로 채우면 모든 row 삭제
         return writeDatabase.delete(RssItem.Keyword.TABLE_NAME,

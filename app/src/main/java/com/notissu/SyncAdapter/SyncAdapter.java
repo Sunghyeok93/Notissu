@@ -9,11 +9,15 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.notissu.Database.KeywordProvider;
+import com.notissu.Database.LibraryProvider;
+import com.notissu.Database.MainProvider;
 import com.notissu.Database.NoticeProvider;
 import com.notissu.Database.RssDatabase;
 import com.notissu.Model.RssItem;
 import com.notissu.Notification.Alarm;
 import com.notissu.Util.IOUtils;
+import com.notissu.Util.TestUtils;
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
@@ -66,7 +70,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             // 그리고 "[***]" 라고 들어가 있는 문자열 중에서 ***만 빼서 category로 구별해서 넣는다.
             for (RssItem rssItem : receiveMainNotices) {
                 String title = rssItem.getTitle();
-                final String[] category = NoticeProvider.NOTICE_CATEGORY;
+                final String[] category = MainProvider.NOTICE_CATEGORY;
                 for (int i = 0; i < category.length; i++) {
                     if (title.contains("[" + category[i] + "]")) {
                         rssItem.setCategory(category[i]);
@@ -82,19 +86,21 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             HashMap<String, RssItem> libraryMap = transToMap(receiveLibraryNotices);
 
             //DB에 저장되어 있는 MainNotice, LibraryNotice RssItem을 불러들인다.
-            RssDatabase rssDatabase = RssDatabase.getInstance();
-            final List<RssItem> DBMainNotice = rssDatabase.getMainNotice(NoticeProvider.NOTICE_SSU_ALL);
-            final List<RssItem> DBLibararyNotice = rssDatabase.getLibraryNotice();
+            MainProvider mainProvider = new RssDatabase(getContext());
+            LibraryProvider libraryProvider = new RssDatabase(getContext());
+            final List<RssItem> DBMainNotice = mainProvider.getMainNotice(MainProvider.NOTICE_SSU_ALL);
+            final List<RssItem> DBLibararyNotice = libraryProvider.getLibraryNotice();
 
             // DB에 등록된 정보를 모두 읽으며 Guid로 Map과 비교해서
             // 같은게 있으면
-                    // Map안에 데이터를 지우고
-                    // 업데이트할 필요가 있다면 업데이트한다.
-            updateNotice(DBMainNotice,mainMap,rssDatabase,syncResult);
-            updateNotice(DBLibararyNotice,libraryMap,rssDatabase,syncResult);
+            // Map안에 데이터를 지우고
+            // 업데이트할 필요가 있다면 업데이트한다.
+            updateNotice(DBMainNotice,mainMap,mainProvider,syncResult);
+            updateNotice(DBLibararyNotice,libraryMap,libraryProvider,syncResult);
 
             // 키워드에 등록된 모든 값을 가져온다.
-            final List<String> keywordList = rssDatabase.getKeyword();
+            KeywordProvider keywordProvider = new RssDatabase(getContext());
+            final List<String> keywordList = keywordProvider.getKeyword();
 
             /*
             새롭게 입련된 것들의 Title과 키워드를 비교해본다.
@@ -113,13 +119,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             // Main을 DB에 넣는다.
             for (RssItem item : mainMap.values()) {
-                rssDatabase.addMainNotice(item);
+                mainProvider.addMainNotice(item);
                 syncResult.stats.numInserts++;
             }
 
             // Library를 DB에 넣는다.
             for (RssItem item : libraryMap.values()) {
-                rssDatabase.addLibraryNotice(item);
+                libraryProvider.addLibraryNotice(item);
                 syncResult.stats.numInserts++;
             }
 
@@ -166,7 +172,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     업데이트할 필요가 있다면 업데이트한다.
     */
     private void updateNotice(List<RssItem> dbRssItems, HashMap<String, RssItem> receiveMap,
-                          RssDatabase rssDatabase, SyncResult syncResult) {
+                          MainProvider mainProvider, SyncResult syncResult) {
         for (RssItem dbRssItem : dbRssItems) {
             syncResult.stats.numEntries++;
             RssItem existedItem = receiveMap.get(dbRssItem.getTitle());
@@ -178,7 +184,26 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         existedItem.getPublishDate() != 0 && existedItem.getPublishDate() != dbRssItem.getPublishDate() ||
                         existedItem.getCategory() != null && !existedItem.getCategory().equals(dbRssItem.getCategory())) {
                     //새로 들어온것이 업데이트 할 필요가 있으면 업데이트를 한다.
-                    rssDatabase.updateMainNotice(existedItem);
+                    mainProvider.updateMainNotice(existedItem);
+                    syncResult.stats.numUpdates++;
+                }
+            }
+        }
+    }
+    private void updateNotice(List<RssItem> dbRssItems, HashMap<String, RssItem> receiveMap,
+                              LibraryProvider libraryProvider, SyncResult syncResult) {
+        for (RssItem dbRssItem : dbRssItems) {
+            syncResult.stats.numEntries++;
+            RssItem existedItem = receiveMap.get(dbRssItem.getTitle());
+            if (existedItem != null) {  //같은게 있으면
+                receiveMap.remove(dbRssItem.getTitle()); // map에서 지우고
+                if (existedItem.getGuid() != null && !existedItem.getGuid().equals(dbRssItem.getGuid()) ||
+                        existedItem.getLink() != null && !existedItem.getLink().equals(dbRssItem.getLink()) ||
+                        existedItem.getDescription() != null && !existedItem.getDescription().equals(dbRssItem.getDescription()) ||
+                        existedItem.getPublishDate() != 0 && existedItem.getPublishDate() != dbRssItem.getPublishDate() ||
+                        existedItem.getCategory() != null && !existedItem.getCategory().equals(dbRssItem.getCategory())) {
+                    //새로 들어온것이 업데이트 할 필요가 있으면 업데이트를 한다.
+                    libraryProvider.updateLibraryNotice(existedItem);
                     syncResult.stats.numUpdates++;
                 }
             }

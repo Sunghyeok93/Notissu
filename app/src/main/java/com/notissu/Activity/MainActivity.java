@@ -19,6 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.notissu.Database.KeywordProvider;
+import com.notissu.Database.LibraryProvider;
+import com.notissu.Database.StarredProvider;
 import com.notissu.Dialog.AddKeywordDialog;
 import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Fragment.NoticeTabFragment;
@@ -100,9 +103,9 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();
         } else {
-            NoticeProvider noticeProvider = new NoticeProviderImpl();
+            KeywordProvider keywordProvider = new RssDatabase(getApplicationContext());
             String title = intent.getStringExtra(Alarm.KEY_FIRST_KEYWORD);
-            ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getKeywordNotice(title));
+            ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(title));
             fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.KEY_MAIN_NOTICE, title, noticeList));
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();
@@ -156,8 +159,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onQueryTextSubmit(String s) {
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                NoticeProvider noticeProvider = new NoticeProviderImpl();
-                ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getKeywordNotice(s));
+                KeywordProvider keywordProvider = new RssDatabase(getApplicationContext());
+                ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(s));
                 fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.KEY_KEYWORD, s, noticeList));
                 fragmentTransaction.addToBackStack(null).commit();
                 return false;
@@ -190,20 +193,22 @@ public class MainActivity extends AppCompatActivity
         int groupid = item.getGroupId(); // keyword 그룹아이디 가져오기
         String itemTitle = item.getTitle().toString(); // keyword 구분을 위한 제목 가져오기
 
-        NoticeProvider noticeProvider = new NoticeProviderImpl();
         if (id == R.id.nav_ssu_notice) {
             //Main 공지사항
             showFragment(STACK_NAME_MAIN,NoticeTabFragment.newInstance(NoticeListFragment.KEY_MAIN_NOTICE, itemTitle));
         } else if (id == R.id.nav_ssu_library) {
             //도서관 공지사항
-            ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getLibraryNotice());
+            LibraryProvider libraryProvider = new RssDatabase(getApplicationContext());
+            ArrayList<RssItem> noticeList = new ArrayList<>(libraryProvider.getLibraryNotice());
             showFragment(STACK_NAME_LIBRARY,NoticeListFragment.newInstance(NoticeListFragment.KEY_LIBRARY_NOTICE, itemTitle, noticeList));
         } else if (id == R.id.nav_starred) {
             //즐겨찾기
-            ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getStarredNotice());
+            StarredProvider starredProvider = new RssDatabase(getApplicationContext());
+            ArrayList<RssItem> noticeList = new ArrayList<>(starredProvider.getStarred());
             showFragment(STACK_NAME_STARRED,NoticeListFragment.newInstance(NoticeListFragment.KEY_STARRED, itemTitle, noticeList));
         } else if (groupid == R.id.group_keyword) {
-            ArrayList<RssItem> noticeList = new ArrayList<>(noticeProvider.getKeywordNotice(itemTitle));
+            KeywordProvider keywordProvider = new RssDatabase(getApplicationContext());
+            ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(itemTitle));
             showFragment(STACK_NAME_KEYWORD+itemTitle,NoticeListFragment.newInstance(NoticeListFragment.KEY_KEYWORD, itemTitle, noticeList));
         } else if (id == R.id.nav_setting) {
             //설정 공지사항
@@ -243,8 +248,8 @@ public class MainActivity extends AppCompatActivity
         }
 
         menu.add(R.id.group_keyword, navigationMenu.getNewId(),1,itemName).setIcon(R.drawable.ic_menu_send);
-        RssDatabase rssDatabase = RssDatabase.getInstance();
-        rssDatabase.addKeyword(itemName);
+        KeywordProvider keywordProvider = new RssDatabase(getApplicationContext());
+        keywordProvider.addKeyword(itemName);
 
         return true;
     }
@@ -253,8 +258,8 @@ public class MainActivity extends AppCompatActivity
     public void drawKeyword() {
         NavigationMenu navigationMenu = NavigationMenu.getInstance();
         Menu menu = navigationMenu.getKeywordMenu();
-        RssDatabase rssDatabase = RssDatabase.getInstance();
-        List<String> keywordList = rssDatabase.getKeyword();
+        KeywordProvider keywordProvider = new RssDatabase(getApplicationContext());
+        List<String> keywordList = keywordProvider.getKeyword();
         if (keywordList.size() != 0) {
             for (int i = 0; i < keywordList.size(); i++) {
                 menu.add(R.id.group_keyword, navigationMenu.getNewId(), 1, keywordList.get(i)).setIcon(R.drawable.ic_menu_send);

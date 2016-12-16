@@ -12,6 +12,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.notissu.Adapter.NoticeAdapter;
+import com.notissu.Database.KeywordProvider;
+import com.notissu.Database.LibraryProvider;
+import com.notissu.Database.MainProvider;
+import com.notissu.Database.StarredProvider;
 import com.notissu.Dialog.RssItemDialog;
 import com.notissu.Model.RssItem;
 import com.notissu.R;
@@ -19,6 +23,7 @@ import com.notissu.Database.NoticeProvider;
 import com.notissu.Database.NoticeProviderImpl;
 import com.notissu.Database.RssDatabase;
 import com.notissu.SyncAdapter.SyncUtil;
+import com.notissu.Util.TestUtils;
 
 import java.util.ArrayList;
 
@@ -92,9 +97,9 @@ public class NoticeListFragment extends Fragment {
         category = bundle.getString(KEY_CATEGORY);
         //ListView에 집어넣을 데이터 List
         ArrayList<RssItem> noticeList = bundle.getParcelableArrayList(KEY_NOTICE_ROWS);
-        RssDatabase rssDatabase = RssDatabase.getInstance();
+        StarredProvider starredProvider = new RssDatabase(getContext());
         //즐겨찾기에 추가된 List
-        ArrayList<RssItem> starredList = new ArrayList<>(rssDatabase.getStarred());
+        ArrayList<RssItem> starredList = new ArrayList<>(starredProvider.getStarred());
         mNoticeAdapter = new NoticeAdapter(getContext(),noticeList, starredList);
         this.mNoticeList.setAdapter(mNoticeAdapter);
     }
@@ -119,22 +124,24 @@ public class NoticeListFragment extends Fragment {
     }
 
     private void refresh() {
-        RssDatabase rssDatabase = RssDatabase.getInstance();
+        StarredProvider starredProvider = new RssDatabase(getContext());
         ArrayList<RssItem> noticeList = null;
-        ArrayList<RssItem> starredList = new ArrayList<>(rssDatabase.getStarred());
+        ArrayList<RssItem> starredList = new ArrayList<>(starredProvider.getStarred());
         if (flag == KEY_MAIN_NOTICE || flag == KEY_LIBRARY_NOTICE) {
             SyncUtil.TriggerRefresh();
             if (flag == KEY_MAIN_NOTICE) {
-                NoticeProvider noticeProvider = new NoticeProviderImpl();
-                noticeList = new ArrayList<>(noticeProvider.getSsuNotice(category));
+                MainProvider mainProvider = new RssDatabase(getContext());
+                noticeList = new ArrayList<>(mainProvider.getSsuNotice(category));
             } else if (flag == KEY_LIBRARY_NOTICE) {
-                noticeList = new ArrayList<>(rssDatabase.getLibraryNotice());
+                LibraryProvider libraryProvider = new RssDatabase(getContext());
+                noticeList = new ArrayList<>(libraryProvider.getLibraryNotice());
             }
         } else if (flag == KEY_STARRED || flag == KEY_KEYWORD) {
             if (flag == KEY_STARRED) {
                 noticeList = starredList;
             } else if (flag == KEY_KEYWORD) {
-                noticeList = new ArrayList<>(rssDatabase.getKeyword(title));
+                KeywordProvider keywordProvider = new RssDatabase(getContext());
+                noticeList = new ArrayList<>(keywordProvider.getKeyword(title));
             }
         }
         mNoticeAdapter = new NoticeAdapter(getContext(),noticeList, starredList);

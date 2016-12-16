@@ -1,10 +1,15 @@
 package com.notissu.Util;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.notissu.Database.KeywordProvider;
+import com.notissu.Database.LibraryProvider;
+import com.notissu.Database.LowDBProvider;
+import com.notissu.Database.MainProvider;
+import com.notissu.Database.StarredProvider;
 import com.notissu.Model.RssItem;
-import com.notissu.Database.NoticeProvider;
 import com.notissu.Database.RssDatabase;
 
 import java.util.ArrayList;
@@ -18,7 +23,6 @@ import static com.notissu.Util.LogUtils.makeLogTag;
 
 public class TestUtils {
     private static final String TAG = makeLogTag(TestUtils.class);
-
 
     public static String getMethodName(StackTraceElement e[]) {
         boolean doNext = false;
@@ -48,8 +52,17 @@ public class TestUtils {
     }
 
     public static class DB {
-        static RssDatabase rssDatabase = RssDatabase.getInstance();
-        public DB() {
+        static MainProvider mainProvider;
+        static LibraryProvider libraryProvider;
+        static StarredProvider starredProvider;
+        static KeywordProvider keywordProvider;
+        static LowDBProvider lowDBProvider;
+        public DB(Context context) {
+            mainProvider = new RssDatabase(context);
+            libraryProvider = new RssDatabase(context);
+            starredProvider = new RssDatabase(context);
+            keywordProvider = new RssDatabase(context);
+            lowDBProvider = new RssDatabase(context);
             Etc.getCursor();
             Etc.getNotice();
             new Main();
@@ -136,10 +149,10 @@ public class TestUtils {
                 RssItem mainItem1 = new RssItem("main1","main1","main1","main1",1);
                 RssItem mainItem2 = new RssItem("main2","main2","main2","main2",2);
                 //Main에 RSS 2개 넣고
-                rssDatabase.addMainNotice(mainItem1);
-                rssDatabase.addMainNotice(mainItem2);
+                mainProvider.addMainNotice(mainItem1);
+                mainProvider.addMainNotice(mainItem2);
                 //getCursor를 호출한다음
-                Cursor cursor = rssDatabase.getCursor(RssItem.MainNotice.TABLE_NAME, RssItem.MainNotice.COLUMN_NAME_TITLE+"=?",new String[]{"main1"});
+                Cursor cursor = lowDBProvider.getCursor(RssItem.MainNotice.TABLE_NAME, RssItem.MainNotice.COLUMN_NAME_TITLE+"=?",new String[]{"main1"});
                 //제대로 나왔는지 비교하고
                 boolean result;
                 result = false;
@@ -167,8 +180,8 @@ public class TestUtils {
                     printFail(methodName);
 
                 //집어넣은 더미 값 삭제
-                rssDatabase.deleteMainNotice(mainItem1.getGuid());
-                rssDatabase.deleteMainNotice(mainItem2.getGuid());
+                mainProvider.deleteMainNotice(mainItem1.getGuid());
+                mainProvider.deleteMainNotice(mainItem2.getGuid());
                 Log.d(TAG, methodName + " Test Finish");
             }
 
@@ -184,16 +197,16 @@ public class TestUtils {
                 dumyDataList.add(new RssItem("library2","library2","library2","library2",3));
 
                 // Main과 Library 두 곳에 각각 2개의 RssItem을 집어넣고
-                rssDatabase.addMainNotice(dumyDataList.get(0));
-                rssDatabase.addMainNotice(dumyDataList.get(1));
-                rssDatabase.addLibraryNotice(dumyDataList.get(2));
-                rssDatabase.addLibraryNotice(dumyDataList.get(3));
+                mainProvider.addMainNotice(dumyDataList.get(0));
+                mainProvider.addMainNotice(dumyDataList.get(1));
+                libraryProvider.addLibraryNotice(dumyDataList.get(2));
+                libraryProvider.addLibraryNotice(dumyDataList.get(3));
 
                 // getNotice를 호출한다.
                 boolean result;
                 // 있는거 모두 호출
                 Log.d(TAG, methodName + " Case1 전부 호출");
-                List<RssItem> returnList = rssDatabase.getNotice(null,null);
+                List<RssItem> returnList = lowDBProvider.getNotice(null,null);
                 //size 체크 최대 4개이거나 4개 이상
                 result = checkCount(4,returnList.size(),FLAG_OPERATION_EQUALLOWER);
                 printResult(methodName,"Case1 size()",result);
@@ -204,7 +217,7 @@ public class TestUtils {
 
 
                 Log.d(TAG, methodName + " Case2 두개 호출");
-                returnList = rssDatabase.getNotice(
+                returnList = lowDBProvider.getNotice(
                         RssItem.Common.COLUMN_NAME_TITLE+"=? or "+RssItem.Common.COLUMN_NAME_PUBLISH_DATE+"=?",
                         new String[]{"main1","3"});
 
@@ -221,10 +234,10 @@ public class TestUtils {
                 printResult(methodName,"Case2 equals()",result);
 
                 //집어넣은 더미 값 삭제
-                rssDatabase.deleteMainNotice(dumyDataList.get(0).getGuid());
-                rssDatabase.deleteMainNotice(dumyDataList.get(1).getGuid());
-                rssDatabase.deleteLibraryNotice(dumyDataList.get(2).getGuid());
-                rssDatabase.deleteLibraryNotice(dumyDataList.get(3).getGuid());
+                mainProvider.deleteMainNotice(dumyDataList.get(0).getGuid());
+                mainProvider.deleteMainNotice(dumyDataList.get(1).getGuid());
+                libraryProvider.deleteLibraryNotice(dumyDataList.get(2).getGuid());
+                libraryProvider.deleteLibraryNotice(dumyDataList.get(3).getGuid());
                 Log.d(TAG, methodName + " Test Finish");
            }
         }
@@ -244,7 +257,7 @@ public class TestUtils {
 
             public void getMainNotice() {
 
-                List<RssItem> rssItemList = rssDatabase.getMainNotice(NoticeProvider.NOTICE_SSU_ALL);
+                List<RssItem> rssItemList = mainProvider.getMainNotice(MainProvider.NOTICE_SSU_ALL);
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (rssItemList.size() > 0)
@@ -255,7 +268,7 @@ public class TestUtils {
 
             public void addMainNotice() {
 
-                long result = rssDatabase.addMainNotice(rssItem);
+                long result = mainProvider.addMainNotice(rssItem);
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result == -1)
@@ -268,7 +281,7 @@ public class TestUtils {
                 //테스트 케이스
                 RssItem rssItem = new RssItem("guid","update","update","update",123);
 
-                int result = rssDatabase.updateMainNotice(rssItem);
+                int result = mainProvider.updateMainNotice(rssItem);
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result <= 0)
@@ -279,7 +292,7 @@ public class TestUtils {
 
             public void deleteMainNotice() {
                 //테스트 케이스
-                int result = rssDatabase.deleteMainNotice("guid");
+                int result = mainProvider.deleteMainNotice("guid");
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result <= 0)
@@ -303,7 +316,7 @@ public class TestUtils {
             RssItem rssItem = new RssItem("guid","title","link","descript",123);
 
             public void getLibraryNotice() {
-                List<RssItem> rssItemList = rssDatabase.getLibraryNotice();
+                List<RssItem> rssItemList = libraryProvider.getLibraryNotice();
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (rssItemList.size() > 0)
@@ -313,7 +326,7 @@ public class TestUtils {
             }
 
             public void addLibraryNotice() {
-                long result = rssDatabase.addLibraryNotice(rssItem);
+                long result = libraryProvider.addLibraryNotice(rssItem);
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result == -1)
@@ -326,7 +339,7 @@ public class TestUtils {
                 //테스트 케이스
                 RssItem rssItem = new RssItem("guid","update","update","update",123);
 
-                int result = rssDatabase.updateLibraryNotice(rssItem);
+                int result = libraryProvider.updateLibraryNotice(rssItem);
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result <= 0)
@@ -337,7 +350,7 @@ public class TestUtils {
 
             public void deleteLibraryNotice() {
                 //테스트 케이스
-                int result = rssDatabase.deleteLibraryNotice(rssItem.getGuid());
+                int result = libraryProvider.deleteLibraryNotice(rssItem.getGuid());
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result <= 0)
@@ -359,7 +372,7 @@ public class TestUtils {
             RssItem rssItem = new RssItem("guid","title","link","descript",123);
 
             public void getStarred() {
-                List<RssItem> rssItemList = rssDatabase.getStarred();
+                List<RssItem> rssItemList = starredProvider.getStarred();
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (rssItemList.size() > 0)
@@ -370,7 +383,7 @@ public class TestUtils {
 
             public void addStarred() {
 
-                long result = rssDatabase.addStarred(rssItem.getTitle());
+                long result = starredProvider.addStarred(rssItem.getTitle());
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result == -1)
@@ -381,7 +394,7 @@ public class TestUtils {
 
             public void deleteStarred() {
 
-                int result = rssDatabase.deleteStarred(rssItem.getTitle());
+                int result = starredProvider.deleteStarred(rssItem.getTitle());
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result <= 0)
@@ -404,7 +417,7 @@ public class TestUtils {
             //테스트 케이스
             String testCase = "keyword";
             public boolean getKeywordData() {
-                List<RssItem> rssItemList = rssDatabase.getKeyword(testCase);
+                List<RssItem> rssItemList = keywordProvider.getKeyword(testCase);
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (rssItemList.size() > 0) {
@@ -417,7 +430,7 @@ public class TestUtils {
             }
 
             public boolean getKeyword() {
-                List<String> rssItemList = rssDatabase.getKeyword();
+                List<String> rssItemList = keywordProvider.getKeyword();
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (rssItemList.size() > 0) {
@@ -431,7 +444,7 @@ public class TestUtils {
 
             public void addKeyword() {
 
-                long result = rssDatabase.addKeyword(testCase);
+                long result = keywordProvider.addKeyword(testCase);
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result == -1)
@@ -442,7 +455,7 @@ public class TestUtils {
 
             public void deleteKeyword() {
                 //테스트 케이스
-                int result = rssDatabase.deleteKeyword(testCase);
+                int result = keywordProvider.deleteKeyword(testCase);
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result <= 0)

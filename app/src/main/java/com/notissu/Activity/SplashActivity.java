@@ -30,10 +30,10 @@ public class SplashActivity extends AppCompatActivity {
         singleton으로 되어있기에 최초에 context를 넘겨줘야함.*/
         ResString.getInstance().setContext(getApplicationContext());
         SyncUtil.CreateSyncAccount(this);
-        RssDatabase.setInstance(getApplicationContext());
+        //RssDatabase.setInstance(getApplicationContext());
 
         //DB테스트코드
-        new TestUtils.DB();
+        new TestUtils.DB(getApplicationContext());
 
         handler = new Handler(){
             @Override

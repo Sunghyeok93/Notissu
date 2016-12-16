@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.notissu.Adapter.DeleteKeywordAdapter;
+import com.notissu.Database.KeywordProvider;
 import com.notissu.Model.NavigationMenu;
 import com.notissu.R;
 import com.notissu.Database.RssDatabase;
@@ -27,6 +28,7 @@ public class DeleteKeywordActivity extends AppCompatActivity {
     RelativeLayout mRlList;
     ListView mLvKeyword;
     Button mBtnRemoveAll;
+    KeywordProvider mKeywordProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +43,7 @@ public class DeleteKeywordActivity extends AppCompatActivity {
     }
 
     private void initWidget() {
-
+        mKeywordProvider = new RssDatabase(getApplicationContext());
         mLvKeyword = (ListView) findViewById(R.id.delete_keyword_lv_keyword);
         mRlList = (RelativeLayout) findViewById(R.id.delete_keyword_rl_list);
         mBtnRemoveAll = (Button) findViewById(R.id.delete_keyword_btn_remove_all);
@@ -51,8 +53,8 @@ public class DeleteKeywordActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        RssDatabase rssDatabase = RssDatabase.getInstance();
-        ArrayList<String> keywordListDB = new ArrayList<String>(rssDatabase.getKeyword());
+
+        ArrayList<String> keywordListDB = new ArrayList<String>(mKeywordProvider.getKeyword());
         deleteKeywordAdapter = new DeleteKeywordAdapter(this, keywordListDB);
         mLvKeyword.setAdapter(deleteKeywordAdapter);
 
@@ -119,10 +121,9 @@ public class DeleteKeywordActivity extends AppCompatActivity {
     }
 
     private void deleteKeyword(String title){
-        RssDatabase rssDatabase = RssDatabase.getInstance();
         //키워드를 지울 때 무엇을 해야할까?
         //1. DB에서 지워져야한다.
-        rssDatabase.deleteKeyword(title);
+        mKeywordProvider.deleteKeyword(title);
         //2. Menu에서 지워져야한다.
         Menu menu = NavigationMenu.getInstance().getKeywordMenu();
         int menuSize = menu.size();

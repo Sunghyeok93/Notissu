@@ -59,7 +59,7 @@ public class NoticeTabFragment extends Fragment {
         }
 
         NoticeFragmentPagerAdapter noticeFragmentPagerAdapter =
-        new NoticeFragmentPagerAdapter(getChildFragmentManager(), flag, title, tabLayout.getTabCount(), categoryList);
+        new NoticeFragmentPagerAdapter(getChildFragmentManager(), getContext(), flag, title, tabLayout.getTabCount(), categoryList);
 
         viewPager.setAdapter(noticeFragmentPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
