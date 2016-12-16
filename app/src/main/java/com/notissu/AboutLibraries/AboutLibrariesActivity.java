@@ -6,13 +6,15 @@ import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsActivity;
 import com.notissu.Fragment.SettingFragment;
+import com.notissu.R;
+import com.notissu.Util.ResString;
 
 public class AboutLibrariesActivity extends LibsActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         LibsBuilder libsBuilder = new LibsBuilder()
                 .withLibraries("numberpicker","rome")
-                .withActivityTitle(getIntent().getStringExtra(SettingFragment.KEY_ABOUT_LIBRARIES_TITLE))
+                .withActivityTitle(ResString.getInstance().getString(ResString.RES_SETTING_TITLE_ABOUT_LIBRARIES))
                 .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
                 .withActivityTheme(com.mikepenz.aboutlibraries.R.style.AboutLibrariesTheme_Light_DarkToolbar);
 

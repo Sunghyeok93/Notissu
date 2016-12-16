@@ -16,8 +16,16 @@ public class ResString {
     public static final String RES_WITH_US_NAME= "with_us_name";
     public static final String RES_WITH_US_POSITION= "with_us_position";
     public static final String RES_WITH_US_EMAIL= "with_us_email";
+    
     public static final String RES_ALARM_TICKER= "alarm_ticker";
     public static final String RES_ALARM_TITLE= "alarm_title";
+    
+    public static final String RES_SETTING_TITLE_UPDATE_PERIOD = "setting_title_update_period";
+    public static final String RES_SETTING_TITLE_DELETE_KEYWORD = "setting_title_delete_keyword";
+    public static final String RES_SETTING_TITLE_WITH_US = "setting_title_with_us";
+    public static final String RES_SETTING_TITLE_ABOUT_LIBRARIES = "setting_title_about_libraries";
+    public static final String RES_SETTING_TITLE_SEND_EMAIL = "setting_title_send_email";
+    
 
     private static final String RESOURCE_STRING = "string";
     private static final String RESOURCE_STRING_ARRAY = "array";
