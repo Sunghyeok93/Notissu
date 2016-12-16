@@ -52,9 +52,6 @@ public class DeleteKeywordActivity extends AppCompatActivity {
     private void settingWidget() {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Intent dataIntent = getIntent();
-        String title = dataIntent.getStringExtra(SettingFragment.KEY_DELETE_KEYWORD_TITLE);
-        setTitle(title);
 
         RssDatabase rssDatabase = RssDatabase.getInstance();
         ArrayList<String> keywordListDB = new ArrayList<String>(rssDatabase.getKeyword());

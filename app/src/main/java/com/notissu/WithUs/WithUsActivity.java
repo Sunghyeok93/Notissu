@@ -39,7 +39,6 @@ public class WithUsActivity extends AppCompatActivity {
     private void settingWidget() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        setTitle(getIntent().getStringExtra(SettingFragment.KEY_WITH_US_TITLE));
 
         String[] imgName = ResString.getInstance().getStringArray(ResString.RES_WITH_US_IMG_NAME);
         String[] name = ResString.getInstance().getStringArray(ResString.RES_WITH_US_NAME);

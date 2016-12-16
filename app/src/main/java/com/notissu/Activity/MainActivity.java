@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity
             showFragment(STACK_NAME_KEYWORD+itemTitle,NoticeListFragment.newInstance(NoticeListFragment.KEY_KEYWORD, itemTitle, noticeList));
         } else if (id == R.id.nav_setting) {
             //설정 공지사항
-            showFragment(STACK_NAME_SETTING,SettingFragment.newInstance(itemTitle));
+            showFragment(STACK_NAME_SETTING,SettingFragment.newInstance());
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
