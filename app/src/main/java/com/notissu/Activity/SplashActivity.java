@@ -6,9 +6,8 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.notissu.Model.NavigationMenu;
 import com.notissu.R;
-import com.notissu.SyncAdapter.RssDatabase;
+import com.notissu.Database.RssDatabase;
 import com.notissu.SyncAdapter.SyncUtil;
 import com.notissu.Util.ResString;
 import com.notissu.Util.TestUtils;

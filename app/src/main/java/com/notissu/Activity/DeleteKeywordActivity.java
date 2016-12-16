@@ -1,7 +1,6 @@
 package com.notissu.Activity;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,10 +13,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.notissu.Adapter.DeleteKeywordAdapter;
-import com.notissu.Fragment.SettingFragment;
+import com.notissu.Database.KeywordProvider;
 import com.notissu.Model.NavigationMenu;
 import com.notissu.R;
-import com.notissu.SyncAdapter.RssDatabase;
+import com.notissu.Database.RssDatabase;
 import com.notissu.Util.LogUtils;
 
 import java.util.ArrayList;
@@ -29,6 +28,7 @@ public class DeleteKeywordActivity extends AppCompatActivity {
     RelativeLayout mRlList;
     ListView mLvKeyword;
     Button mBtnRemoveAll;
+    KeywordProvider mKeywordProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class DeleteKeywordActivity extends AppCompatActivity {
     }
 
     private void initWidget() {
-
+        mKeywordProvider = RssDatabase.getInstance();
         mLvKeyword = (ListView) findViewById(R.id.delete_keyword_lv_keyword);
         mRlList = (RelativeLayout) findViewById(R.id.delete_keyword_rl_list);
         mBtnRemoveAll = (Button) findViewById(R.id.delete_keyword_btn_remove_all);
@@ -53,8 +53,8 @@ public class DeleteKeywordActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        RssDatabase rssDatabase = RssDatabase.getInstance();
-        ArrayList<String> keywordListDB = new ArrayList<String>(rssDatabase.getKeyword());
+
+        ArrayList<String> keywordListDB = new ArrayList<String>(mKeywordProvider.getKeyword());
         deleteKeywordAdapter = new DeleteKeywordAdapter(this, keywordListDB);
         mLvKeyword.setAdapter(deleteKeywordAdapter);
 
@@ -121,10 +121,9 @@ public class DeleteKeywordActivity extends AppCompatActivity {
     }
 
     private void deleteKeyword(String title){
-        RssDatabase rssDatabase = RssDatabase.getInstance();
         //키워드를 지울 때 무엇을 해야할까?
         //1. DB에서 지워져야한다.
-        rssDatabase.deleteKeyword(title);
+        mKeywordProvider.deleteKeyword(title);
         //2. Menu에서 지워져야한다.
         Menu menu = NavigationMenu.getInstance().getKeywordMenu();
         int menuSize = menu.size();
