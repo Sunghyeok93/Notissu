@@ -182,6 +182,18 @@ public class RssDatabase extends SQLiteOpenHelper implements
         return rssItemList;
     }
 
+
+    //인자로 들어온 RssItem을 업데이트한다.
+    //main인지 library인지 알아서 찾는다.
+    //일치하는 row가 없으면 0 반환
+    @Override
+    public int updateNotice(RssItem rssItem) {
+        int result = 0;
+        result += updateMainNotice(rssItem);
+        result += updateLibraryNotice(rssItem);
+        return result;
+    }
+
     /*Main 공지사항들의 기능들
     * Main테이블을 카테고리별로 골라 가지고 옴
     * List<RssItem> getMainNotice(String category)
@@ -241,7 +253,7 @@ public class RssDatabase extends SQLiteOpenHelper implements
         values.put(RssItem.MainNotice.COLUMN_NAME_DESCRIPTION,isExist.getDescription());
         values.put(RssItem.MainNotice.COLUMN_NAME_CATEGORY,isExist.getCategory());
         //공지사항이 업데이트 됐으면 당연히 다시 읽을 기회를 줘야지, 그러니 안읽은 표시.
-        values.put(RssItem.MainNotice.COLUMN_NAME_IS_READ,RssItem.NOT_READ);
+        values.put(RssItem.MainNotice.COLUMN_NAME_IS_READ,isExist.getIsRead());
 
 
         return writeDatabase.update(RssItem.MainNotice.TABLE_NAME,values,
@@ -334,7 +346,7 @@ public class RssDatabase extends SQLiteOpenHelper implements
         values.put(RssItem.LibraryNotice.COLUMN_NAME_PUBLISH_DATE,isExist.getPublishDate());
         values.put(RssItem.LibraryNotice.COLUMN_NAME_DESCRIPTION,isExist.getDescription());
         //공지사항이 업데이트 됐으면 당연히 다시 읽을 기회를 줘야지, 그러니 안읽은 표시.
-        values.put(RssItem.LibraryNotice.COLUMN_NAME_IS_READ,RssItem.NOT_READ);
+        values.put(RssItem.LibraryNotice.COLUMN_NAME_IS_READ,isExist.getIsRead());
 
         return writeDatabase.update(RssItem.LibraryNotice.TABLE_NAME,values,
                 RssItem.LibraryNotice.COLUMN_NAME_GUID+"=?",new String[]{isExist.getGuid()});
@@ -454,5 +466,6 @@ public class RssDatabase extends SQLiteOpenHelper implements
         return writeDatabase.delete(RssItem.Keyword.TABLE_NAME,
                 RssItem.Keyword.COLUMN_NAME_KEYWORD+"=?",new String[]{keyword});
     }
+
 
 }

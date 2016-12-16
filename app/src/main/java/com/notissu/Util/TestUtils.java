@@ -8,6 +8,7 @@ import com.notissu.Database.KeywordProvider;
 import com.notissu.Database.LibraryProvider;
 import com.notissu.Database.LowDBProvider;
 import com.notissu.Database.MainProvider;
+import com.notissu.Database.NoticeProvider;
 import com.notissu.Database.StarredProvider;
 import com.notissu.Model.RssItem;
 import com.notissu.Database.RssDatabase;
@@ -51,20 +52,32 @@ public class TestUtils {
         Log.d(TAG, methodName +" "+feature+" : Success");
     }
 
+    public static void printResult(final String methodName, final String feature, final boolean result) {
+        if (result) {
+            printSuccess(methodName, feature);
+        } else {
+            printFail(methodName, feature);
+        }
+    }
+
     public static class DB {
+        static NoticeProvider noticeProvider;
         static MainProvider mainProvider;
         static LibraryProvider libraryProvider;
         static StarredProvider starredProvider;
         static KeywordProvider keywordProvider;
         static LowDBProvider lowDBProvider;
-        public DB(Context context) {
+        public DB() {
+            noticeProvider = RssDatabase.getInstance();
             mainProvider = RssDatabase.getInstance();
             libraryProvider = RssDatabase.getInstance();
             starredProvider = RssDatabase.getInstance();
             keywordProvider = RssDatabase.getInstance();
             lowDBProvider = RssDatabase.getInstance();
+
             Etc.getCursor();
             Etc.getNotice();
+            new Notice();
             new Main();
             new Library();
             new Starred();
@@ -116,14 +129,6 @@ public class TestUtils {
                     return true;
                 } else {
                     return false;
-                }
-            }
-
-            private static void printResult(final String methodName, final String feature, final boolean result) {
-                if (result) {
-                    printSuccess(methodName, feature);
-                } else {
-                    printFail(methodName, feature);
                 }
             }
 
@@ -237,6 +242,80 @@ public class TestUtils {
                 libraryProvider.deleteLibraryNotice(dumyDataList.get(3).getGuid());
            }
         }
+
+        public static class Notice {
+            public Notice() {
+                updateNotice();
+            }
+
+            public static void updateNotice() {
+                String methodName = getMethodName(Thread.currentThread().getStackTrace());
+                //인자로 들어온 RssItem을 업데이트한다.
+                //이 메소드의 효과는 library나 main구별없이 rss를 넣으면 update해주는 것이다.
+                //0이 아니게 나오는것을 유도해보고 잘된것
+                //main에 하나 library에 하나 RssItem을 넣고,
+                List<RssItem> dumyDataList = new ArrayList<>();
+                dumyDataList.add(new RssItem("main2","main2","main2","main2",1, RssItem.NOT_READ));
+                dumyDataList.add(new RssItem("library1","library1","library1","library1",2, RssItem.NOT_READ));
+                mainProvider.addMainNotice(dumyDataList.get(0));
+                libraryProvider.addLibraryNotice(dumyDataList.get(1));
+                //main을 변경해본다.
+                RssItem rssItem = dumyDataList.get(0);
+                rssItem.setIsRead(RssItem.READ);
+                noticeProvider.updateNotice(rssItem);
+                //main과 library를 읽어서 값이제대로 변했나 확인한다.
+                List<RssItem> mainList = mainProvider.getMainNotice(MainProvider.NOTICE_SSU_ALL);
+                List<RssItem> libraryList = libraryProvider.getLibraryNotice();
+                int result = 0;
+                for (RssItem main : mainList) {
+                    if (rssItem.equals(main)) {
+                        if (main.getIsRead() == RssItem.READ)
+                            result++;
+                        break;
+                    }
+                }
+                for (RssItem library : libraryList) {
+                    if (dumyDataList.get(1).equals(library)) {
+                        if (library.getIsRead() != RssItem.READ)
+                            result++;
+                        break;
+                    }
+                }
+                if (result == 2) {
+                    printResult(methodName, "isMainChanged", true);
+                } else {
+                    printResult(methodName, "isMainChanged", false);
+                }
+
+                //삽입한 값을 지운다.
+                mainProvider.deleteMainNotice(dumyDataList.get(0).getGuid());
+                libraryProvider.deleteLibraryNotice(dumyDataList.get(1).getGuid());
+
+                //0이 나오게 유도해보자. 틀린것
+                //2개를 더하쟈.
+                dumyDataList = new ArrayList<>();
+                dumyDataList.add(new RssItem("main2","main2","main2","main2",1, RssItem.NOT_READ));
+                dumyDataList.add(new RssItem("library1","library1","library1","library1",2, RssItem.NOT_READ));
+                mainProvider.addMainNotice(dumyDataList.get(0));
+                libraryProvider.addLibraryNotice(dumyDataList.get(1));
+                //Library를 변경해보자. Guid와 isread를 변경해서 넘겨보자. update 할 수 없도록.
+                rssItem = new RssItem("library2","library1","library1","library1",2, RssItem.READ);
+                result = noticeProvider.updateNotice(rssItem);
+                //확인해본다.
+                if (result == 0) {
+                    printResult(methodName, "isZero", true);
+                } else {
+                    printResult(methodName, "isZero", false);
+                }
+                //삭제한다.
+                mainProvider.deleteMainNotice(dumyDataList.get(0).getGuid());
+                libraryProvider.deleteLibraryNotice(dumyDataList.get(1).getGuid());
+
+
+
+            }
+        }
+
 
         public static class Main {
             public Main() {

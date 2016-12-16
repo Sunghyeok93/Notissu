@@ -8,7 +8,7 @@ import java.util.List;
  * Created by forhack on 2016-12-16.
  */
 
-public interface LibraryProvider {
+public interface LibraryProvider extends NoticeProvider{
     //Library 공지사항 가져오기
     List<RssItem> getLibraryNotice();
 

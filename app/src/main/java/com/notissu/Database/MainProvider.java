@@ -8,7 +8,7 @@ import java.util.List;
  * Created by forhack on 2016-12-16.
  */
 
-public interface MainProvider {
+public interface MainProvider extends NoticeProvider{
     String NOTICE_SSU_ALL = "전체";
     String NOTICE_SSU_HACKSA = "학사";
     String NOTICE_SSU_JANGHACK = "장학";

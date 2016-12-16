@@ -16,4 +16,5 @@ public interface LowDBProvider {
 
     // Main,Library 두 곳에서 지정한 조건에 해당하는 리스트를 모두 반환한다.
     List<RssItem> getNotice(String selection, String[] selectionargs);
+
 }

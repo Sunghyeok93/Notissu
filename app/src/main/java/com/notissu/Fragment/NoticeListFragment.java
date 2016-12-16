@@ -1,5 +1,7 @@
 package com.notissu.Fragment;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -10,17 +12,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.notissu.Adapter.NoticeAdapter;
 import com.notissu.Database.KeywordProvider;
 import com.notissu.Database.LibraryProvider;
+import com.notissu.Database.LowDBProvider;
 import com.notissu.Database.MainProvider;
+import com.notissu.Database.NoticeProvider;
 import com.notissu.Database.StarredProvider;
 import com.notissu.Dialog.RssItemDialog;
 import com.notissu.Model.RssItem;
 import com.notissu.R;
 import com.notissu.Database.RssDatabase;
 import com.notissu.SyncAdapter.SyncUtil;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -35,14 +42,12 @@ public class NoticeListFragment extends Fragment {
     public static final int KEY_STARRED = 2;
     public static final int KEY_KEYWORD= 3;
 
-    public static final int MESSAGE_SYNC_FINISH= 0;
-
     ListView mNoticeList;
     NoticeAdapter mNoticeAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
     View mRootView;
 
-    //이 List가 현재 어떤 탭에서 실행되고 있는지 구별 flag
+    //이 List가 Main인지 Library 인지 starred인지 keyword인지 구별 flag
     int flag;
     String title;
     String category;
@@ -106,7 +111,17 @@ public class NoticeListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 FragmentManager manager = getFragmentManager();
+                //읽음표시로 전환하고
                 RssItem rssitem = mNoticeAdapter.getItem(i);
+                rssitem.setIsRead(RssItem.READ);
+                NoticeProvider noticeProvider = RssDatabase.getInstance();
+                //RssItem Update
+                noticeProvider.updateNotice(rssitem);
+                //TextView 업데이트
+                TextView tvSubject = (TextView) view.findViewById(R.id.notice_tv_subject);
+                tvSubject.setTextColor(Color.parseColor("#aaaaaa"));
+                tvSubject.setTypeface(Typeface.DEFAULT);
+                //Dialog 시작
                 DialogFragment mydialog = RssItemDialog.newInstance(rssitem);
                 mydialog.show(manager,"");
             }

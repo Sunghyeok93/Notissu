@@ -33,7 +33,7 @@ public class SplashActivity extends AppCompatActivity {
         RssDatabase.setInstance(getApplicationContext());
 
         //DB테스트코드
-        new TestUtils.DB(getApplicationContext());
+        new TestUtils.DB();
 
         handler = new Handler(){
             @Override

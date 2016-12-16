@@ -147,6 +147,10 @@ public class RssItem implements Parcelable{
         return isRead;
     }
 
+    public void setIsRead(int isRead) {
+        this.isRead = isRead;
+    }
+
     //인자로 넘어온 List<SyndEntry>를 List<RssItem>로 변환하는 메소드
     public static List<RssItem> toRssList(List<SyndEntry> syndEntries) {
         List<RssItem> rssItems = new ArrayList<>();
