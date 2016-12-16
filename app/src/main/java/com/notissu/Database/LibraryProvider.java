@@ -23,4 +23,7 @@ public interface LibraryProvider extends NoticeProvider{
     //인자로 넣은 GUID와 일치하는 RSS 삭제
     //일치하는 row가 없으면 0 반환
     int deleteLibraryNotice(String guid);
+
+    //안 읽은 공지사항의 개수 반환
+    int getLibraryNotReadCount();
 }

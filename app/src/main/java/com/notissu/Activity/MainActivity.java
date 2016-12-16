@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.notissu.Database.KeywordProvider;
 import com.notissu.Database.LibraryProvider;
+import com.notissu.Database.MainProvider;
 import com.notissu.Database.StarredProvider;
 import com.notissu.Dialog.AddKeywordDialog;
 import com.notissu.Fragment.NoticeListFragment;
@@ -31,6 +32,7 @@ import com.notissu.Model.RssItem;
 import com.notissu.Notification.Alarm;
 import com.notissu.R;
 import com.notissu.Database.RssDatabase;
+import com.notissu.Util.TestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,8 +89,12 @@ public class MainActivity extends AppCompatActivity
 
     private void settingWidget() {
         toggle.syncState();
+        MainProvider mainProvider = RssDatabase.getInstance();
+        LibraryProvider libraryProvider = RssDatabase.getInstance();
         NavigationMenu navigationMenu = NavigationMenu.getInstance();
         navigationMenu.setMenu(navigationView);
+        navigationMenu.setMainNotReadCount(mainProvider.getMainNotReadCount());
+        navigationMenu.setLibraryNotReadCount(libraryProvider.getLibraryNotReadCount());
         drawKeyword();
 
         Intent intent = getIntent();
@@ -245,7 +251,9 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-        menu.add(R.id.group_keyword, navigationMenu.getNewId(),1,itemName).setIcon(R.drawable.ic_menu_send);
+        int newId = navigationMenu.getNewId();
+        menu.add(R.id.group_keyword, newId,1,itemName).setIcon(R.drawable.ic_menu_send);
+//        menu.getItem(newId).setActionView()
         KeywordProvider keywordProvider = RssDatabase.getInstance();
         keywordProvider.addKeyword(itemName);
 

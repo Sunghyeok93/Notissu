@@ -41,5 +41,8 @@ public interface MainProvider extends NoticeProvider{
 
     List<RssItem> getSsuNotice(String category);
 
+    //안 읽은 공지사항의 개수 반환
+    int getMainNotReadCount();
+
 
 }
