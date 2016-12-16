@@ -1,15 +1,18 @@
 package com.notissu.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.notissu.Model.RssItem;
 import com.notissu.R;
 import com.notissu.SyncAdapter.RssDatabase;
+import com.notissu.Util.LogUtils;
 
 import java.util.ArrayList;
 
@@ -18,6 +21,7 @@ import java.util.ArrayList;
  */
 
 public class NoticeAdapter extends ArrayAdapter<RssItem> {
+    private static final String TAG = LogUtils.makeLogTag(NoticeAdapter.class);
     Context context;
     ViewHolder viewHolder;
     //ListView에 보여줄 Item
@@ -26,6 +30,9 @@ public class NoticeAdapter extends ArrayAdapter<RssItem> {
     ArrayList<RssItem> starredList = new ArrayList<>();
     //노드들 CheckBox 체크되어있는지 저장하기.
     boolean[] isChecked;
+    //checkbox 범위 넓히려고 checkboxlist를 관리하는 코드 수정했다.
+    //그러는 과정에서 ischecked를 없애려고 했는데, 해결방안이 생각안나서 안함
+    ArrayList<CheckBox> checkList = new ArrayList<>();
 
 
     public NoticeAdapter(Context context, ArrayList<RssItem> noticeList, ArrayList<RssItem> starredList) {
@@ -72,7 +79,9 @@ public class NoticeAdapter extends ArrayAdapter<RssItem> {
             viewHolder = new ViewHolder();
             viewHolder.tvSubject = (TextView) view.findViewById(R.id.notice_tv_subject);
             viewHolder.tvTime = (TextView) view.findViewById(R.id.notice_tv_time);
-            viewHolder.cbStar = (CheckBox) view.findViewById(R.id.notice_cb_star);
+            viewHolder.llWrapper = (LinearLayout) view.findViewById(R.id.notice_ll_cb_wrapper);
+            CheckBox checkBox = (CheckBox) view.findViewById(R.id.notice_cb_star);
+            checkList.add(i,checkBox);
             view.setTag(viewHolder);
         }else{
             viewHolder = (ViewHolder) view.getTag();
@@ -83,20 +92,24 @@ public class NoticeAdapter extends ArrayAdapter<RssItem> {
 
         viewHolder.tvSubject.setText(title);
         viewHolder.tvTime.setText(getItem(index).getPublishDateShort());
-        viewHolder.cbStar.setChecked(isChecked[index]);
-        viewHolder.cbStar.setOnClickListener(new View.OnClickListener() {
+        checkList.get(i).setChecked(isChecked[index]);
+        viewHolder.llWrapper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RssDatabase rssDatabase = RssDatabase.getInstance();
-                CheckBox checkBox = (CheckBox) v;
 
                 //클릭되고 난 다음이라 isChecked는 체크되는 순간이다.
-                if (checkBox.isChecked()) {
-                    rssDatabase.addStarred(title);
-                    isChecked[index] = true;
-                } else {
+                if (checkList.get(index).isChecked()) {
+                    Log.d(TAG,"ischecked true");
+                    checkList.get(index).setChecked(false);
                     rssDatabase.deleteStarred(title);
                     isChecked[index] = false;
+                } else {
+                    Log.d(TAG,"is ischecked false");
+                    checkList.get(index).setChecked(true);
+                    rssDatabase.addStarred(title);
+                    isChecked[index] = true;
+
                 }
             }
         });
@@ -106,7 +119,7 @@ public class NoticeAdapter extends ArrayAdapter<RssItem> {
     static class ViewHolder{
         TextView tvSubject;
         TextView tvTime;
-        CheckBox cbStar;
+        LinearLayout llWrapper;
     }
 
 }
