@@ -2,6 +2,8 @@ package com.notissu.WithUs;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -12,12 +14,15 @@ import com.notissu.Util.ResString;
 import java.util.ArrayList;
 
 public class WithUsActivity extends AppCompatActivity {
+    Toolbar mToolbar;
     ListView mLvList;
     WithUsAdapter mAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_with_us);
+        mToolbar = (Toolbar) findViewById(R.id.with_us_toolbar);
+        setSupportActionBar(mToolbar);
         /*위젯을 초기화하는 함수*/
         initWidget();
         /*초기화한 위젯에 데이터를 처리하는 함수*/
@@ -32,6 +37,8 @@ public class WithUsActivity extends AppCompatActivity {
     }
 
     private void settingWidget() {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         setTitle(getIntent().getStringExtra(SettingFragment.KEY_WITH_US_TITLE));
 
         String[] imgName = ResString.getInstance().getStringArray(ResString.RES_WITH_US_IMG_NAME);
@@ -50,6 +57,11 @@ public class WithUsActivity extends AppCompatActivity {
     }
 
     private void settingListener() {
-
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 }
