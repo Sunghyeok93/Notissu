@@ -22,6 +22,7 @@ import com.notissu.Database.MainProvider;
 import com.notissu.Database.NoticeProvider;
 import com.notissu.Database.StarredProvider;
 import com.notissu.Dialog.RssItemDialog;
+import com.notissu.Model.NavigationMenu;
 import com.notissu.Model.RssItem;
 import com.notissu.R;
 import com.notissu.Database.RssDatabase;
@@ -117,6 +118,12 @@ public class NoticeListFragment extends Fragment {
                 NoticeProvider noticeProvider = RssDatabase.getInstance();
                 //RssItem Update
                 noticeProvider.updateNotice(rssitem);
+                //Navigation 업데이트
+                MainProvider mainProvider = RssDatabase.getInstance();
+                LibraryProvider libraryProvider = RssDatabase.getInstance();
+                NavigationMenu navigationMenu = NavigationMenu.getInstance();
+                navigationMenu.setMainNotReadCount(mainProvider.getMainNotReadCount());
+                navigationMenu.setLibraryNotReadCount(libraryProvider.getLibraryNotReadCount());
                 //TextView 업데이트
                 TextView tvSubject = (TextView) view.findViewById(R.id.notice_tv_subject);
                 tvSubject.setTextColor(Color.parseColor("#aaaaaa"));
