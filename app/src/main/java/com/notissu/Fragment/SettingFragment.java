@@ -14,6 +14,7 @@ import com.notissu.Activity.DeleteKeywordActivity;
 import com.notissu.Activity.MainActivity;
 import com.notissu.Activity.UpdatePeriodActivity;
 import com.notissu.R;
+import com.notissu.Support.SupportActivity;
 import com.notissu.Util.LogUtils;
 import com.notissu.Util.ResString;
 import com.notissu.WithUs.WithUsActivity;
@@ -29,6 +30,7 @@ public class SettingFragment extends Fragment{
     public static final String KEY_DELETE_KEYWORD_TITLE = "KEY_DELETE_KEYWORD_TITLE";
     public static final String KEY_UPDATE_PERIOD_TITLE = "KEY_UPDATE_PERIOD_TITLE";
     public static final String KEY_WITH_US_TITLE = "KEY_WITH_US_TITLE";
+    public static final String KEY_SUPPORT_TITLE = "KEY_SUPPORT_TITLE";
 
     private static final String CONTENT_UPDATE_PERIOD;
     private static final String CONTENT_DELETE_KEYWORD;
@@ -89,15 +91,15 @@ public class SettingFragment extends Fragment{
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parent, View v, int position, long id) {
-                String strText = (String) parent.getItemAtPosition(position) ;
-                if (strText.equals(CONTENT_UPDATE_PERIOD)) {
-                    goUpdatePeriod(strText);
-                } else if (strText.equals(CONTENT_DELETE_KEYWORD)) {
-                    goDeleteKeyword(strText);
-                } else if (strText.equals(CONTENT_WITH_US)) {
-                    goWithUs(strText);
-                } else if (strText.equals(CONTENT_SUPPORT)) {
-
+                String title = (String) parent.getItemAtPosition(position) ;
+                if (title.equals(CONTENT_UPDATE_PERIOD)) {
+                    goUpdatePeriod(title);
+                } else if (title.equals(CONTENT_DELETE_KEYWORD)) {
+                    goDeleteKeyword(title);
+                } else if (title.equals(CONTENT_WITH_US)) {
+                    goWithUs(title);
+                } else if (title.equals(CONTENT_SUPPORT)) {
+                    goSupport(title);
                 }
             }
         }) ;
@@ -118,6 +120,12 @@ public class SettingFragment extends Fragment{
     public void goWithUs(String title){
         Intent intent = new Intent(getContext(), WithUsActivity.class);
         intent.putExtra(KEY_WITH_US_TITLE,title);
+        startActivity(intent);
+    }
+
+    private void goSupport(String title) {
+        Intent intent = new Intent(getContext(), SupportActivity.class);
+        intent.putExtra(KEY_SUPPORT_TITLE,title);
         startActivity(intent);
     }
 }
