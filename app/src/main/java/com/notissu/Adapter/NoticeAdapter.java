@@ -30,9 +30,6 @@ public class NoticeAdapter extends ArrayAdapter<RssItem> {
     ArrayList<RssItem> starredList = new ArrayList<>();
     //노드들 CheckBox 체크되어있는지 저장하기.
     boolean[] isChecked;
-    //checkbox 범위 넓히려고 checkboxlist를 관리하는 코드 수정했다.
-    //그러는 과정에서 ischecked를 없애려고 했는데, 해결방안이 생각안나서 안함
-    ArrayList<CheckBox> checkList = new ArrayList<>();
 
 
     public NoticeAdapter(Context context, ArrayList<RssItem> noticeList, ArrayList<RssItem> starredList) {
@@ -80,8 +77,7 @@ public class NoticeAdapter extends ArrayAdapter<RssItem> {
             viewHolder.tvSubject = (TextView) view.findViewById(R.id.notice_tv_subject);
             viewHolder.tvTime = (TextView) view.findViewById(R.id.notice_tv_time);
             viewHolder.llWrapper = (LinearLayout) view.findViewById(R.id.notice_ll_cb_wrapper);
-            CheckBox checkBox = (CheckBox) view.findViewById(R.id.notice_cb_star);
-            checkList.add(i,checkBox);
+            viewHolder.cbStar = (CheckBox) view.findViewById(R.id.notice_cb_star);
             view.setTag(viewHolder);
         }else{
             viewHolder = (ViewHolder) view.getTag();
@@ -92,21 +88,22 @@ public class NoticeAdapter extends ArrayAdapter<RssItem> {
 
         viewHolder.tvSubject.setText(title);
         viewHolder.tvTime.setText(getItem(index).getPublishDateShort());
-        checkList.get(i).setChecked(isChecked[index]);
+        viewHolder.cbStar.setChecked(isChecked[index]);
         viewHolder.llWrapper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 RssDatabase rssDatabase = RssDatabase.getInstance();
+                CheckBox cb = (CheckBox)v.findViewById(R.id.notice_cb_star);
 
                 //클릭되고 난 다음이라 isChecked는 체크되는 순간이다.
-                if (checkList.get(index).isChecked()) {
-                    Log.d(TAG,"ischecked true");
-                    checkList.get(index).setChecked(false);
+                if (cb.isChecked()) {
+                    Log.d(TAG,"isChecked() : false");
+                    cb.setChecked(false);
                     rssDatabase.deleteStarred(title);
                     isChecked[index] = false;
                 } else {
-                    Log.d(TAG,"is ischecked false");
-                    checkList.get(index).setChecked(true);
+                    Log.d(TAG,"isChecked() : true");
+                    cb.setChecked(true);
                     rssDatabase.addStarred(title);
                     isChecked[index] = true;
 
@@ -119,6 +116,7 @@ public class NoticeAdapter extends ArrayAdapter<RssItem> {
     static class ViewHolder{
         TextView tvSubject;
         TextView tvTime;
+        CheckBox cbStar;
         LinearLayout llWrapper;
     }
 
