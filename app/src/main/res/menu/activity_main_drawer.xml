@@ -39,7 +39,7 @@
     <group android:id="@+id/drawer_group_setting">
         <item
             android:orderInCategory="2"
-            android:id="@+id/nav_option"
+            android:id="@+id/nav_setting"
             android:icon="@drawable/ic_drawer_settings_24dp"
             android:title="설정" />
     </group>
