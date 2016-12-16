@@ -2,7 +2,8 @@ package com.notissu.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v7.preference.PreferenceFragmentCompat;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,7 @@ import com.notissu.WithUs.WithUsActivity;
  * Created by Sunghyeok on 2016-12-04.
  */
 
-public class SettingFragment extends Fragment{
+public class SettingFragment extends PreferenceFragmentCompat {
     private static final String TAG = LogUtils.makeLogTag(SettingFragment.class);
     private static final String KEY_TITLE = "KEY_TITLE";
 
@@ -65,6 +66,11 @@ public class SettingFragment extends Fragment{
     }
 
     @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        addPreferencesFromResource(R.xml.setting_preference);
+    }
+
+    /*@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_setting,container, false);
 
@@ -73,7 +79,7 @@ public class SettingFragment extends Fragment{
         settingListener();
 
         return rootView;
-    }
+    }*/
 
     private void initWidget() {
         mListView = (ListView) rootView.findViewById(R.id.setting_list) ;
