@@ -30,8 +30,6 @@ import com.notissu.Model.NavigationMenu;
 import com.notissu.Model.RssItem;
 import com.notissu.Notification.Alarm;
 import com.notissu.R;
-import com.notissu.Database.NoticeProvider;
-import com.notissu.Database.NoticeProviderImpl;
 import com.notissu.Database.RssDatabase;
 
 import java.util.ArrayList;

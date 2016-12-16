@@ -9,8 +9,6 @@ import com.notissu.Database.MainProvider;
 import com.notissu.Database.RssDatabase;
 import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Model.RssItem;
-import com.notissu.Database.NoticeProvider;
-import com.notissu.Database.NoticeProviderImpl;
 
 import java.util.ArrayList;
 

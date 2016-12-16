@@ -143,11 +143,10 @@ public class TestUtils {
 
             public static void getCursor() {
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
-                Log.d(TAG, methodName + " Test Start");
                 //DB에 있는 모든 RSS를 List형태로 반환하는 메소드
                 //더미 생성
-                RssItem mainItem1 = new RssItem("main1","main1","main1","main1",1);
-                RssItem mainItem2 = new RssItem("main2","main2","main2","main2",2);
+                RssItem mainItem1 = new RssItem("main1","main1","main1","main1",1, RssItem.NOT_READ);
+                RssItem mainItem2 = new RssItem("main2","main2","main2","main2",2, RssItem.NOT_READ);
                 //Main에 RSS 2개 넣고
                 mainProvider.addMainNotice(mainItem1);
                 mainProvider.addMainNotice(mainItem2);
@@ -182,19 +181,17 @@ public class TestUtils {
                 //집어넣은 더미 값 삭제
                 mainProvider.deleteMainNotice(mainItem1.getGuid());
                 mainProvider.deleteMainNotice(mainItem2.getGuid());
-                Log.d(TAG, methodName + " Test Finish");
             }
 
             public static void getNotice() {
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
-                Log.d(TAG, methodName + " Test Start");
                 // Main,Library 두 곳에서 지정한 조건에 해당하는 리스트를 모두 반환한다.
                 //더미 생성
                 List<RssItem> dumyDataList = new ArrayList<>();
-                dumyDataList.add(new RssItem("main1","main1","main1","main1",0));
-                dumyDataList.add(new RssItem("main2","main2","main2","main2",1));
-                dumyDataList.add(new RssItem("library1","library1","library1","library1",2));
-                dumyDataList.add(new RssItem("library2","library2","library2","library2",3));
+                dumyDataList.add(new RssItem("main1","main1","main1","main1",0, RssItem.NOT_READ));
+                dumyDataList.add(new RssItem("main2","main2","main2","main2",1, RssItem.NOT_READ));
+                dumyDataList.add(new RssItem("library1","library1","library1","library1",2, RssItem.NOT_READ));
+                dumyDataList.add(new RssItem("library2","library2","library2","library2",3, RssItem.NOT_READ));
 
                 // Main과 Library 두 곳에 각각 2개의 RssItem을 집어넣고
                 mainProvider.addMainNotice(dumyDataList.get(0));
@@ -238,7 +235,6 @@ public class TestUtils {
                 mainProvider.deleteMainNotice(dumyDataList.get(1).getGuid());
                 libraryProvider.deleteLibraryNotice(dumyDataList.get(2).getGuid());
                 libraryProvider.deleteLibraryNotice(dumyDataList.get(3).getGuid());
-                Log.d(TAG, methodName + " Test Finish");
            }
         }
 
@@ -253,7 +249,7 @@ public class TestUtils {
             }
 
             //테스트 케이스
-            RssItem rssItem = new RssItem("guid","title","link","descript",123);
+            RssItem rssItem = new RssItem("guid","title","link","descript",123, RssItem.NOT_READ);
 
             public void getMainNotice() {
 
@@ -279,7 +275,7 @@ public class TestUtils {
 
             public void updateMainNotice() {
                 //테스트 케이스
-                RssItem rssItem = new RssItem("guid","update","update","update",123);
+                RssItem rssItem = new RssItem("guid","update","update","update",123, RssItem.NOT_READ);
 
                 int result = mainProvider.updateMainNotice(rssItem);
 
@@ -313,7 +309,7 @@ public class TestUtils {
             }
 
             //테스트 케이스
-            RssItem rssItem = new RssItem("guid","title","link","descript",123);
+            RssItem rssItem = new RssItem("guid","title","link","descript",123, RssItem.NOT_READ);
 
             public void getLibraryNotice() {
                 List<RssItem> rssItemList = libraryProvider.getLibraryNotice();
@@ -337,7 +333,7 @@ public class TestUtils {
 
             public void updateLibraryNotice() {
                 //테스트 케이스
-                RssItem rssItem = new RssItem("guid","update","update","update",123);
+                RssItem rssItem = new RssItem("guid","update","update","update",123, RssItem.NOT_READ);
 
                 int result = libraryProvider.updateLibraryNotice(rssItem);
 
@@ -369,7 +365,7 @@ public class TestUtils {
             }
 
             //테스트 케이스
-            RssItem rssItem = new RssItem("guid","title","link","descript",123);
+            RssItem rssItem = new RssItem("guid","title","link","descript",123, RssItem.NOT_READ);
 
             public void getStarred() {
                 List<RssItem> rssItemList = starredProvider.getStarred();

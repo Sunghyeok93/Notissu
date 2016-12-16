@@ -19,11 +19,8 @@ import com.notissu.Database.StarredProvider;
 import com.notissu.Dialog.RssItemDialog;
 import com.notissu.Model.RssItem;
 import com.notissu.R;
-import com.notissu.Database.NoticeProvider;
-import com.notissu.Database.NoticeProviderImpl;
 import com.notissu.Database.RssDatabase;
 import com.notissu.SyncAdapter.SyncUtil;
-import com.notissu.Util.TestUtils;
 
 import java.util.ArrayList;
 

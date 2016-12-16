@@ -16,6 +16,8 @@ import java.util.List;
  */
 
 public class RssItem implements Parcelable{
+    public static final int READ = 1;
+    public static final int NOT_READ = 0;
     //id는 db로부터 읽어왔을 때만 값을 갖는다.
     //서버로 읽어왔을 때는 값을갖지 않는다.
     private int id;
@@ -24,11 +26,13 @@ public class RssItem implements Parcelable{
     private String link;
     private String description;
     private long publishDate;
+    private int isRead;
     //MainNotice에서만 값을 가지고
     //Library에서는 값을 가지지 않는다.
     private String category;
 
-    public RssItem(String guid, String title, String link, String description, long publishDate) {
+
+    public RssItem(String guid, String title, String link, String description, long publishDate, int isRead) {
         this.guid = guid;
         this.title = title;
         this.link = link;
@@ -50,6 +54,8 @@ public class RssItem implements Parcelable{
         this.publishDate = results.getLong(index);
         index = results.getColumnIndex(Common.COLUMN_NAME_DESCRIPTION);
         this.description = results.getString(index);
+        index = results.getColumnIndex(Common.COLUMN_NAME_IS_READ);
+        this.isRead = results.getInt(index);
     }
 
 
@@ -60,6 +66,7 @@ public class RssItem implements Parcelable{
         link = in.readString();
         description = in.readString();
         publishDate = in.readLong();
+        isRead = in.readInt();
         category = in.readString();
     }
 
@@ -71,6 +78,7 @@ public class RssItem implements Parcelable{
         dest.writeString(link);
         dest.writeString(description);
         dest.writeLong(publishDate);
+        dest.writeInt(isRead);
         dest.writeString(category);
     }
 
@@ -135,6 +143,10 @@ public class RssItem implements Parcelable{
         this.category = category;
     }
 
+    public int getIsRead() {
+        return isRead;
+    }
+
     //인자로 넘어온 List<SyndEntry>를 List<RssItem>로 변환하는 메소드
     public static List<RssItem> toRssList(List<SyndEntry> syndEntries) {
         List<RssItem> rssItems = new ArrayList<>();
@@ -148,7 +160,7 @@ public class RssItem implements Parcelable{
             }
 
             RssItem rssItem = new RssItem(se.getUri(),se.getTitle(),se.getLink(),
-                    se.getDescription().getValue(), publishDate);
+                    se.getDescription().getValue(), publishDate, RssItem.NOT_READ);
             rssItems.add(rssItem);
         }
         return rssItems;
@@ -179,6 +191,7 @@ public class RssItem implements Parcelable{
         public static final String COLUMN_NAME_LINK = "link";
         public static final String COLUMN_NAME_PUBLISH_DATE = "published";
         public static final String COLUMN_NAME_DESCRIPTION = "description";
+        public static final String COLUMN_NAME_IS_READ = "isRead";
     }
     
     
@@ -199,6 +212,7 @@ public class RssItem implements Parcelable{
         public static final String COLUMN_NAME_LINK = Common.COLUMN_NAME_LINK;
         public static final String COLUMN_NAME_PUBLISH_DATE = Common.COLUMN_NAME_PUBLISH_DATE;
         public static final String COLUMN_NAME_DESCRIPTION = Common.COLUMN_NAME_DESCRIPTION;
+        public static final String COLUMN_NAME_IS_READ = Common.COLUMN_NAME_IS_READ;
         public static final String COLUMN_NAME_CATEGORY = "category";
     }
 
@@ -217,6 +231,7 @@ public class RssItem implements Parcelable{
         public static final String COLUMN_NAME_TITLE = Common.COLUMN_NAME_TITLE;
         public static final String COLUMN_NAME_LINK = Common.COLUMN_NAME_LINK;
         public static final String COLUMN_NAME_PUBLISH_DATE = Common.COLUMN_NAME_PUBLISH_DATE;
+        public static final String COLUMN_NAME_IS_READ = Common.COLUMN_NAME_IS_READ;
         public static final String COLUMN_NAME_DESCRIPTION = Common.COLUMN_NAME_DESCRIPTION;
     }
 

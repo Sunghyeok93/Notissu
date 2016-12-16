@@ -17,7 +17,7 @@ import java.util.List;
 public class RssDatabase extends SQLiteOpenHelper implements
         MainProvider, LibraryProvider, StarredProvider, KeywordProvider, LowDBProvider{
     /** Schema version. */
-    public static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 8;
     /** Filename for SQLite file. */
     public static final String DATABASE_NAME = "MainNotice.db";
 
@@ -35,6 +35,7 @@ public class RssDatabase extends SQLiteOpenHelper implements
                     RssItem.MainNotice.COLUMN_NAME_LINK + TYPE_TEXT + COMMA_SEP +
                     RssItem.MainNotice.COLUMN_NAME_PUBLISH_DATE + TYPE_INTEGER + COMMA_SEP +
                     RssItem.MainNotice.COLUMN_NAME_DESCRIPTION + TYPE_TEXT + COMMA_SEP +
+                    RssItem.MainNotice.COLUMN_NAME_IS_READ + TYPE_INTEGER + COMMA_SEP +
                     RssItem.MainNotice.COLUMN_NAME_CATEGORY + TYPE_TEXT + ")";
 
     //main_notice Table 삭제 SQL 코드
@@ -50,7 +51,8 @@ public class RssDatabase extends SQLiteOpenHelper implements
                     RssItem.LibraryNotice.COLUMN_NAME_TITLE + TYPE_TEXT + COMMA_SEP +
                     RssItem.LibraryNotice.COLUMN_NAME_LINK + TYPE_TEXT + COMMA_SEP +
                     RssItem.LibraryNotice.COLUMN_NAME_PUBLISH_DATE + TYPE_INTEGER + COMMA_SEP +
-                    RssItem.LibraryNotice.COLUMN_NAME_DESCRIPTION + TYPE_TEXT + ")";
+                    RssItem.LibraryNotice.COLUMN_NAME_DESCRIPTION + TYPE_TEXT + COMMA_SEP +
+                    RssItem.LibraryNotice.COLUMN_NAME_IS_READ + TYPE_INTEGER + ")";
 
     //main_notice Table 삭제 SQL 코드
     private static final String SQL_DELETE_LIBRARY_NOTICE =
@@ -132,12 +134,13 @@ public class RssDatabase extends SQLiteOpenHelper implements
     private String getSelectString(String table, String selection) {
         StringBuilder stringBuilder = new StringBuilder();
         String query = "select "+
-                RssItem.MainNotice.COLUMN_NAME_ID+","+
-                RssItem.MainNotice.COLUMN_NAME_GUID+","+
-                RssItem.MainNotice.COLUMN_NAME_TITLE+","+
-                RssItem.MainNotice.COLUMN_NAME_LINK+","+
-                RssItem.MainNotice.COLUMN_NAME_PUBLISH_DATE+","+
-                RssItem.MainNotice.COLUMN_NAME_DESCRIPTION+
+                RssItem.Common.COLUMN_NAME_ID+","+
+                RssItem.Common.COLUMN_NAME_GUID+","+
+                RssItem.Common.COLUMN_NAME_TITLE+","+
+                RssItem.Common.COLUMN_NAME_LINK+","+
+                RssItem.Common.COLUMN_NAME_PUBLISH_DATE+","+
+                RssItem.Common.COLUMN_NAME_DESCRIPTION+","+
+                RssItem.Common.COLUMN_NAME_IS_READ+
                 " from "+
                 table;
         stringBuilder.append(query);
@@ -222,6 +225,7 @@ public class RssDatabase extends SQLiteOpenHelper implements
         values.put(RssItem.MainNotice.COLUMN_NAME_PUBLISH_DATE,isExist.getPublishDate());
         values.put(RssItem.MainNotice.COLUMN_NAME_DESCRIPTION,isExist.getDescription());
         values.put(RssItem.MainNotice.COLUMN_NAME_CATEGORY,isExist.getCategory());
+        values.put(RssItem.MainNotice.COLUMN_NAME_IS_READ,isExist.getIsRead());
 
         return writeDatabase.insert(RssItem.MainNotice.TABLE_NAME,null,values);
     }
@@ -236,6 +240,9 @@ public class RssDatabase extends SQLiteOpenHelper implements
         values.put(RssItem.MainNotice.COLUMN_NAME_PUBLISH_DATE,isExist.getPublishDate());
         values.put(RssItem.MainNotice.COLUMN_NAME_DESCRIPTION,isExist.getDescription());
         values.put(RssItem.MainNotice.COLUMN_NAME_CATEGORY,isExist.getCategory());
+        //공지사항이 업데이트 됐으면 당연히 다시 읽을 기회를 줘야지, 그러니 안읽은 표시.
+        values.put(RssItem.MainNotice.COLUMN_NAME_IS_READ,RssItem.NOT_READ);
+
 
         return writeDatabase.update(RssItem.MainNotice.TABLE_NAME,values,
                 RssItem.MainNotice.COLUMN_NAME_GUID+"=?",new String[]{isExist.getGuid()});
@@ -312,6 +319,7 @@ public class RssDatabase extends SQLiteOpenHelper implements
         values.put(RssItem.LibraryNotice.COLUMN_NAME_LINK,isExist.getLink());
         values.put(RssItem.LibraryNotice.COLUMN_NAME_PUBLISH_DATE,isExist.getPublishDate());
         values.put(RssItem.LibraryNotice.COLUMN_NAME_DESCRIPTION,isExist.getDescription());
+        values.put(RssItem.LibraryNotice.COLUMN_NAME_IS_READ,isExist.getIsRead());
 
         return writeDatabase.insert(RssItem.LibraryNotice.TABLE_NAME,null,values);
     }
@@ -325,6 +333,8 @@ public class RssDatabase extends SQLiteOpenHelper implements
         values.put(RssItem.LibraryNotice.COLUMN_NAME_LINK,isExist.getLink());
         values.put(RssItem.LibraryNotice.COLUMN_NAME_PUBLISH_DATE,isExist.getPublishDate());
         values.put(RssItem.LibraryNotice.COLUMN_NAME_DESCRIPTION,isExist.getDescription());
+        //공지사항이 업데이트 됐으면 당연히 다시 읽을 기회를 줘야지, 그러니 안읽은 표시.
+        values.put(RssItem.LibraryNotice.COLUMN_NAME_IS_READ,RssItem.NOT_READ);
 
         return writeDatabase.update(RssItem.LibraryNotice.TABLE_NAME,values,
                 RssItem.LibraryNotice.COLUMN_NAME_GUID+"=?",new String[]{isExist.getGuid()});
