@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -86,8 +87,8 @@ public class MainActivity extends AppCompatActivity
         LibraryProvider libraryProvider = RssDatabase.getInstance();
         NavigationMenu navigationMenu = NavigationMenu.getInstance();
         navigationMenu.setMenu(navigationView);
-        navigationMenu.setMainNotReadCount(mainProvider.getNotReadCount());
-        navigationMenu.setLibraryNotReadCount(libraryProvider.getLibraryNotReadCount());
+        navigationMenu.setMainNotReadCount(mainProvider.getNotReadCount(RssItem.MainNotice.TABLE_NAME));
+        navigationMenu.setLibraryNotReadCount(libraryProvider.getNotReadCount(RssItem.LibraryNotice.TABLE_NAME));
         drawKeyword();
 
         Intent intent = getIntent();
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity
                 dialogFragment.show(getSupportFragmentManager(),"");
             }
         });
+
     }
 
     public void hideFloatingActionButton() {
@@ -150,7 +152,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar
-        toolbar.inflateMenu(R.menu.main);
+        /*toolbar.inflateMenu(R.menu.main);
         mSearchView = (SearchView) toolbar.getMenu().findItem(R.id.menu_search).getActionView();
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -169,11 +171,10 @@ public class MainActivity extends AppCompatActivity
             }
         });
         mSearchView.setQueryHint("검색 입력");
-        mSearchView.clearFocus();
+        mSearchView.clearFocus();*/
 
         return super.onCreateOptionsMenu(menu);
     }
-
 
 
     /*

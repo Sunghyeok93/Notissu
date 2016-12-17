@@ -8,7 +8,10 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.notissu.Activity.MainActivity;
 import com.notissu.Adapter.NoticeAdapter;
 import com.notissu.Database.KeywordProvider;
 import com.notissu.Database.LibraryProvider;
@@ -50,6 +54,7 @@ public class NoticeListFragment extends Fragment {
     //이 List가 Main인지 Library 인지 starred인지 keyword인지 구별 flag
     int flag;
     String title;
+    //main일 때만 사용하는 멤버변수, 어느 카테고리인지 알려준다.
     String category;
 
     public static Fragment newInstance(int flag, String title, String category, ArrayList<RssItem> noticeRows) {
@@ -76,6 +81,7 @@ public class NoticeListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         mRootView = inflater.inflate(R.layout.fragment_notice_list, container, false);
         // Inflate the layout for this fragment
 
@@ -86,24 +92,42 @@ public class NoticeListFragment extends Fragment {
         return mRootView;
     }
 
-    private void initWidget() {
-        mNoticeList = (ListView) mRootView.findViewById(R.id.notice_list);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.notice_swipe_refresh_layout);
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main,menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_read_all) {
             NoticeProvider noticeProvider = RssDatabase.getInstance();
-            if (flag == FLAG_MAIN_NOTICE) {
-                noticeProvider.updateAllReadCount(RssItem.MainNotice.TABLE_NAME);
-                return true;
-            } else if (flag == FLAG_LIBRARY_NOTICE) {
-                noticeProvider.updateAllReadCount(RssItem.LibraryNotice.TABLE_NAME);
+            boolean isMain = flag == FLAG_MAIN_NOTICE;
+            boolean isLibrary = flag == FLAG_LIBRARY_NOTICE;
+            if (isMain || isLibrary) {
+                if (isMain) {
+                    noticeProvider.updateAllReadCount(RssItem.MainNotice.TABLE_NAME);
+                } else if (isLibrary) {
+                    noticeProvider.updateAllReadCount(RssItem.LibraryNotice.TABLE_NAME);
+                }
+                //Navigation 업데이트
+                NavigationMenu navigationMenu = NavigationMenu.getInstance();
+                navigationMenu.setMainNotReadCount(noticeProvider.getNotReadCount(RssItem.MainNotice.TABLE_NAME));
+                navigationMenu.setLibraryNotReadCount(noticeProvider.getNotReadCount(RssItem.LibraryNotice.TABLE_NAME));
+                //TextView 업데이트
+                for (int i = 0; i < mNoticeAdapter.getCount(); i++) {
+                    mNoticeAdapter.getItem(i).setIsRead(RssItem.READ);
+                }
+                mNoticeAdapter.notifyDataSetChanged();
                 return true;
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void initWidget() {
+        mNoticeList = (ListView) mRootView.findViewById(R.id.notice_list);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.notice_swipe_refresh_layout);
     }
 
     private void settingWidget() {

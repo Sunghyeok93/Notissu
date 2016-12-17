@@ -14,6 +14,6 @@ public interface NoticeProvider {
     //안 읽은 공지사항의 개수 반환
     int getNotReadCount(String table);
 
-    //안읽은 공지사항 모두 업데이트 하도록 한다.
+    //안읽은 공지사항 모두 읽음으로 업데이트 하도록 한다.
     int updateAllReadCount(String table);
 }

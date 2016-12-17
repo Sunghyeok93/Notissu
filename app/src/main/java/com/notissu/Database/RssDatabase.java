@@ -215,8 +215,9 @@ public class RssDatabase extends SQLiteOpenHelper implements
     //안읽은 공지사항 모두 업데이트 하도록 한다.
     @Override
     public int updateAllReadCount(String table) {
-        
-        return 0;
+        ContentValues values = new ContentValues();
+        values.put(RssItem.Common.COLUMN_NAME_IS_READ,RssItem.READ);
+        return writeDatabase.update(table,values,null,null);
     }
 /*Main 공지사항들의 기능들
     * Main테이블을 카테고리별로 골라 가지고 옴
@@ -276,9 +277,7 @@ public class RssDatabase extends SQLiteOpenHelper implements
         values.put(RssItem.MainNotice.COLUMN_NAME_PUBLISH_DATE,isExist.getPublishDate());
         values.put(RssItem.MainNotice.COLUMN_NAME_DESCRIPTION,isExist.getDescription());
         values.put(RssItem.MainNotice.COLUMN_NAME_CATEGORY,isExist.getCategory());
-        //공지사항이 업데이트 됐으면 당연히 다시 읽을 기회를 줘야지, 그러니 안읽은 표시.
         values.put(RssItem.MainNotice.COLUMN_NAME_IS_READ,isExist.getIsRead());
-
 
         return writeDatabase.update(RssItem.MainNotice.TABLE_NAME,values,
                 RssItem.MainNotice.COLUMN_NAME_GUID+"=?",new String[]{isExist.getGuid()});
