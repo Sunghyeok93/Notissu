@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.notissu.Database.KeywordProvider;
 import com.notissu.Database.LibraryProvider;
 import com.notissu.Database.MainProvider;
+import com.notissu.Database.RssDatabase;
 import com.notissu.Database.StarredProvider;
 import com.notissu.Dialog.AddKeywordDialog;
 import com.notissu.Fragment.NoticeListFragment;
@@ -32,7 +33,6 @@ import com.notissu.Model.NavigationMenu;
 import com.notissu.Model.RssItem;
 import com.notissu.Notification.Alarm;
 import com.notissu.R;
-import com.notissu.Database.RssDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -170,6 +170,7 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
         });
+
         mSearchView.setQueryHint("검색 입력");
         mSearchView.clearFocus();*/
 
