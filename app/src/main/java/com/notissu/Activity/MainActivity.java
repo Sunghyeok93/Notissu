@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        fragmentManager.popBackStack(stackName,FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//        fragmentManager.popBackStack(stackName,FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fragmentTransaction.replace(R.id.main_fragment_container, fragment);
         fragmentTransaction.addToBackStack(stackName);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
