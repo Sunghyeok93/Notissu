@@ -95,7 +95,12 @@ public class NoticeListFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.main,menu);
+        boolean isMain = flag == FLAG_MAIN_NOTICE;
+        boolean isLibrary = flag == FLAG_LIBRARY_NOTICE;
+        if (isMain || isLibrary) {
+            inflater.inflate(R.menu.main,menu);
+        }
+        super.onCreateOptionsMenu(menu,inflater);
     }
 
     @Override
