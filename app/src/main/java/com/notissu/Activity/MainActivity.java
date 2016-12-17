@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.notissu.Database.KeywordProvider;
 import com.notissu.Database.LibraryProvider;
 import com.notissu.Database.MainProvider;
+import com.notissu.Database.RssDatabase;
 import com.notissu.Database.StarredProvider;
 import com.notissu.Dialog.AddKeywordDialog;
 import com.notissu.Fragment.NoticeListFragment;
@@ -31,8 +32,6 @@ import com.notissu.Model.NavigationMenu;
 import com.notissu.Model.RssItem;
 import com.notissu.Notification.Alarm;
 import com.notissu.R;
-import com.notissu.Database.RssDatabase;
-import com.notissu.Util.TestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -169,6 +168,7 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
         });
+
         mSearchView.setQueryHint("검색 입력");
         mSearchView.clearFocus();
 
@@ -193,23 +193,30 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_ssu_notice) {
             //Main 공지사항
+            mSearchView.setVisibility(View.VISIBLE);
             showFragment(STACK_NAME_MAIN,NoticeTabFragment.newInstance(NoticeListFragment.KEY_MAIN_NOTICE, itemTitle));
         } else if (id == R.id.nav_ssu_library) {
             //도서관 공지사항
+            mSearchView.setVisibility(View.VISIBLE);
             LibraryProvider libraryProvider = RssDatabase.getInstance();
             ArrayList<RssItem> noticeList = new ArrayList<>(libraryProvider.getLibraryNotice());
             showFragment(STACK_NAME_LIBRARY,NoticeListFragment.newInstance(NoticeListFragment.KEY_LIBRARY_NOTICE, itemTitle, noticeList));
         } else if (id == R.id.nav_starred) {
             //즐겨찾기
+            mSearchView.setVisibility(View.GONE);
             StarredProvider starredProvider = RssDatabase.getInstance();
             ArrayList<RssItem> noticeList = new ArrayList<>(starredProvider.getStarred());
             showFragment(STACK_NAME_STARRED,NoticeListFragment.newInstance(NoticeListFragment.KEY_STARRED, itemTitle, noticeList));
         } else if (groupid == R.id.group_keyword) {
+            mSearchView.setVisibility(View.GONE);
+
             KeywordProvider keywordProvider = RssDatabase.getInstance();
             ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(itemTitle));
             showFragment(STACK_NAME_KEYWORD+itemTitle,NoticeListFragment.newInstance(NoticeListFragment.KEY_KEYWORD, itemTitle, noticeList));
         } else if (id == R.id.nav_setting) {
             //설정 공지사항
+            mSearchView.setVisibility(View.GONE);
+
             showFragment(STACK_NAME_SETTING,SettingFragment.newInstance());
         }
 
