@@ -194,7 +194,31 @@ public class RssDatabase extends SQLiteOpenHelper implements
         return result;
     }
 
-    /*Main 공지사항들의 기능들
+    //안 읽은 공지사항의 개수 반환
+    @Override
+    public int getNotReadCount(String table) {
+        int count = 0;
+        List<RssItem> rssList = null;
+        if (table == RssItem.MainNotice.TABLE_NAME) {
+            rssList = getMainNotice(NOTICE_SSU_ALL);
+        } else if (table == RssItem.LibraryNotice.TABLE_NAME) {
+            rssList = getLibraryNotice();
+        } else return 0;
+        for (RssItem rss : rssList) {
+            if (rss.getIsRead() == RssItem.NOT_READ) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    //안읽은 공지사항 모두 업데이트 하도록 한다.
+    @Override
+    public int updateAllReadCount(String table) {
+        
+        return 0;
+    }
+/*Main 공지사항들의 기능들
     * Main테이블을 카테고리별로 골라 가지고 옴
     * List<RssItem> getMainNotice(String category)
     * 쓰기
@@ -293,18 +317,6 @@ public class RssDatabase extends SQLiteOpenHelper implements
         }
     }
 
-    @Override
-    public int getMainNotReadCount() {
-        int count = 0;
-        List<RssItem> rssList = getMainNotice(NOTICE_SSU_ALL);
-        for (RssItem rss : rssList) {
-            if (rss.getIsRead() == RssItem.NOT_READ) {
-                count++;
-            }
-        }
-        return count;
-    }
-
     /*Library 공지사항들의 기능들
     * Library 테이블을 불러오기
     List<RssItem> getLibraryNotice()
@@ -370,18 +382,6 @@ public class RssDatabase extends SQLiteOpenHelper implements
         //두번째 인자를 null로 채우면 모든 row 삭제
         return writeDatabase.delete(RssItem.LibraryNotice.TABLE_NAME,
                 RssItem.LibraryNotice.COLUMN_NAME_GUID+"=?",new String[]{guid});
-    }
-
-    @Override
-    public int getLibraryNotReadCount() {
-        int count = 0;
-        List<RssItem> rssList = getLibraryNotice();
-        for (RssItem rss : rssList) {
-            if (rss.getIsRead() == RssItem.NOT_READ) {
-                count++;
-            }
-        }
-        return count;
     }
 
     /*Starred 기능들

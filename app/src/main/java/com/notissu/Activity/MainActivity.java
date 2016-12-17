@@ -32,7 +32,6 @@ import com.notissu.Model.RssItem;
 import com.notissu.Notification.Alarm;
 import com.notissu.R;
 import com.notissu.Database.RssDatabase;
-import com.notissu.Util.TestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +86,7 @@ public class MainActivity extends AppCompatActivity
         LibraryProvider libraryProvider = RssDatabase.getInstance();
         NavigationMenu navigationMenu = NavigationMenu.getInstance();
         navigationMenu.setMenu(navigationView);
-        navigationMenu.setMainNotReadCount(mainProvider.getMainNotReadCount());
+        navigationMenu.setMainNotReadCount(mainProvider.getNotReadCount());
         navigationMenu.setLibraryNotReadCount(libraryProvider.getLibraryNotReadCount());
         drawKeyword();
 
@@ -97,14 +96,14 @@ public class MainActivity extends AppCompatActivity
 
         if (!isAlarm) {
             String title = NavigationMenu.getInstance().getFristItemTitle();
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeTabFragment.newInstance(NoticeListFragment.KEY_MAIN_NOTICE, title));
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeTabFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, title));
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();
         } else {
             KeywordProvider keywordProvider = RssDatabase.getInstance();
             String title = intent.getStringExtra(Alarm.KEY_FIRST_KEYWORD);
             ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(title));
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.KEY_MAIN_NOTICE, title, noticeList));
+            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, title, noticeList));
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();
         }
@@ -159,7 +158,7 @@ public class MainActivity extends AppCompatActivity
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 KeywordProvider keywordProvider = RssDatabase.getInstance();
                 ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(s));
-                fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.KEY_KEYWORD, s, noticeList));
+                fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.FLAG_KEYWORD, s, noticeList));
                 fragmentTransaction.addToBackStack(null).commit();
                 return false;
             }
@@ -191,23 +190,23 @@ public class MainActivity extends AppCompatActivity
         int groupid = item.getGroupId(); // keyword 그룹아이디 가져오기
         String itemTitle = item.getTitle().toString(); // keyword 구분을 위한 제목 가져오기
 
-        if (id == R.id.nav_ssu_notice) {
+        if (id == R.id.nav_ssu_main) {
             //Main 공지사항
-            showFragment(STACK_NAME_MAIN,NoticeTabFragment.newInstance(NoticeListFragment.KEY_MAIN_NOTICE, itemTitle));
+            showFragment(STACK_NAME_MAIN,NoticeTabFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, itemTitle));
         } else if (id == R.id.nav_ssu_library) {
             //도서관 공지사항
             LibraryProvider libraryProvider = RssDatabase.getInstance();
             ArrayList<RssItem> noticeList = new ArrayList<>(libraryProvider.getLibraryNotice());
-            showFragment(STACK_NAME_LIBRARY,NoticeListFragment.newInstance(NoticeListFragment.KEY_LIBRARY_NOTICE, itemTitle, noticeList));
+            showFragment(STACK_NAME_LIBRARY,NoticeListFragment.newInstance(NoticeListFragment.FLAG_LIBRARY_NOTICE, itemTitle, noticeList));
         } else if (id == R.id.nav_starred) {
             //즐겨찾기
             StarredProvider starredProvider = RssDatabase.getInstance();
             ArrayList<RssItem> noticeList = new ArrayList<>(starredProvider.getStarred());
-            showFragment(STACK_NAME_STARRED,NoticeListFragment.newInstance(NoticeListFragment.KEY_STARRED, itemTitle, noticeList));
+            showFragment(STACK_NAME_STARRED,NoticeListFragment.newInstance(NoticeListFragment.FLAG_STARRED, itemTitle, noticeList));
         } else if (groupid == R.id.group_keyword) {
             KeywordProvider keywordProvider = RssDatabase.getInstance();
             ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(itemTitle));
-            showFragment(STACK_NAME_KEYWORD+itemTitle,NoticeListFragment.newInstance(NoticeListFragment.KEY_KEYWORD, itemTitle, noticeList));
+            showFragment(STACK_NAME_KEYWORD+itemTitle,NoticeListFragment.newInstance(NoticeListFragment.FLAG_KEYWORD, itemTitle, noticeList));
         } else if (id == R.id.nav_setting) {
             //설정 공지사항
             showFragment(STACK_NAME_SETTING,SettingFragment.newInstance());

@@ -2,12 +2,14 @@ package com.notissu.Fragment;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.media.NotProvisionedException;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -17,7 +19,6 @@ import android.widget.TextView;
 import com.notissu.Adapter.NoticeAdapter;
 import com.notissu.Database.KeywordProvider;
 import com.notissu.Database.LibraryProvider;
-import com.notissu.Database.LowDBProvider;
 import com.notissu.Database.MainProvider;
 import com.notissu.Database.NoticeProvider;
 import com.notissu.Database.StarredProvider;
@@ -28,8 +29,6 @@ import com.notissu.R;
 import com.notissu.Database.RssDatabase;
 import com.notissu.SyncAdapter.SyncUtil;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 public class NoticeListFragment extends Fragment {
@@ -38,10 +37,10 @@ public class NoticeListFragment extends Fragment {
     private static final String KEY_CATEGORY= "KEY_CATEGORY";
     private static final String KEY_FLAG= "KEY_FLAG";
 
-    public static final int KEY_MAIN_NOTICE = 0;
-    public static final int KEY_LIBRARY_NOTICE = 1;
-    public static final int KEY_STARRED = 2;
-    public static final int KEY_KEYWORD= 3;
+    public static final int FLAG_MAIN_NOTICE = 0;
+    public static final int FLAG_LIBRARY_NOTICE = 1;
+    public static final int FLAG_STARRED = 2;
+    public static final int FLAG_KEYWORD = 3;
 
     ListView mNoticeList;
     NoticeAdapter mNoticeAdapter;
@@ -92,6 +91,21 @@ public class NoticeListFragment extends Fragment {
         mSwipeRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.notice_swipe_refresh_layout);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_read_all) {
+            NoticeProvider noticeProvider = RssDatabase.getInstance();
+            if (flag == FLAG_MAIN_NOTICE) {
+                noticeProvider.updateAllReadCount(RssItem.MainNotice.TABLE_NAME);
+                return true;
+            } else if (flag == FLAG_LIBRARY_NOTICE) {
+                noticeProvider.updateAllReadCount(RssItem.LibraryNotice.TABLE_NAME);
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void settingWidget() {
         Bundle bundle = getArguments();
         title = bundle.getString(KEY_TITLE);
@@ -119,11 +133,9 @@ public class NoticeListFragment extends Fragment {
                 //RssItem Update
                 noticeProvider.updateNotice(rssitem);
                 //Navigation 업데이트
-                MainProvider mainProvider = RssDatabase.getInstance();
-                LibraryProvider libraryProvider = RssDatabase.getInstance();
                 NavigationMenu navigationMenu = NavigationMenu.getInstance();
-                navigationMenu.setMainNotReadCount(mainProvider.getMainNotReadCount());
-                navigationMenu.setLibraryNotReadCount(libraryProvider.getLibraryNotReadCount());
+                navigationMenu.setMainNotReadCount(noticeProvider.getNotReadCount(RssItem.MainNotice.TABLE_NAME));
+                navigationMenu.setLibraryNotReadCount(noticeProvider.getNotReadCount(RssItem.LibraryNotice.TABLE_NAME));
                 //TextView 업데이트
                 TextView tvSubject = (TextView) view.findViewById(R.id.notice_tv_subject);
                 tvSubject.setTextColor(Color.parseColor("#aaaaaa"));
@@ -146,19 +158,19 @@ public class NoticeListFragment extends Fragment {
         StarredProvider starredProvider = RssDatabase.getInstance();
         ArrayList<RssItem> noticeList = null;
         ArrayList<RssItem> starredList = new ArrayList<>(starredProvider.getStarred());
-        if (flag == KEY_MAIN_NOTICE || flag == KEY_LIBRARY_NOTICE) {
+        if (flag == FLAG_MAIN_NOTICE || flag == FLAG_LIBRARY_NOTICE) {
             SyncUtil.TriggerRefresh();
-            if (flag == KEY_MAIN_NOTICE) {
+            if (flag == FLAG_MAIN_NOTICE) {
                 MainProvider mainProvider = RssDatabase.getInstance();
                 noticeList = new ArrayList<>(mainProvider.getSsuNotice(category));
-            } else if (flag == KEY_LIBRARY_NOTICE) {
+            } else if (flag == FLAG_LIBRARY_NOTICE) {
                 LibraryProvider libraryProvider = RssDatabase.getInstance();
                 noticeList = new ArrayList<>(libraryProvider.getLibraryNotice());
             }
-        } else if (flag == KEY_STARRED || flag == KEY_KEYWORD) {
-            if (flag == KEY_STARRED) {
+        } else if (flag == FLAG_STARRED || flag == FLAG_KEYWORD) {
+            if (flag == FLAG_STARRED) {
                 noticeList = starredList;
-            } else if (flag == KEY_KEYWORD) {
+            } else if (flag == FLAG_KEYWORD) {
                 KeywordProvider keywordProvider = RssDatabase.getInstance();
                 noticeList = new ArrayList<>(keywordProvider.getKeyword(title));
             }

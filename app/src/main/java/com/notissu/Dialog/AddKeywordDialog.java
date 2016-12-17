@@ -16,7 +16,7 @@ import com.notissu.R;
  */
 
 public class AddKeywordDialog extends DialogFragment {
-    public static final String KEY_KEYWORD = "KEY_KEYWORD";
+    public static final String KEY_KEYWORD = "FLAG_KEYWORD";
     View rootView;
     Button btnKeyword;
     EditText etText;

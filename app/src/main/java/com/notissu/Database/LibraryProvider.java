@@ -24,6 +24,4 @@ public interface LibraryProvider extends NoticeProvider{
     //일치하는 row가 없으면 0 반환
     int deleteLibraryNotice(String guid);
 
-    //안 읽은 공지사항의 개수 반환
-    int getLibraryNotReadCount();
 }

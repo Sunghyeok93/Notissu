@@ -1,8 +1,8 @@
 package com.notissu.Model;
 
-import android.graphics.Color;
 import android.support.design.widget.NavigationView;
 import android.view.Menu;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.notissu.R;
@@ -29,8 +29,11 @@ public class NavigationMenu {
     public void setMenu(NavigationView menu) {
         this.menu = menu;
         this.menu.inflateMenu(R.menu.activity_main_drawer);
-        mTvMainCount = (TextView) menu.getMenu().getItem(0).getSubMenu().getItem(0).getActionView();
-        mTvLibraryCount = (TextView) menu.getMenu().getItem(0).getSubMenu().getItem(1).getActionView();
+
+        LinearLayout view = (LinearLayout) menu.getMenu().findItem(R.id.nav_ssu_main).getActionView();
+        mTvMainCount = (TextView) view.findViewById(R.id.navigation_item_tv_count);
+        view = (LinearLayout) menu.getMenu().findItem(R.id.nav_ssu_library).getActionView();
+        mTvLibraryCount = (TextView) view.findViewById(R.id.navigation_item_tv_count);
     }
 
     public Menu getKeywordMenu() {
