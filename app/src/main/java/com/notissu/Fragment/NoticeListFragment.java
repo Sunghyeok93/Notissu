@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -23,6 +24,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.notissu.Activity.MainActivity;
+import com.notissu.Activity.SearchActivity;
 import com.notissu.Adapter.NoticeAdapter;
 import com.notissu.Database.KeywordProvider;
 import com.notissu.Database.KeywordProviderImp;
@@ -46,6 +49,8 @@ import java.util.ArrayList;
 
 public class NoticeListFragment extends Fragment {
     private static final String TAG = LogUtils.makeLogTag(NoticeListFragment.class);
+
+    public static final String KEY_SEARCH_QUERY = "KEY_SEARCH_QUERY";
 
     private static final String KEY_NOTICE_ROWS = "KEY_NOTICE_ROWS";
     private static final String KEY_TITLE= "KEY_TITLE";
@@ -157,22 +162,6 @@ public class NoticeListFragment extends Fragment {
             }
         });
 
-//        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String s) {
-//                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-//                KeywordProvider keywordProvider = RssDatabase.getInstance();
-//                ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(s));
-//                fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.FLAG_KEYWORD, s, noticeList));
-//                fragmentTransaction.addToBackStack(null).commit();
-//                return false;
-//            }
-//            @Override
-//            public boolean onQueryTextChange(String s) {
-//
-//                return false;
-//            }
-//        });
     }
 
 
@@ -183,6 +172,22 @@ public class NoticeListFragment extends Fragment {
         if (isMain || isLibrary) {
             inflater.inflate(R.menu.main,menu);
             mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+            mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    Intent intent = new Intent(getContext(), SearchActivity.class);
+                    intent.putExtra(KEY_SEARCH_QUERY,query);
+                    getActivity().startActivity(intent);
+                    mSearchView.clearFocus();
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    return false;
+                }
+            });
+
         }
         super.onCreateOptionsMenu(menu,inflater);
     }
