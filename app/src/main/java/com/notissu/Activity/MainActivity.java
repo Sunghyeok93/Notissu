@@ -14,18 +14,20 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.notissu.Database.KeywordProvider;
+import com.notissu.Database.KeywordProviderImp;
 import com.notissu.Database.LibraryProvider;
+import com.notissu.Database.LibraryProviderImp;
 import com.notissu.Database.MainProvider;
+import com.notissu.Database.MainProviderImp;
 import com.notissu.Database.RssDatabase;
 import com.notissu.Database.StarredProvider;
+import com.notissu.Database.StarredProviderImp;
 import com.notissu.Dialog.AddKeywordDialog;
 import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Fragment.NoticeTabFragment;
@@ -56,6 +58,10 @@ public class MainActivity extends AppCompatActivity
     FloatingActionButton fab;
     SearchView mSearchView;
     SwipeRefreshLayout refreshLayout;
+
+    LibraryProvider libraryProvider = new LibraryProviderImp();
+    KeywordProvider keywordProvider = new KeywordProviderImp();
+    StarredProvider starredProvider = new StarredProviderImp();
 
 
     @Override
@@ -98,8 +104,6 @@ public class MainActivity extends AppCompatActivity
 
     private void settingWidget() {
         toggle.syncState();
-        MainProvider mainProvider = RssDatabase.getInstance();
-        LibraryProvider libraryProvider = RssDatabase.getInstance();
         NavigationMenu navigationMenu = NavigationMenu.getInstance();
         navigationMenu.setMenu(navigationView);
         navigationMenu.setMenuNotReadCount();
@@ -115,7 +119,6 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();
         } else {
-            KeywordProvider keywordProvider = RssDatabase.getInstance();
             String title = intent.getStringExtra(Alarm.KEY_FIRST_KEYWORD);
             ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(title));
             fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, title, noticeList));
@@ -210,16 +213,13 @@ public class MainActivity extends AppCompatActivity
             showFragment(STACK_NAME_MAIN,NoticeTabFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, itemTitle));
         } else if (id == R.id.nav_ssu_library) {
             //도서관 공지사항
-            LibraryProvider libraryProvider = RssDatabase.getInstance();
-            ArrayList<RssItem> noticeList = new ArrayList<>(libraryProvider.getLibraryNotice());
+            ArrayList<RssItem> noticeList = new ArrayList<>(libraryProvider.getNotice());
             showFragment(STACK_NAME_LIBRARY,NoticeListFragment.newInstance(NoticeListFragment.FLAG_LIBRARY_NOTICE, itemTitle, noticeList));
         } else if (id == R.id.nav_starred) {
             //즐겨찾기
-            StarredProvider starredProvider = RssDatabase.getInstance();
             ArrayList<RssItem> noticeList = new ArrayList<>(starredProvider.getStarred());
             showFragment(STACK_NAME_STARRED,NoticeListFragment.newInstance(NoticeListFragment.FLAG_STARRED, itemTitle, noticeList));
         } else if (groupid == R.id.group_keyword) {
-            KeywordProvider keywordProvider = RssDatabase.getInstance();
             ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(itemTitle));
             showFragment(STACK_NAME_KEYWORD+itemTitle,NoticeListFragment.newInstance(NoticeListFragment.FLAG_KEYWORD, itemTitle, noticeList));
         } else if (id == R.id.nav_setting) {
@@ -262,7 +262,6 @@ public class MainActivity extends AppCompatActivity
         int newId = navigationMenu.getNewId();
         menu.add(R.id.group_keyword, newId,1,itemName).setIcon(R.drawable.ic_menu_send);
 //        menu.getItem(newId).setActionView()
-        KeywordProvider keywordProvider = RssDatabase.getInstance();
         keywordProvider.addKeyword(itemName);
 
         return true;
@@ -272,7 +271,6 @@ public class MainActivity extends AppCompatActivity
     public void drawKeyword() {
         NavigationMenu navigationMenu = NavigationMenu.getInstance();
         Menu menu = navigationMenu.getKeywordMenu();
-        KeywordProvider keywordProvider = RssDatabase.getInstance();
         List<String> keywordList = keywordProvider.getKeyword();
         if (keywordList.size() != 0) {
             for (int i = 0; i < keywordList.size(); i++) {

@@ -1,17 +1,10 @@
 package com.notissu.Util;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-import com.notissu.Database.KeywordProvider;
-import com.notissu.Database.LibraryProvider;
-import com.notissu.Database.LowDBProvider;
-import com.notissu.Database.MainProvider;
-import com.notissu.Database.NoticeProvider;
-import com.notissu.Database.StarredProvider;
+import com.notissu.Database.*;
 import com.notissu.Model.RssItem;
-import com.notissu.Database.RssDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,19 +54,20 @@ public class TestUtils {
     }
 
     public static class DB {
-        static NoticeProvider noticeProvider;
         static MainProvider mainProvider;
         static LibraryProvider libraryProvider;
         static StarredProvider starredProvider;
         static KeywordProvider keywordProvider;
         static LowDBProvider lowDBProvider;
+        static {
+
+        }
         public DB() {
-            noticeProvider = RssDatabase.getInstance();
-            mainProvider = RssDatabase.getInstance();
-            libraryProvider = RssDatabase.getInstance();
-            starredProvider = RssDatabase.getInstance();
-            keywordProvider = RssDatabase.getInstance();
-            lowDBProvider = RssDatabase.getInstance();
+            mainProvider = new MainProviderImp();
+            libraryProvider = new LibraryProviderImp();
+            starredProvider = new StarredProviderImp();
+            keywordProvider = new KeywordProviderImp();
+            lowDBProvider = new LowDBProviderImp();
 
             Etc.getCursor();
             Etc.getNotice();
@@ -153,8 +147,8 @@ public class TestUtils {
                 RssItem mainItem1 = new RssItem("main1","main1","main1","main1",1, RssItem.NOT_READ);
                 RssItem mainItem2 = new RssItem("main2","main2","main2","main2",2, RssItem.NOT_READ);
                 //Main에 RSS 2개 넣고
-                mainProvider.addMainNotice(mainItem1);
-                mainProvider.addMainNotice(mainItem2);
+                mainProvider.addNotice(mainItem1);
+                mainProvider.addNotice(mainItem2);
                 //getCursor를 호출한다음
                 Cursor cursor = lowDBProvider.getCursor(RssItem.MainNotice.TABLE_NAME, RssItem.MainNotice.COLUMN_NAME_TITLE+"=?",new String[]{"main1"});
                 //제대로 나왔는지 비교하고
@@ -184,8 +178,8 @@ public class TestUtils {
                     printFail(methodName);
 
                 //집어넣은 더미 값 삭제
-                mainProvider.deleteMainNotice(mainItem1.getTitle());
-                mainProvider.deleteMainNotice(mainItem2.getTitle());
+                mainProvider.deleteNotice(mainItem1.getTitle());
+                mainProvider.deleteNotice(mainItem2.getTitle());
             }
 
             public static void getNotice() {
@@ -199,10 +193,10 @@ public class TestUtils {
                 dumyDataList.add(new RssItem("library2","library2","library2","library2",3, RssItem.NOT_READ));
 
                 // Main과 Library 두 곳에 각각 2개의 RssItem을 집어넣고
-                mainProvider.addMainNotice(dumyDataList.get(0));
-                mainProvider.addMainNotice(dumyDataList.get(1));
-                libraryProvider.addLibraryNotice(dumyDataList.get(2));
-                libraryProvider.addLibraryNotice(dumyDataList.get(3));
+                mainProvider.addNotice(dumyDataList.get(0));
+                mainProvider.addNotice(dumyDataList.get(1));
+                libraryProvider.addNotice(dumyDataList.get(2));
+                libraryProvider.addNotice(dumyDataList.get(3));
 
                 // getNotice를 호출한다.
                 boolean result;
@@ -236,10 +230,10 @@ public class TestUtils {
                 printResult(methodName,"Case2 equals()",result);
 
                 //집어넣은 더미 값 삭제
-                mainProvider.deleteMainNotice(dumyDataList.get(0).getTitle());
-                mainProvider.deleteMainNotice(dumyDataList.get(1).getTitle());
-                libraryProvider.deleteLibraryNotice(dumyDataList.get(2).getTitle());
-                libraryProvider.deleteLibraryNotice(dumyDataList.get(3).getTitle());
+                mainProvider.deleteNotice(dumyDataList.get(0).getTitle());
+                mainProvider.deleteNotice(dumyDataList.get(1).getTitle());
+                libraryProvider.deleteNotice(dumyDataList.get(2).getTitle());
+                libraryProvider.deleteNotice(dumyDataList.get(3).getTitle());
            }
         }
 
@@ -257,15 +251,16 @@ public class TestUtils {
                 List<RssItem> dumyDataList = new ArrayList<>();
                 dumyDataList.add(new RssItem("main2","main2","main2","main2",1, RssItem.NOT_READ));
                 dumyDataList.add(new RssItem("library1","library1","library1","library1",2, RssItem.NOT_READ));
-                mainProvider.addMainNotice(dumyDataList.get(0));
-                libraryProvider.addLibraryNotice(dumyDataList.get(1));
+                mainProvider.addNotice(dumyDataList.get(0));
+                libraryProvider.addNotice(dumyDataList.get(1));
                 //main을 변경해본다.
                 RssItem rssItem = dumyDataList.get(0);
                 rssItem.setIsRead(RssItem.READ);
-                noticeProvider.updateNotice(rssItem);
+                mainProvider.updateNotice(rssItem);
+                libraryProvider.updateNotice(rssItem);
                 //main과 library를 읽어서 값이제대로 변했나 확인한다.
-                List<RssItem> mainList = mainProvider.getMainNotice(MainProvider.NOTICE_SSU_ALL);
-                List<RssItem> libraryList = libraryProvider.getLibraryNotice();
+                List<RssItem> mainList = mainProvider.getNotice(MainProvider.NOTICE_SSU_ALL);
+                List<RssItem> libraryList = libraryProvider.getNotice();
                 int result = 0;
                 for (RssItem main : mainList) {
                     if (rssItem.equals(main)) {
@@ -288,8 +283,8 @@ public class TestUtils {
                 }
 
                 //삽입한 값을 지운다.
-                mainProvider.deleteMainNotice(dumyDataList.get(0).getTitle());
-                libraryProvider.deleteLibraryNotice(dumyDataList.get(1).getTitle());
+                mainProvider.deleteNotice(dumyDataList.get(0).getTitle());
+                libraryProvider.deleteNotice(dumyDataList.get(1).getTitle());
 
                 List<RssItem> all = lowDBProvider.getNotice(null, null);
 
@@ -298,11 +293,12 @@ public class TestUtils {
                 dumyDataList = new ArrayList<>();
                 dumyDataList.add(new RssItem("main2","main2","main2","main2",1, RssItem.NOT_READ));
                 dumyDataList.add(new RssItem("library1","library1","library1","library1",2, RssItem.NOT_READ));
-                mainProvider.addMainNotice(dumyDataList.get(0));
-                libraryProvider.addLibraryNotice(dumyDataList.get(1));
+                mainProvider.addNotice(dumyDataList.get(0));
+                libraryProvider.addNotice(dumyDataList.get(1));
                 //Library를 변경해보자. Guid와 isread를 변경해서 넘겨보자. update 할 수 없도록.
                 rssItem = new RssItem("library1","library2","library1","library1",2, RssItem.READ);
-                result = noticeProvider.updateNotice(rssItem);
+                mainProvider.updateNotice(rssItem);
+                libraryProvider.updateNotice(rssItem);
                 //확인해본다.
                 if (result == 0) {
                     printResult(methodName, "isZero", true);
@@ -310,11 +306,8 @@ public class TestUtils {
                     printResult(methodName, "isZero", false);
                 }
                 //삭제한다.
-                mainProvider.deleteMainNotice(dumyDataList.get(0).getTitle());
-                libraryProvider.deleteLibraryNotice(dumyDataList.get(1).getTitle());
-
-
-
+                mainProvider.deleteNotice(dumyDataList.get(0).getTitle());
+                libraryProvider.deleteNotice(dumyDataList.get(1).getTitle());
             }
         }
 
@@ -334,7 +327,7 @@ public class TestUtils {
 
             public void getMainNotice() {
 
-                List<RssItem> rssItemList = mainProvider.getMainNotice(MainProvider.NOTICE_SSU_ALL);
+                List<RssItem> rssItemList = mainProvider.getNotice(MainProvider.NOTICE_SSU_ALL);
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (rssItemList.size() > 0)
@@ -345,7 +338,7 @@ public class TestUtils {
 
             public void addMainNotice() {
 
-                long result = mainProvider.addMainNotice(rssItem);
+                long result = mainProvider.addNotice(rssItem);
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result == -1)
@@ -358,7 +351,7 @@ public class TestUtils {
                 //테스트 케이스
                 RssItem rssItem = new RssItem("update","title","update","update",123, RssItem.NOT_READ);
 
-                int result = mainProvider.updateMainNotice(rssItem);
+                int result = mainProvider.updateNotice(rssItem);
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result <= 0)
@@ -369,7 +362,7 @@ public class TestUtils {
 
             public void deleteMainNotice() {
                 //테스트 케이스
-                int result = mainProvider.deleteMainNotice("title");
+                int result = mainProvider.deleteNotice("title");
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result <= 0)
@@ -393,7 +386,7 @@ public class TestUtils {
             RssItem rssItem = new RssItem("guid","title","link","descript",123, RssItem.NOT_READ);
 
             public void getLibraryNotice() {
-                List<RssItem> rssItemList = libraryProvider.getLibraryNotice();
+                List<RssItem> rssItemList = libraryProvider.getNotice();
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (rssItemList.size() > 0)
@@ -403,7 +396,7 @@ public class TestUtils {
             }
 
             public void addLibraryNotice() {
-                long result = libraryProvider.addLibraryNotice(rssItem);
+                long result = libraryProvider.addNotice(rssItem);
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result == -1)
@@ -416,7 +409,7 @@ public class TestUtils {
                 //테스트 케이스
                 RssItem rssItem = new RssItem("update","title","update","update",123, RssItem.NOT_READ);
 
-                int result = libraryProvider.updateLibraryNotice(rssItem);
+                int result = libraryProvider.updateNotice(rssItem);
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result <= 0)
@@ -427,7 +420,7 @@ public class TestUtils {
 
             public void deleteLibraryNotice() {
                 //테스트 케이스
-                int result = libraryProvider.deleteLibraryNotice(rssItem.getTitle());
+                int result = libraryProvider.deleteNotice(rssItem.getTitle());
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result <= 0)

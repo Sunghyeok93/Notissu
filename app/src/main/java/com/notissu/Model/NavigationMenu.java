@@ -6,10 +6,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.notissu.Database.LibraryProvider;
+import com.notissu.Database.LibraryProviderImp;
 import com.notissu.Database.MainProvider;
+import com.notissu.Database.MainProviderImp;
 import com.notissu.Database.RssDatabase;
 import com.notissu.R;
-import com.notissu.Util.TestUtils;
 
 /**
  * Created by forhack on 2016-12-11.
@@ -66,10 +67,10 @@ public class NavigationMenu {
     }
 
     public void setMenuNotReadCount() {
-        MainProvider mainProvider = RssDatabase.getInstance();
-        LibraryProvider libraryProvider = RssDatabase.getInstance();
-        setMainNotReadCount(mainProvider.getNotReadCount(RssItem.MainNotice.TABLE_NAME));
-        setLibraryNotReadCount(libraryProvider.getNotReadCount(RssItem.LibraryNotice.TABLE_NAME));
+        MainProvider mainProvider = new MainProviderImp();
+        LibraryProvider libraryProvider = new LibraryProviderImp();
+        setMainNotReadCount(mainProvider.getNotReadCount());
+        setLibraryNotReadCount(libraryProvider.getNotReadCount());
     }
 
     public int getNewId() {

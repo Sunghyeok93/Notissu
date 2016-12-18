@@ -24,23 +24,7 @@ public interface MainProvider extends NoticeProvider{
             NOTICE_SSU_KYOWAE, NOTICE_SSU_BONGSA
     };
 
-    //메인 공지사항을 불러오는데, 카테고리를 인자로 넣어서 불러올 수 있다.
-    List<RssItem> getMainNotice(String category);
-
-    //입력받은 RSS를 DB에 삽입하는 메소드
-    //실패했을 때 -1 반환
-    long addMainNotice(RssItem isExist);
-
-    //입력받은 RSS를 DB에 업데이트(수정)하는 메소드
-    //일치하는 row가 없으면 0 반환
-    int updateMainNotice(RssItem isExist);
-
-    //인자로 넣은 GUID와 일치하는 RSS 삭제
-    //일치하는 row가 없으면 0 반환
-    int deleteMainNotice(String guid);
-
     List<RssItem> getSsuNotice(String category);
-
-
-
+    //Main 공지사항 가져오기
+    List<RssItem> getNotice(String category);
 }

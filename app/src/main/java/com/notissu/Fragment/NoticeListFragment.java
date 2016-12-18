@@ -2,14 +2,11 @@ package com.notissu.Fragment;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.media.NotProvisionedException;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,13 +18,16 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.notissu.Activity.MainActivity;
 import com.notissu.Adapter.NoticeAdapter;
 import com.notissu.Database.KeywordProvider;
+import com.notissu.Database.KeywordProviderImp;
 import com.notissu.Database.LibraryProvider;
+import com.notissu.Database.LibraryProviderImp;
 import com.notissu.Database.MainProvider;
+import com.notissu.Database.MainProviderImp;
 import com.notissu.Database.NoticeProvider;
 import com.notissu.Database.StarredProvider;
+import com.notissu.Database.StarredProviderImp;
 import com.notissu.Dialog.RssItemDialog;
 import com.notissu.Model.NavigationMenu;
 import com.notissu.Model.RssItem;
@@ -110,15 +110,16 @@ public class NoticeListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_read_all) {
-            NoticeProvider noticeProvider = RssDatabase.getInstance();
             boolean isMain = flag == FLAG_MAIN_NOTICE;
             boolean isLibrary = flag == FLAG_LIBRARY_NOTICE;
             if (isMain || isLibrary) {
+                NoticeProvider noticeProvider = null;
                 if (isMain) {
-                    noticeProvider.updateAllReadCount(RssItem.MainNotice.TABLE_NAME);
+                    noticeProvider = new MainProviderImp();
                 } else if (isLibrary) {
-                    noticeProvider.updateAllReadCount(RssItem.LibraryNotice.TABLE_NAME);
+                    noticeProvider = new LibraryProviderImp();
                 }
+                noticeProvider.updateAllReadCount();
                 //Navigation 업데이트
                 NavigationMenu navigationMenu = NavigationMenu.getInstance();
                 navigationMenu.setMenuNotReadCount();
@@ -146,7 +147,7 @@ public class NoticeListFragment extends Fragment {
         category = bundle.getString(KEY_CATEGORY);
         //ListView에 집어넣을 데이터 List
         ArrayList<RssItem> noticeList = bundle.getParcelableArrayList(KEY_NOTICE_ROWS);
-        StarredProvider starredProvider = RssDatabase.getInstance();
+        StarredProvider starredProvider = new StarredProviderImp();
         //즐겨찾기에 추가된 List
         ArrayList<RssItem> starredList = new ArrayList<>(starredProvider.getStarred());
         mNoticeAdapter = new NoticeAdapter(getContext(),noticeList, starredList);
@@ -161,9 +162,12 @@ public class NoticeListFragment extends Fragment {
                 //읽음표시로 전환하고
                 RssItem rssitem = mNoticeAdapter.getItem(i);
                 rssitem.setIsRead(RssItem.READ);
-                NoticeProvider noticeProvider = RssDatabase.getInstance();
+                MainProvider mainProvider = new MainProviderImp();
+                LibraryProvider libraryProvider = new LibraryProviderImp();
                 //RssItem Update
-                noticeProvider.updateNotice(rssitem);
+                //두개를 다 업데이트 함으로써 어떤걸 업데이트할지 결정된다.
+                mainProvider.updateNotice(rssitem);
+                libraryProvider.updateNotice(rssitem);
                 //Navigation 업데이트
                 NavigationMenu navigationMenu = NavigationMenu.getInstance();
                 navigationMenu.setMenuNotReadCount();
@@ -203,23 +207,23 @@ public class NoticeListFragment extends Fragment {
     }
 
     private void refresh() {
-        StarredProvider starredProvider = RssDatabase.getInstance();
+        StarredProvider starredProvider = new StarredProviderImp();
         ArrayList<RssItem> noticeList = null;
         ArrayList<RssItem> starredList = new ArrayList<>(starredProvider.getStarred());
         if (flag == FLAG_MAIN_NOTICE || flag == FLAG_LIBRARY_NOTICE) {
             SyncUtil.TriggerRefresh();
             if (flag == FLAG_MAIN_NOTICE) {
-                MainProvider mainProvider = RssDatabase.getInstance();
+                MainProvider mainProvider = new MainProviderImp();
                 noticeList = new ArrayList<>(mainProvider.getSsuNotice(category));
             } else if (flag == FLAG_LIBRARY_NOTICE) {
-                LibraryProvider libraryProvider = RssDatabase.getInstance();
-                noticeList = new ArrayList<>(libraryProvider.getLibraryNotice());
+                LibraryProvider libraryProvider = new LibraryProviderImp();
+                noticeList = new ArrayList<>(libraryProvider.getNotice());
             }
         } else if (flag == FLAG_STARRED || flag == FLAG_KEYWORD) {
             if (flag == FLAG_STARRED) {
                 noticeList = starredList;
             } else if (flag == FLAG_KEYWORD) {
-                KeywordProvider keywordProvider = RssDatabase.getInstance();
+                KeywordProvider keywordProvider = new KeywordProviderImp();
                 noticeList = new ArrayList<>(keywordProvider.getKeyword(title));
             }
         }

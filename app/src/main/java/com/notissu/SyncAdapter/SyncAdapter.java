@@ -10,8 +10,11 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.notissu.Database.KeywordProvider;
+import com.notissu.Database.KeywordProviderImp;
 import com.notissu.Database.LibraryProvider;
+import com.notissu.Database.LibraryProviderImp;
 import com.notissu.Database.MainProvider;
+import com.notissu.Database.MainProviderImp;
 import com.notissu.Database.RssDatabase;
 import com.notissu.Model.RssItem;
 import com.notissu.Notification.Alarm;
@@ -37,9 +40,9 @@ import java.util.List;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String TAG = SyncAdapter.class.getName();
 //    private static final String MAIN_NOTICE_URL = "https://leesanghyeok.github.io/feed.xml"; //내 블로그 임시
-    private static final String MAIN_NOTICE_URL = "http://192.168.37.140:4000/feed.xml"; //내 블로그 임시
+//    private static final String MAIN_NOTICE_URL = "http://192.168.37.140:4000/feed.xml"; //내 블로그 임시
     private static final String LIBRARY_NOTICE_URL = "http://oasis.ssu.ac.kr/API/BBS/1"; //도서관 공지사항
-//    private static final String MAIN_NOTICE_URL = "http://www.ssu.ac.kr/web/kor/plaza_d_01;jsessionid=yIPyJDhVJSyGG1SWk3kZeQ5qXfdbVfqihsikvlZZVAILUn5tgH2HjcX4fiQFXD40?p_p_id=EXT_MIRRORBBS&p_p_lifecycle=0&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_pos=1&p_p_col_count=2&_EXT_MIRRORBBS_struts_action=%2Fext%2Fmirrorbbs%2Frss"; //내 블로그 임시
+    private static final String MAIN_NOTICE_URL = "http://www.ssu.ac.kr/web/kor/plaza_d_01;jsessionid=yIPyJDhVJSyGG1SWk3kZeQ5qXfdbVfqihsikvlZZVAILUn5tgH2HjcX4fiQFXD40?p_p_id=EXT_MIRRORBBS&p_p_lifecycle=0&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_pos=1&p_p_col_count=2&_EXT_MIRRORBBS_struts_action=%2Fext%2Fmirrorbbs%2Frss"; //내 블로그 임시
     ContentResolver mContentResolver;
 
     public SyncAdapter(Context context, boolean autoInitialize) {
@@ -84,10 +87,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             HashMap<String, RssItem> libraryMap = transToMap(receiveLibraryNotices);
 
             //DB에 저장되어 있는 MainNotice, LibraryNotice RssItem을 불러들인다.
-            MainProvider mainProvider = RssDatabase.getInstance();
-            LibraryProvider libraryProvider = RssDatabase.getInstance();
-            final List<RssItem> DBMainNotice = mainProvider.getMainNotice(MainProvider.NOTICE_SSU_ALL);
-            final List<RssItem> DBLibararyNotice = libraryProvider.getLibraryNotice();
+            MainProvider mainProvider = new MainProviderImp();
+            LibraryProvider libraryProvider = new LibraryProviderImp();
+            final List<RssItem> DBMainNotice = mainProvider.getNotice(MainProvider.NOTICE_SSU_ALL);
+            final List<RssItem> DBLibararyNotice = libraryProvider.getNotice();
 
             // DB에 등록된 정보를 모두 읽으며 Guid로 Map과 비교해서
             // 같은게 있으면
@@ -97,7 +100,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             updateNotice(DBLibararyNotice,libraryMap,libraryProvider,syncResult);
 
             // 키워드에 등록된 모든 값을 가져온다.
-            KeywordProvider keywordProvider = RssDatabase.getInstance();
+            KeywordProvider keywordProvider = new KeywordProviderImp();
             final List<String> keywordList = keywordProvider.getKeyword();
 
             /*
@@ -117,13 +120,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             // Main을 DB에 넣는다.
             for (RssItem item : mainMap.values()) {
-                mainProvider.addMainNotice(item);
+                mainProvider.addNotice(item);
                 syncResult.stats.numInserts++;
             }
 
             // Library를 DB에 넣는다.
             for (RssItem item : libraryMap.values()) {
-                libraryProvider.addLibraryNotice(item);
+                libraryProvider.addNotice(item);
                 syncResult.stats.numInserts++;
             }
 
@@ -182,7 +185,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         existedItem.getPublishDate() != 0 && existedItem.getPublishDate() != dbRssItem.getPublishDate() ||
                         existedItem.getCategory() != null && !existedItem.getCategory().equals(dbRssItem.getCategory())) {
                     //새로 들어온것이 업데이트 할 필요가 있으면 업데이트를 한다.
-                    mainProvider.updateMainNotice(existedItem);
+                    mainProvider.updateNotice(existedItem);
                     syncResult.stats.numUpdates++;
                 }
             }
@@ -201,7 +204,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         existedItem.getPublishDate() != 0 && existedItem.getPublishDate() != dbRssItem.getPublishDate() ||
                         existedItem.getCategory() != null && !existedItem.getCategory().equals(dbRssItem.getCategory())) {
                     //새로 들어온것이 업데이트 할 필요가 있으면 업데이트를 한다.
-                    libraryProvider.updateLibraryNotice(existedItem);
+                    libraryProvider.updateNotice(existedItem);
                     syncResult.stats.numUpdates++;
                 }
             }

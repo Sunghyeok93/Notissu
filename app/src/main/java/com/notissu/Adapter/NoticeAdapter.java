@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.notissu.Database.StarredProvider;
+import com.notissu.Database.StarredProviderImp;
 import com.notissu.Model.RssItem;
 import com.notissu.R;
 import com.notissu.Database.RssDatabase;
@@ -102,7 +103,7 @@ public class NoticeAdapter extends ArrayAdapter<RssItem> {
         viewHolder.llWrapper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StarredProvider starredProvider = RssDatabase.getInstance();
+                StarredProvider starredProvider = new StarredProviderImp();
                 CheckBox cb = (CheckBox)v.findViewById(R.id.notice_cb_star);
 
                 //클릭되고 난 다음이라 isChecked는 체크되는 순간이다.

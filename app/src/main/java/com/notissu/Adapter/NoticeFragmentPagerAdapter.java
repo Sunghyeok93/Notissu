@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.notissu.Database.MainProvider;
+import com.notissu.Database.MainProviderImp;
 import com.notissu.Database.RssDatabase;
 import com.notissu.Fragment.NoticeListFragment;
 import com.notissu.Model.RssItem;
@@ -38,7 +39,7 @@ public class NoticeFragmentPagerAdapter extends FragmentStatePagerAdapter{
 
     @Override
     public Fragment getItem(int position) {
-        MainProvider mainProvider = RssDatabase.getInstance();
+        MainProvider mainProvider = new MainProviderImp();
         ArrayList<RssItem> noticeRows = new ArrayList<>(mainProvider.getSsuNotice(categoryList[position]));
         return NoticeListFragment.newInstance(flag, mTitle, categoryList[position], noticeRows);
     }

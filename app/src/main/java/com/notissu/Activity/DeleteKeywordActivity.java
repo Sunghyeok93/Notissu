@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 
 import com.notissu.Adapter.DeleteKeywordAdapter;
 import com.notissu.Database.KeywordProvider;
+import com.notissu.Database.KeywordProviderImp;
 import com.notissu.Model.NavigationMenu;
 import com.notissu.R;
 import com.notissu.Database.RssDatabase;
@@ -43,7 +44,7 @@ public class DeleteKeywordActivity extends AppCompatActivity {
     }
 
     private void initWidget() {
-        mKeywordProvider = RssDatabase.getInstance();
+        mKeywordProvider = new KeywordProviderImp();
         mLvKeyword = (ListView) findViewById(R.id.delete_keyword_lv_keyword);
         mRlList = (RelativeLayout) findViewById(R.id.delete_keyword_rl_list);
         mBtnRemoveAll = (Button) findViewById(R.id.delete_keyword_btn_remove_all);
