@@ -5,8 +5,11 @@ import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
+import android.content.pm.ProviderInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.notissu.Database.KeywordProvider;
@@ -15,7 +18,7 @@ import com.notissu.Database.LibraryProvider;
 import com.notissu.Database.LibraryProviderImp;
 import com.notissu.Database.MainProvider;
 import com.notissu.Database.MainProviderImp;
-import com.notissu.Database.RssDatabase;
+import com.notissu.Database.NoticeProvider;
 import com.notissu.Model.RssItem;
 import com.notissu.Notification.Alarm;
 import com.notissu.Util.IOUtils;
@@ -39,10 +42,13 @@ import java.util.List;
 
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
     private static final String TAG = SyncAdapter.class.getName();
-//    private static final String MAIN_NOTICE_URL = "https://leesanghyeok.github.io/feed.xml"; //내 블로그 임시
+    private static final int FLAG_MAIN = 0;
+    private static final int FLAG_LIBRARY = 1;
+    private static final String KEY_FIRST_DOWNLOAD = "KEY_FIRST_DOWNLOAD";
+
 //    private static final String MAIN_NOTICE_URL = "http://192.168.37.140:4000/feed.xml"; //내 블로그 임시
-    private static final String LIBRARY_NOTICE_URL = "http://oasis.ssu.ac.kr/API/BBS/1"; //도서관 공지사항
-    private static final String MAIN_NOTICE_URL = "http://www.ssu.ac.kr/web/kor/plaza_d_01;jsessionid=yIPyJDhVJSyGG1SWk3kZeQ5qXfdbVfqihsikvlZZVAILUn5tgH2HjcX4fiQFXD40?p_p_id=EXT_MIRRORBBS&p_p_lifecycle=0&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_pos=1&p_p_col_count=2&_EXT_MIRRORBBS_struts_action=%2Fext%2Fmirrorbbs%2Frss"; //내 블로그 임시
+
+    public static final String SYNC_FINISHED = "SYNC_FINISHED";
     ContentResolver mContentResolver;
 
     public SyncAdapter(Context context, boolean autoInitialize) {
@@ -55,54 +61,39 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         mContentResolver = context.getContentResolver();
     }
 
+    private boolean isFirst() {
+        boolean isFirst = PreferenceManager
+                .getDefaultSharedPreferences(getContext()).getBoolean(KEY_FIRST_DOWNLOAD, true);
+        return isFirst;
+    }
+
     @Override
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
         Log.i(TAG, "Beginning network synchronization");
         try {
-            // 학교, 도서관 공지사항 읽어오기,
-            final List<RssItem> receiveMainNotices = getServerNotice(MAIN_NOTICE_URL);
-            final List<RssItem> receiveLibraryNotices = getServerNotice(LIBRARY_NOTICE_URL);
+            HashMap<String,RssItem> mainMap = null;
+            HashMap<String,RssItem> libraryMap = null;
 
-            // 학교, 도서관 공지사항에서 "[공지]" 라는 문자열을 제거한다.
-            final String removeWord = "[공지]";
-            removeString(receiveMainNotices,removeWord);
-            removeString(receiveLibraryNotices,removeWord);
+            libraryMap = checkAndAdd(Url.getLibrary(), syncResult, FLAG_LIBRARY);
+            mainMap = checkAndAdd(Url.getMainAll(1), syncResult, FLAG_MAIN);
 
-            // 그리고 "[***]" 라고 들어가 있는 문자열 중에서 ***만 빼서 category로 구별해서 넣는다.
-            for (RssItem rssItem : receiveMainNotices) {
-                String title = rssItem.getTitle();
-                final String[] category = MainProvider.NOTICE_CATEGORY;
-                for (int i = 0; i < category.length; i++) {
-                    if (title.contains("[" + category[i] + "]")) {
-                        rssItem.setCategory(category[i]);
-                        break;
-                    } else {
-                        //Log.w(TAG,"Category can not find!");
-                    }
-                }
+            if (isFirst()) {
+                checkAndAdd(Url.getMainHacksa(1), syncResult, FLAG_MAIN);
+                checkAndAdd(Url.getMainJanghack(1), syncResult, FLAG_MAIN);
+                checkAndAdd(Url.getMainKuckje(1), syncResult, FLAG_MAIN);
+                checkAndAdd(Url.getMainWaekuck(1), syncResult, FLAG_MAIN);
+                checkAndAdd(Url.getMainMojip(1), syncResult, FLAG_MAIN);
+                checkAndAdd(Url.getMainKyone(1), syncResult, FLAG_MAIN);
+                checkAndAdd(Url.getMainKyowae(1), syncResult, FLAG_MAIN);
+                checkAndAdd(Url.getMainBongsa(1), syncResult, FLAG_MAIN);
+
+                PreferenceManager.getDefaultSharedPreferences(getContext()).edit()
+                        .putBoolean(KEY_FIRST_DOWNLOAD, false).commit();
             }
-
-            // 학교, 도서관 공지사항을 Map에 데이터 넣기.
-            HashMap<String, RssItem> mainMap = transToMap(receiveMainNotices);
-            HashMap<String, RssItem> libraryMap = transToMap(receiveLibraryNotices);
-
-            //DB에 저장되어 있는 MainNotice, LibraryNotice RssItem을 불러들인다.
-            MainProvider mainProvider = new MainProviderImp();
-            LibraryProvider libraryProvider = new LibraryProviderImp();
-            final List<RssItem> DBMainNotice = mainProvider.getNotice(MainProvider.NOTICE_SSU_ALL);
-            final List<RssItem> DBLibararyNotice = libraryProvider.getNotice();
-
-            // DB에 등록된 정보를 모두 읽으며 Guid로 Map과 비교해서
-            // 같은게 있으면
-            // Map안에 데이터를 지우고
-            // 업데이트할 필요가 있다면 업데이트한다.
-            updateNotice(DBMainNotice,mainMap,mainProvider,syncResult);
-            updateNotice(DBLibararyNotice,libraryMap,libraryProvider,syncResult);
 
             // 키워드에 등록된 모든 값을 가져온다.
             KeywordProvider keywordProvider = new KeywordProviderImp();
             final List<String> keywordList = keywordProvider.getKeyword();
-
             /*
             새롭게 입련된 것들의 Title과 키워드를 비교해본다.
             매칭된다면 푸시메시지 보낸다.
@@ -115,19 +106,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             if (pushKeyword.size() > 0) {
                 ArrayList<String> uniquePushKeyword= new ArrayList<>(new HashSet<>(pushKeyword));
                 Alarm.showAlarm(getContext(),uniquePushKeyword);
-            }
-
-
-            // Main을 DB에 넣는다.
-            for (RssItem item : mainMap.values()) {
-                mainProvider.addNotice(item);
-                syncResult.stats.numInserts++;
-            }
-
-            // Library를 DB에 넣는다.
-            for (RssItem item : libraryMap.values()) {
-                libraryProvider.addNotice(item);
-                syncResult.stats.numInserts++;
             }
 
 
@@ -144,6 +122,58 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             syncResult.databaseError = true;
         }
         Log.i(TAG, "Network synchronization complete");
+    }
+
+    private HashMap<String, RssItem> checkAndAdd(String url, SyncResult syncResult, int flag) throws IOException, FeedException{
+        // 공지사항 읽어오기,
+        final List<RssItem> receiveNotices = getServerNotice(url);
+        // 공지사항에서 "[공지]" 라는 문자열을 제거한다.
+        final String removeWord = "[공지]";
+        removeString(receiveNotices,removeWord);
+
+        NoticeProvider noticeProvider = null;
+        List<RssItem> dbNotice = null;
+        HashMap<String,RssItem> map;
+
+        if (flag == FLAG_MAIN) {
+            // 그리고 "[***]" 라고 들어가 있는 문자열 중에서 ***만 빼서 category로 구별해서 넣는다.
+            for (RssItem rssItem : receiveNotices) {
+                String title = rssItem.getTitle();
+                final String[] category = MainProvider.NOTICE_CATEGORY;
+                for (int i = 0; i < category.length; i++) {
+                    if (title.contains("[" + category[i] + "]")) {
+                        rssItem.setCategory(category[i]);
+                        break;
+                    } else {
+                        //Log.w(TAG,"Category can not find!");
+                    }
+                }
+            }
+            //DB에 저장되어 있는 Notice RssItem을 불러들인다.
+            noticeProvider = new MainProviderImp();
+            dbNotice = ((MainProvider)noticeProvider).getNotice(MainProvider.NOTICE_SSU_ALL);
+        } else if (flag == FLAG_LIBRARY) {
+            //DB에 저장되어 있는 Notice RssItem을 불러들인다.
+            noticeProvider = new LibraryProviderImp();
+            dbNotice = ((LibraryProvider)noticeProvider).getNotice();
+        }
+
+        // 공지사항을 Map에 데이터 넣기.
+        map = transToMap(receiveNotices);
+
+        // DB에 등록된 정보를 모두 읽으며 Title로 Map과 비교해서
+        // 같은게 있으면 Map안에 데이터를 지우고 업데이트할 필요가 있다면 업데이트한다.
+        updateNotice(dbNotice,map,noticeProvider,syncResult);
+
+        // Main을 DB에 넣는다.
+        for (RssItem item : map.values()) {
+            noticeProvider.addNotice(item);
+            syncResult.stats.numInserts++;
+        }
+        Intent i = new Intent(SYNC_FINISHED);
+        getContext().sendBroadcast(i);
+
+        return map;
     }
 
     /*
@@ -173,7 +203,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     업데이트할 필요가 있다면 업데이트한다.
     */
     private void updateNotice(List<RssItem> dbRssItems, HashMap<String, RssItem> receiveMap,
-                          MainProvider mainProvider, SyncResult syncResult) {
+                          NoticeProvider provider, SyncResult syncResult) {
         for (RssItem dbRssItem : dbRssItems) {
             syncResult.stats.numEntries++;
             RssItem existedItem = receiveMap.get(dbRssItem.getTitle());
@@ -185,26 +215,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         existedItem.getPublishDate() != 0 && existedItem.getPublishDate() != dbRssItem.getPublishDate() ||
                         existedItem.getCategory() != null && !existedItem.getCategory().equals(dbRssItem.getCategory())) {
                     //새로 들어온것이 업데이트 할 필요가 있으면 업데이트를 한다.
-                    mainProvider.updateNotice(existedItem);
-                    syncResult.stats.numUpdates++;
-                }
-            }
-        }
-    }
-    private void updateNotice(List<RssItem> dbRssItems, HashMap<String, RssItem> receiveMap,
-                              LibraryProvider libraryProvider, SyncResult syncResult) {
-        for (RssItem dbRssItem : dbRssItems) {
-            syncResult.stats.numEntries++;
-            RssItem existedItem = receiveMap.get(dbRssItem.getTitle());
-            if (existedItem != null) {  //같은게 있으면
-                receiveMap.remove(dbRssItem.getTitle()); // map에서 지우고
-                if (existedItem.getGuid() != null && !existedItem.getGuid().equals(dbRssItem.getGuid()) ||
-                        existedItem.getLink() != null && !existedItem.getLink().equals(dbRssItem.getLink()) ||
-                        existedItem.getDescription() != null && !existedItem.getDescription().equals(dbRssItem.getDescription()) ||
-                        existedItem.getPublishDate() != 0 && existedItem.getPublishDate() != dbRssItem.getPublishDate() ||
-                        existedItem.getCategory() != null && !existedItem.getCategory().equals(dbRssItem.getCategory())) {
-                    //새로 들어온것이 업데이트 할 필요가 있으면 업데이트를 한다.
-                    libraryProvider.updateNotice(existedItem);
+                    provider.updateNotice(existedItem);
                     syncResult.stats.numUpdates++;
                 }
             }
