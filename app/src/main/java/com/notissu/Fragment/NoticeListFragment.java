@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -50,6 +52,7 @@ public class NoticeListFragment extends Fragment {
     NoticeAdapter mNoticeAdapter;
     SwipeRefreshLayout mSwipeRefreshLayout;
     View mRootView;
+    SearchView mSearchView;
 
     //이 List가 Main인지 Library 인지 starred인지 keyword인지 구별 flag
     int flag;
@@ -99,6 +102,7 @@ public class NoticeListFragment extends Fragment {
         boolean isLibrary = flag == FLAG_LIBRARY_NOTICE;
         if (isMain || isLibrary) {
             inflater.inflate(R.menu.main,menu);
+            mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         }
         super.onCreateOptionsMenu(menu,inflater);
     }
@@ -117,8 +121,7 @@ public class NoticeListFragment extends Fragment {
                 }
                 //Navigation 업데이트
                 NavigationMenu navigationMenu = NavigationMenu.getInstance();
-                navigationMenu.setMainNotReadCount(noticeProvider.getNotReadCount(RssItem.MainNotice.TABLE_NAME));
-                navigationMenu.setLibraryNotReadCount(noticeProvider.getNotReadCount(RssItem.LibraryNotice.TABLE_NAME));
+                navigationMenu.setMenuNotReadCount();
                 //TextView 업데이트
                 for (int i = 0; i < mNoticeAdapter.getCount(); i++) {
                     mNoticeAdapter.getItem(i).setIsRead(RssItem.READ);
@@ -163,8 +166,7 @@ public class NoticeListFragment extends Fragment {
                 noticeProvider.updateNotice(rssitem);
                 //Navigation 업데이트
                 NavigationMenu navigationMenu = NavigationMenu.getInstance();
-                navigationMenu.setMainNotReadCount(noticeProvider.getNotReadCount(RssItem.MainNotice.TABLE_NAME));
-                navigationMenu.setLibraryNotReadCount(noticeProvider.getNotReadCount(RssItem.LibraryNotice.TABLE_NAME));
+                navigationMenu.setMenuNotReadCount();
                 //TextView 업데이트
                 TextView tvSubject = (TextView) view.findViewById(R.id.notice_tv_subject);
                 tvSubject.setTextColor(Color.parseColor("#aaaaaa"));
@@ -181,6 +183,23 @@ public class NoticeListFragment extends Fragment {
                 refresh();
             }
         });
+
+//        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String s) {
+//                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+//                KeywordProvider keywordProvider = RssDatabase.getInstance();
+//                ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(s));
+//                fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.FLAG_KEYWORD, s, noticeList));
+//                fragmentTransaction.addToBackStack(null).commit();
+//                return false;
+//            }
+//            @Override
+//            public boolean onQueryTextChange(String s) {
+//
+//                return false;
+//            }
+//        });
     }
 
     private void refresh() {

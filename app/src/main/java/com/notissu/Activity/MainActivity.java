@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ import com.notissu.Model.NavigationMenu;
 import com.notissu.Model.RssItem;
 import com.notissu.Notification.Alarm;
 import com.notissu.R;
+import com.notissu.Util.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,7 @@ import java.util.List;
 //메인 화면이 나오는 Activity
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String TAG = LogUtils.makeLogTag(MainActivity.class);
     private static final String STACK_NAME_MAIN = "STACK_NAME_MAIN";
     private static final String STACK_NAME_LIBRARY = "STACK_NAME_LIBRARY";
     private static final String STACK_NAME_STARRED = "STACK_NAME_STARRED";
@@ -75,7 +78,19 @@ public class MainActivity extends AppCompatActivity
         Alarm.cancel(getApplicationContext());
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                NavigationMenu.getInstance().setMenuNotReadCount();
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                NavigationMenu.getInstance().setMenuNotReadCount();
+            }
+        };
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -87,8 +102,7 @@ public class MainActivity extends AppCompatActivity
         LibraryProvider libraryProvider = RssDatabase.getInstance();
         NavigationMenu navigationMenu = NavigationMenu.getInstance();
         navigationMenu.setMenu(navigationView);
-        navigationMenu.setMainNotReadCount(mainProvider.getNotReadCount(RssItem.MainNotice.TABLE_NAME));
-        navigationMenu.setLibraryNotReadCount(libraryProvider.getNotReadCount(RssItem.LibraryNotice.TABLE_NAME));
+        navigationMenu.setMenuNotReadCount();
         drawKeyword();
 
         Intent intent = getIntent();
@@ -185,7 +199,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-
         fab.show();
 
         int id = item.getItemId();
