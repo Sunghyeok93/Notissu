@@ -184,8 +184,8 @@ public class TestUtils {
                     printFail(methodName);
 
                 //집어넣은 더미 값 삭제
-                mainProvider.deleteMainNotice(mainItem1.getGuid());
-                mainProvider.deleteMainNotice(mainItem2.getGuid());
+                mainProvider.deleteMainNotice(mainItem1.getTitle());
+                mainProvider.deleteMainNotice(mainItem2.getTitle());
             }
 
             public static void getNotice() {
@@ -236,10 +236,10 @@ public class TestUtils {
                 printResult(methodName,"Case2 equals()",result);
 
                 //집어넣은 더미 값 삭제
-                mainProvider.deleteMainNotice(dumyDataList.get(0).getGuid());
-                mainProvider.deleteMainNotice(dumyDataList.get(1).getGuid());
-                libraryProvider.deleteLibraryNotice(dumyDataList.get(2).getGuid());
-                libraryProvider.deleteLibraryNotice(dumyDataList.get(3).getGuid());
+                mainProvider.deleteMainNotice(dumyDataList.get(0).getTitle());
+                mainProvider.deleteMainNotice(dumyDataList.get(1).getTitle());
+                libraryProvider.deleteLibraryNotice(dumyDataList.get(2).getTitle());
+                libraryProvider.deleteLibraryNotice(dumyDataList.get(3).getTitle());
            }
         }
 
@@ -288,8 +288,10 @@ public class TestUtils {
                 }
 
                 //삽입한 값을 지운다.
-                mainProvider.deleteMainNotice(dumyDataList.get(0).getGuid());
-                libraryProvider.deleteLibraryNotice(dumyDataList.get(1).getGuid());
+                mainProvider.deleteMainNotice(dumyDataList.get(0).getTitle());
+                libraryProvider.deleteLibraryNotice(dumyDataList.get(1).getTitle());
+
+                List<RssItem> all = lowDBProvider.getNotice(null, null);
 
                 //0이 나오게 유도해보자. 틀린것
                 //2개를 더하쟈.
@@ -299,7 +301,7 @@ public class TestUtils {
                 mainProvider.addMainNotice(dumyDataList.get(0));
                 libraryProvider.addLibraryNotice(dumyDataList.get(1));
                 //Library를 변경해보자. Guid와 isread를 변경해서 넘겨보자. update 할 수 없도록.
-                rssItem = new RssItem("library2","library1","library1","library1",2, RssItem.READ);
+                rssItem = new RssItem("library1","library2","library1","library1",2, RssItem.READ);
                 result = noticeProvider.updateNotice(rssItem);
                 //확인해본다.
                 if (result == 0) {
@@ -308,8 +310,8 @@ public class TestUtils {
                     printResult(methodName, "isZero", false);
                 }
                 //삭제한다.
-                mainProvider.deleteMainNotice(dumyDataList.get(0).getGuid());
-                libraryProvider.deleteLibraryNotice(dumyDataList.get(1).getGuid());
+                mainProvider.deleteMainNotice(dumyDataList.get(0).getTitle());
+                libraryProvider.deleteLibraryNotice(dumyDataList.get(1).getTitle());
 
 
 
@@ -354,7 +356,7 @@ public class TestUtils {
 
             public void updateMainNotice() {
                 //테스트 케이스
-                RssItem rssItem = new RssItem("guid","update","update","update",123, RssItem.NOT_READ);
+                RssItem rssItem = new RssItem("update","title","update","update",123, RssItem.NOT_READ);
 
                 int result = mainProvider.updateMainNotice(rssItem);
 
@@ -367,7 +369,7 @@ public class TestUtils {
 
             public void deleteMainNotice() {
                 //테스트 케이스
-                int result = mainProvider.deleteMainNotice("guid");
+                int result = mainProvider.deleteMainNotice("title");
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result <= 0)
@@ -412,7 +414,7 @@ public class TestUtils {
 
             public void updateLibraryNotice() {
                 //테스트 케이스
-                RssItem rssItem = new RssItem("guid","update","update","update",123, RssItem.NOT_READ);
+                RssItem rssItem = new RssItem("update","title","update","update",123, RssItem.NOT_READ);
 
                 int result = libraryProvider.updateLibraryNotice(rssItem);
 
@@ -425,7 +427,7 @@ public class TestUtils {
 
             public void deleteLibraryNotice() {
                 //테스트 케이스
-                int result = libraryProvider.deleteLibraryNotice(rssItem.getGuid());
+                int result = libraryProvider.deleteLibraryNotice(rssItem.getTitle());
 
                 String methodName = getMethodName(Thread.currentThread().getStackTrace());
                 if (result <= 0)

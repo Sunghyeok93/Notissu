@@ -272,7 +272,7 @@ public class RssDatabase extends SQLiteOpenHelper implements
     @Override
     public int updateMainNotice(RssItem isExist) {
         ContentValues values = new ContentValues();
-        values.put(RssItem.MainNotice.COLUMN_NAME_TITLE,isExist.getTitle());
+        values.put(RssItem.MainNotice.COLUMN_NAME_GUID,isExist.getGuid());
         values.put(RssItem.MainNotice.COLUMN_NAME_LINK,isExist.getLink());
         values.put(RssItem.MainNotice.COLUMN_NAME_PUBLISH_DATE,isExist.getPublishDate());
         values.put(RssItem.MainNotice.COLUMN_NAME_DESCRIPTION,isExist.getDescription());
@@ -280,16 +280,16 @@ public class RssDatabase extends SQLiteOpenHelper implements
         values.put(RssItem.MainNotice.COLUMN_NAME_IS_READ,isExist.getIsRead());
 
         return writeDatabase.update(RssItem.MainNotice.TABLE_NAME,values,
-                RssItem.MainNotice.COLUMN_NAME_GUID+"=?",new String[]{isExist.getGuid()});
+                RssItem.MainNotice.COLUMN_NAME_TITLE+"=?",new String[]{isExist.getTitle()});
     }
 
     //인자로 넣은 GUID와 일치하는 RSS 삭제
     //일치하는 row가 없으면 0 반환
     @Override
-    public int deleteMainNotice(String guid) {
+    public int deleteMainNotice(String title) {
         //두번째 인자를 null로 채우면 모든 row 삭제
         return writeDatabase.delete(RssItem.MainNotice.TABLE_NAME,
-                RssItem.MainNotice.COLUMN_NAME_GUID+"=?",new String[]{guid});
+                RssItem.MainNotice.COLUMN_NAME_TITLE+"=?",new String[]{title});
     }
 
     @Override
@@ -363,24 +363,23 @@ public class RssDatabase extends SQLiteOpenHelper implements
     @Override
     public int updateLibraryNotice(RssItem isExist) {
         ContentValues values = new ContentValues();
-        values.put(RssItem.LibraryNotice.COLUMN_NAME_TITLE,isExist.getTitle());
+        values.put(RssItem.LibraryNotice.COLUMN_NAME_GUID,isExist.getGuid());
         values.put(RssItem.LibraryNotice.COLUMN_NAME_LINK,isExist.getLink());
         values.put(RssItem.LibraryNotice.COLUMN_NAME_PUBLISH_DATE,isExist.getPublishDate());
         values.put(RssItem.LibraryNotice.COLUMN_NAME_DESCRIPTION,isExist.getDescription());
-        //공지사항이 업데이트 됐으면 당연히 다시 읽을 기회를 줘야지, 그러니 안읽은 표시.
         values.put(RssItem.LibraryNotice.COLUMN_NAME_IS_READ,isExist.getIsRead());
 
         return writeDatabase.update(RssItem.LibraryNotice.TABLE_NAME,values,
-                RssItem.LibraryNotice.COLUMN_NAME_GUID+"=?",new String[]{isExist.getGuid()});
+                RssItem.LibraryNotice.COLUMN_NAME_TITLE+"=?",new String[]{isExist.getTitle()});
     }
 
     //인자로 넣은 GUID와 일치하는 RSS 삭제
     //일치하는 row가 없으면 0 반환
     @Override
-    public int deleteLibraryNotice(String guid) {
+    public int deleteLibraryNotice(String title) {
         //두번째 인자를 null로 채우면 모든 row 삭제
         return writeDatabase.delete(RssItem.LibraryNotice.TABLE_NAME,
-                RssItem.LibraryNotice.COLUMN_NAME_GUID+"=?",new String[]{guid});
+                RssItem.LibraryNotice.COLUMN_NAME_TITLE+"=?",new String[]{title});
     }
 
     /*Starred 기능들

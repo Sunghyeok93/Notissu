@@ -5,7 +5,11 @@ import android.view.Menu;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.notissu.Database.LibraryProvider;
+import com.notissu.Database.MainProvider;
+import com.notissu.Database.RssDatabase;
 import com.notissu.R;
+import com.notissu.Util.TestUtils;
 
 /**
  * Created by forhack on 2016-12-11.
@@ -45,7 +49,7 @@ public class NavigationMenu {
         return title;
     }
 
-    public void setMainNotReadCount(int count) {
+    private void setMainNotReadCount(int count) {
         if (count == 0) {
             mTvMainCount.setText("");
         } else {
@@ -53,12 +57,19 @@ public class NavigationMenu {
         }
     }
 
-    public void setLibraryNotReadCount(int count) {
+    private void setLibraryNotReadCount(int count) {
         if (count == 0) {
             mTvLibraryCount.setText("");
         } else {
             mTvLibraryCount.setText(count+"");
         }
+    }
+
+    public void setMenuNotReadCount() {
+        MainProvider mainProvider = RssDatabase.getInstance();
+        LibraryProvider libraryProvider = RssDatabase.getInstance();
+        setMainNotReadCount(mainProvider.getNotReadCount(RssItem.MainNotice.TABLE_NAME));
+        setLibraryNotReadCount(libraryProvider.getNotReadCount(RssItem.LibraryNotice.TABLE_NAME));
     }
 
     public int getNewId() {
