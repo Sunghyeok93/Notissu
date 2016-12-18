@@ -264,6 +264,7 @@ public class NoticeListFragment extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "BroadcastReceiver");
             listRefresh();
         }
     };
