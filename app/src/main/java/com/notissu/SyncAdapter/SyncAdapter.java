@@ -5,6 +5,7 @@ import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,6 +44,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 //    private static final String MAIN_NOTICE_URL = "http://192.168.37.140:4000/feed.xml"; //내 블로그 임시
     private static final String LIBRARY_NOTICE_URL = "http://oasis.ssu.ac.kr/API/BBS/1"; //도서관 공지사항
     private static final String MAIN_NOTICE_URL = "http://www.ssu.ac.kr/web/kor/plaza_d_01;jsessionid=yIPyJDhVJSyGG1SWk3kZeQ5qXfdbVfqihsikvlZZVAILUn5tgH2HjcX4fiQFXD40?p_p_id=EXT_MIRRORBBS&p_p_lifecycle=0&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_pos=1&p_p_col_count=2&_EXT_MIRRORBBS_struts_action=%2Fext%2Fmirrorbbs%2Frss"; //내 블로그 임시
+    public static final String SYNC_FINISHED = "SYNC_FINISHED";
     ContentResolver mContentResolver;
 
     public SyncAdapter(Context context, boolean autoInitialize) {
@@ -130,6 +132,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 syncResult.stats.numInserts++;
             }
 
+
+            Intent i = new Intent(SYNC_FINISHED);
+            getContext().sendBroadcast(i);
 
         } catch (MalformedURLException e) {
             Log.e(TAG, "Feed URL is malformed", e);

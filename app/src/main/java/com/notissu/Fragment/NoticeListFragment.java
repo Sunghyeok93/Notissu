@@ -1,5 +1,9 @@
 package com.notissu.Fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -8,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,11 +38,15 @@ import com.notissu.Model.NavigationMenu;
 import com.notissu.Model.RssItem;
 import com.notissu.R;
 import com.notissu.Database.RssDatabase;
+import com.notissu.SyncAdapter.SyncAdapter;
 import com.notissu.SyncAdapter.SyncUtil;
+import com.notissu.Util.LogUtils;
 
 import java.util.ArrayList;
 
 public class NoticeListFragment extends Fragment {
+    private static final String TAG = LogUtils.makeLogTag(NoticeListFragment.class);
+
     private static final String KEY_NOTICE_ROWS = "KEY_NOTICE_ROWS";
     private static final String KEY_TITLE= "KEY_TITLE";
     private static final String KEY_CATEGORY= "KEY_CATEGORY";
@@ -206,12 +215,31 @@ public class NoticeListFragment extends Fragment {
 //        });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().registerReceiver(syncFinishedReceiver, new IntentFilter(SyncAdapter.SYNC_FINISHED));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().unregisterReceiver(syncFinishedReceiver);
+    }
+
     private void refresh() {
+        if (flag == FLAG_MAIN_NOTICE || flag == FLAG_LIBRARY_NOTICE) {
+            SyncUtil.TriggerRefresh();
+        }
+        listRefresh();
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void listRefresh() {
         StarredProvider starredProvider = new StarredProviderImp();
         ArrayList<RssItem> noticeList = null;
         ArrayList<RssItem> starredList = new ArrayList<>(starredProvider.getStarred());
         if (flag == FLAG_MAIN_NOTICE || flag == FLAG_LIBRARY_NOTICE) {
-            SyncUtil.TriggerRefresh();
             if (flag == FLAG_MAIN_NOTICE) {
                 MainProvider mainProvider = new MainProviderImp();
                 noticeList = new ArrayList<>(mainProvider.getSsuNotice(category));
@@ -230,6 +258,13 @@ public class NoticeListFragment extends Fragment {
         mNoticeAdapter = new NoticeAdapter(getContext(),noticeList, starredList);
         mNoticeList.setAdapter(mNoticeAdapter);
         mNoticeAdapter.notifyDataSetChanged();
-        mSwipeRefreshLayout.setRefreshing(false);
     }
+
+    private BroadcastReceiver syncFinishedReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            listRefresh();
+        }
+    };
 }
