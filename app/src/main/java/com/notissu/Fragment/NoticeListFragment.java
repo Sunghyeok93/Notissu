@@ -104,45 +104,6 @@ public class NoticeListFragment extends Fragment {
         return mRootView;
     }
 
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        boolean isMain = flag == FLAG_MAIN_NOTICE;
-        boolean isLibrary = flag == FLAG_LIBRARY_NOTICE;
-        if (isMain || isLibrary) {
-            inflater.inflate(R.menu.main,menu);
-            mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        }
-        super.onCreateOptionsMenu(menu,inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_read_all) {
-            boolean isMain = flag == FLAG_MAIN_NOTICE;
-            boolean isLibrary = flag == FLAG_LIBRARY_NOTICE;
-            if (isMain || isLibrary) {
-                NoticeProvider noticeProvider = null;
-                if (isMain) {
-                    noticeProvider = new MainProviderImp();
-                } else if (isLibrary) {
-                    noticeProvider = new LibraryProviderImp();
-                }
-                noticeProvider.updateAllReadCount();
-                //Navigation 업데이트
-                NavigationMenu navigationMenu = NavigationMenu.getInstance();
-                navigationMenu.setMenuNotReadCount();
-                //TextView 업데이트
-                for (int i = 0; i < mNoticeAdapter.getCount(); i++) {
-                    mNoticeAdapter.getItem(i).setIsRead(RssItem.READ);
-                }
-                mNoticeAdapter.notifyDataSetChanged();
-                return true;
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     private void initWidget() {
         mNoticeList = (ListView) mRootView.findViewById(R.id.notice_list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.notice_swipe_refresh_layout);
@@ -159,8 +120,7 @@ public class NoticeListFragment extends Fragment {
         StarredProvider starredProvider = new StarredProviderImp();
         //즐겨찾기에 추가된 List
         ArrayList<RssItem> starredList = new ArrayList<>(starredProvider.getStarred());
-        mNoticeAdapter = new NoticeAdapter(getContext(),noticeList, starredList);
-        this.mNoticeList.setAdapter(mNoticeAdapter);
+        setAdapter(noticeList, starredList);
     }
 
     private void settingListener() {
@@ -215,6 +175,46 @@ public class NoticeListFragment extends Fragment {
 //        });
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        boolean isMain = flag == FLAG_MAIN_NOTICE;
+        boolean isLibrary = flag == FLAG_LIBRARY_NOTICE;
+        if (isMain || isLibrary) {
+            inflater.inflate(R.menu.main,menu);
+            mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        }
+        super.onCreateOptionsMenu(menu,inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_read_all) {
+            boolean isMain = flag == FLAG_MAIN_NOTICE;
+            boolean isLibrary = flag == FLAG_LIBRARY_NOTICE;
+            if (isMain || isLibrary) {
+                NoticeProvider noticeProvider = null;
+                if (isMain) {
+                    noticeProvider = new MainProviderImp();
+                } else if (isLibrary) {
+                    noticeProvider = new LibraryProviderImp();
+                }
+                noticeProvider.updateAllReadCount();
+                //Navigation 업데이트
+                NavigationMenu navigationMenu = NavigationMenu.getInstance();
+                navigationMenu.setMenuNotReadCount();
+                //TextView 업데이트
+                for (int i = 0; i < mNoticeAdapter.getCount(); i++) {
+                    mNoticeAdapter.getItem(i).setIsRead(RssItem.READ);
+                }
+                mNoticeAdapter.notifyDataSetChanged();
+                return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -255,8 +255,7 @@ public class NoticeListFragment extends Fragment {
                 noticeList = new ArrayList<>(keywordProvider.getKeyword(title));
             }
         }
-        mNoticeAdapter = new NoticeAdapter(getContext(),noticeList, starredList);
-        mNoticeList.setAdapter(mNoticeAdapter);
+        setAdapter(noticeList, starredList);
         mNoticeAdapter.notifyDataSetChanged();
     }
 
@@ -268,4 +267,16 @@ public class NoticeListFragment extends Fragment {
             listRefresh();
         }
     };
+
+    private void setAdapter(ArrayList<RssItem> noticeList, ArrayList<RssItem> starredList) {
+        mNoticeAdapter = new NoticeAdapter(getContext(),noticeList, starredList);
+        mNoticeList.setAdapter(mNoticeAdapter);
+        if (mNoticeAdapter.getCount() == 0) {
+            mNoticeList.setVisibility(View.GONE);
+            Log.d(TAG, "visibility gone");
+        } else {
+            mNoticeList.setVisibility(View.VISIBLE);
+            Log.d(TAG, "visibility visible");
+        }
+    }
 }
