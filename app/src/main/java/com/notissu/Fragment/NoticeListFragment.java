@@ -1,5 +1,6 @@
 package com.notissu.Fragment;
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -68,6 +69,9 @@ public class NoticeListFragment extends Fragment {
     View mRootView;
     SearchView mSearchView;
 
+    //Progress dialog
+    ProgressDialog progressDialog;
+
     //이 List가 Main인지 Library 인지 starred인지 keyword인지 구별 flag
     int flag;
     String title;
@@ -110,6 +114,7 @@ public class NoticeListFragment extends Fragment {
     }
 
     private void initWidget() {
+        progressDialog = new ProgressDialog(getContext());
         mNoticeList = (ListView) mRootView.findViewById(R.id.notice_list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.notice_swipe_refresh_layout);
     }
@@ -276,10 +281,14 @@ public class NoticeListFragment extends Fragment {
     private void setAdapter(ArrayList<RssItem> noticeList, ArrayList<RssItem> starredList) {
         mNoticeAdapter = new NoticeAdapter(getContext(),noticeList, starredList);
         mNoticeList.setAdapter(mNoticeAdapter);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("로딩중입니다...");
         if (mNoticeAdapter.getCount() == 0) {
             mNoticeList.setVisibility(View.GONE);
+            progressDialog.show();
             Log.d(TAG, "visibility gone");
         } else {
+            progressDialog.dismiss();
             mNoticeList.setVisibility(View.VISIBLE);
             Log.d(TAG, "visibility visible");
         }
