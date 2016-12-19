@@ -261,6 +261,7 @@ public class MainActivity extends AppCompatActivity
 
         int newId = navigationMenu.getNewId();
         menu.add(R.id.group_keyword, newId,1,itemName).setIcon(R.drawable.ic_menu_send);
+
 //        menu.getItem(newId).setActionView()
         keywordProvider.addKeyword(itemName);
 

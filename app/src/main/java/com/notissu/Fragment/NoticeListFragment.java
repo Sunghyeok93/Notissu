@@ -62,6 +62,7 @@ public class NoticeListFragment extends Fragment {
     public static final int FLAG_LIBRARY_NOTICE = 1;
     public static final int FLAG_STARRED = 2;
     public static final int FLAG_KEYWORD = 3;
+    public static final int FLAG_SEARCH = 4;
 
     ListView mNoticeList;
     NoticeAdapter mNoticeAdapter;
@@ -77,6 +78,12 @@ public class NoticeListFragment extends Fragment {
     String title;
     //main일 때만 사용하는 멤버변수, 어느 카테고리인지 알려준다.
     String category;
+
+    boolean isMain;
+    boolean isLibrary;
+    boolean isStarred;
+    boolean isKeyword;
+    boolean isSearch;
 
     public static Fragment newInstance(int flag, String title, String category, ArrayList<RssItem> noticeRows) {
         Bundle bundle = new Bundle();
@@ -124,6 +131,11 @@ public class NoticeListFragment extends Fragment {
         title = bundle.getString(KEY_TITLE);
         getActivity().setTitle(title);
         flag = bundle.getInt(KEY_FLAG);
+        isMain = flag == FLAG_MAIN_NOTICE;
+        isLibrary = flag == FLAG_LIBRARY_NOTICE;
+        isStarred = flag == FLAG_STARRED;
+        isKeyword = flag == FLAG_KEYWORD;
+        isSearch = flag == FLAG_SEARCH;
         category = bundle.getString(KEY_CATEGORY);
         //ListView에 집어넣을 데이터 List
         ArrayList<RssItem> noticeList = bundle.getParcelableArrayList(KEY_NOTICE_ROWS);
@@ -172,8 +184,6 @@ public class NoticeListFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        boolean isMain = flag == FLAG_MAIN_NOTICE;
-        boolean isLibrary = flag == FLAG_LIBRARY_NOTICE;
         if (isMain || isLibrary) {
             inflater.inflate(R.menu.main,menu);
             mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
@@ -200,8 +210,6 @@ public class NoticeListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_read_all) {
-            boolean isMain = flag == FLAG_MAIN_NOTICE;
-            boolean isLibrary = flag == FLAG_LIBRARY_NOTICE;
             if (isMain || isLibrary) {
                 NoticeProvider noticeProvider = null;
                 if (isMain) {
@@ -238,7 +246,7 @@ public class NoticeListFragment extends Fragment {
     }
 
     private void refresh() {
-        if (flag == FLAG_MAIN_NOTICE || flag == FLAG_LIBRARY_NOTICE) {
+        if (isMain || isLibrary) {
             SyncUtil.TriggerRefresh();
         }
         listRefresh();
@@ -249,18 +257,18 @@ public class NoticeListFragment extends Fragment {
         StarredProvider starredProvider = new StarredProviderImp();
         ArrayList<RssItem> noticeList = null;
         ArrayList<RssItem> starredList = new ArrayList<>(starredProvider.getStarred());
-        if (flag == FLAG_MAIN_NOTICE || flag == FLAG_LIBRARY_NOTICE) {
-            if (flag == FLAG_MAIN_NOTICE) {
+        if (isMain || isLibrary) {
+            if (isMain) {
                 MainProvider mainProvider = new MainProviderImp();
                 noticeList = new ArrayList<>(mainProvider.getSsuNotice(category));
-            } else if (flag == FLAG_LIBRARY_NOTICE) {
+            } else if (isLibrary) {
                 LibraryProvider libraryProvider = new LibraryProviderImp();
                 noticeList = new ArrayList<>(libraryProvider.getNotice());
             }
-        } else if (flag == FLAG_STARRED || flag == FLAG_KEYWORD) {
-            if (flag == FLAG_STARRED) {
+        } else if (isStarred || isKeyword) {
+            if (isStarred) {
                 noticeList = starredList;
-            } else if (flag == FLAG_KEYWORD) {
+            } else if (isKeyword) {
                 KeywordProvider keywordProvider = new KeywordProviderImp();
                 noticeList = new ArrayList<>(keywordProvider.getKeyword(title));
             }
@@ -283,14 +291,17 @@ public class NoticeListFragment extends Fragment {
         mNoticeList.setAdapter(mNoticeAdapter);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setMessage("로딩중입니다...");
-        if (mNoticeAdapter.getCount() == 0) {
-            mNoticeList.setVisibility(View.GONE);
-            progressDialog.show();
-            Log.d(TAG, "visibility gone");
-        } else {
-            progressDialog.dismiss();
-            mNoticeList.setVisibility(View.VISIBLE);
-            Log.d(TAG, "visibility visible");
+        if (isMain || isLibrary) {
+            if (mNoticeAdapter.getCount() == 0) {
+                mNoticeList.setVisibility(View.GONE);
+                progressDialog.show();
+                Log.d(TAG, "visibility gone");
+            } else {
+                progressDialog.dismiss();
+                mNoticeList.setVisibility(View.VISIBLE);
+                Log.d(TAG, "visibility visible");
+            }
         }
+
     }
 }

@@ -47,7 +47,7 @@ public class SearchActivity extends AppCompatActivity {
 
         KeywordProvider keywordProvider = new KeywordProviderImp();
         ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(query));
-        Fragment fragment = NoticeListFragment.newInstance(NoticeListFragment.FLAG_KEYWORD, query, noticeList);
+        Fragment fragment = NoticeListFragment.newInstance(NoticeListFragment.FLAG_SEARCH, query, noticeList);
 
         fragmentTransaction.replace(R.id.activity_search, fragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);

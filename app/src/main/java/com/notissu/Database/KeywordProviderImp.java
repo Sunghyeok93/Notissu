@@ -77,4 +77,13 @@ public class KeywordProviderImp implements KeywordProvider {
                 RssItem.Keyword.COLUMN_NAME_KEYWORD+"=?",new String[]{keyword});
     }
 
+    @Override
+    public int getNotReadCount(String keyword) {
+        String selection = RssItem.Common.COLUMN_NAME_TITLE + " LIKE ? AND " + RssItem.Common.COLUMN_NAME_IS_READ + "=?";
+        String[] strings = new String[2];
+        strings[0] = "%"+keyword+"%"; // 키워드드가 같고
+        strings[1] = RssItem.NOT_READ+""; // 안 읽은거
+        List<RssItem> rssItemList = mLowDBProvider.getNotice(selection, strings);
+        return rssItemList.size();
+    }
 }
