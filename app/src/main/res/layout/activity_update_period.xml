@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.notissu.Activity.UpdatePeriodActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/update_period_btn_abl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/update_period_toolbar"
+            app:title="@string/setting_title_update_period"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </android.support.design.widget.AppBarLayout>
+
+
+    <LinearLayout
+        android:id="@+id/update_period_ll_header"
+        android:layout_below="@+id/update_period_btn_abl"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="현재 설정 되어있는 업데이트 주기 : "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/update_period_tv_period"
+            android:text="00시간 00분"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/update_period_btn_update"
+        android:text="설정하기"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/update_period_ll_header"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <com.shawnlin.numberpicker.NumberPicker
+                android:id="@+id/update_period_np_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:np_textSize="@dimen/fab_margin"
+                app:np_width="64dp"
+                app:np_height="180dp"
+                app:np_dividerColor="@color/colorPrimary"
+                app:np_max="24"
+                app:np_min="0"
+                app:np_textColor="@color/colorPrimary"
+                />
+            <TextView
+                android:text="시간"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <com.shawnlin.numberpicker.NumberPicker
+                android:id="@+id/update_period_np_minute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:np_width="64dp"
+                app:np_textSize="@dimen/fab_margin"
+                app:np_height="180dp"
+                app:np_dividerColor="@color/colorPrimary"
+                app:np_max="59"
+                app:np_min="0"
+                app:np_textColor="@color/colorPrimary"
+                />
+            <TextView
+                android:text="분"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

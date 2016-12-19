@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="define_int_rome"></string>
+    <!-- Author section -->
+    <string name="library_rome_author">rome</string>
+    <string name="library_rome_authorWebsite">https://github.com/rometools/rome</string>
+    <!-- Library section -->
+    <string name="library_rome_libraryName">rome</string>
+    <string name="library_rome_libraryDescription">All Roads Lead to ROME. ROME is a set of Atom/RSS Java utilities that make it easy to work in Java with most syndication formats. Today it accepts all flavors of RSS (0.90, 0.91, 0.92, 0.93, 0.94, 1.0 and 2.0), Atom 0.3 and Atom 1.0 feeds. Rome includes a set of parsers and generators for the various flavors of feeds, as well as converters to convert from one format to another. The parsers can give you back Java objects that are either specific for the format you want to work with, or a generic normalized SyndFeed object that lets you work on with the data without bothering about the underlying format.</string>
+    <string name="library_rome_libraryWebsite">https://rometools.github.io/rome/index.html</string>
+    <string name="library_rome_libraryVersion">1.7.0</string>
+    <!-- OpenSource section -->
+    <string name="library_rome_isOpenSource">true</string>
+    <string name="library_rome_repositoryLink">https://github.com/rometools/rome</string>
+    <!-- ClassPath for autoDetect section -->
+    <string name="library_rome_classPath">com.rometools.rome</string>
+    <!-- License section -->
+    <string name="library_rome_licenseId">apache_2_0</string>
+    <!-- Custom variables section -->
+</resources>

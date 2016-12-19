@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ssu_notices">
+        <item>전체</item>
+        <item>학사</item>
+        <item>장학</item>
+        <item>국제교류</item>
+        <item>모집,채용</item>
+        <item>교내행사</item>
+        <item>교외행사</item>
+        <item>봉사</item>
+    </string-array>
+
+    <string-array name="settings_list">
+        <item>업데이트 주기 설정</item>
+        <item>키워드 삭제</item>
+        <item>기여한 사람들</item>
+        <item>오픈소스 라이브러리</item>
+        <item>문의사항</item>
+    </string-array>
+
+    <string-array name="with_us_img_name">
+        <item>leesanghyeok</item>
+        <item>empty_avater</item>
+        <item>empty_avater</item>
+    </string-array>
+    <string-array name="with_us_name">
+        <item>이상혁</item>
+        <item>이유정</item>
+        <item>강성혁</item>
+    </string-array>
+    <string-array name="with_us_position">
+        <item>숭실대학교 컴퓨터학부 13학번</item>
+        <item>숭실대학교 컴퓨터학부 13학번</item>
+        <item>숭실대학교 컴퓨터학부 13학번</item>
+    </string-array>
+    <string-array name="with_us_email">
+        <item>1004xlsrn@gmail.com</item>
+        <item>dnfldml3476@gmail.com</item>
+        <item>sunghyeok@gmail.com</item>
+    </string-array>
+
+
+</resources>

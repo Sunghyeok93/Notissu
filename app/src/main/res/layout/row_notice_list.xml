@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:minHeight="48dp">
+
+    <TextView
+        android:id="@+id/notice_tv_subject"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        style="@style/ListTitle.ListNotRead"
+        android:text="[모집·채용]실전창업프로젝트 [내가 CEO라면 이렇게 마케팅한다!] 참가자 모집"
+        android:layout_toLeftOf="@+id/notice_tv_time"
+        />
+
+    <TextView
+        android:id= "@+id/notice_tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:maxLength="5"
+        android:text="11.09" />
+
+    <LinearLayout
+        android:id="@+id/notice_ll_cb_wrapper"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:layout_gravity="end"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+    <CheckBox
+        android:id="@+id/notice_cb_star"
+        android:focusable="false"
+        android:clickable="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:button="@drawable/star_selector"/>
+    </LinearLayout>
+
+</LinearLayout>
