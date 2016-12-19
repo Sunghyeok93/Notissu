@@ -215,6 +215,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         existedItem.getPublishDate() != 0 && existedItem.getPublishDate() != dbRssItem.getPublishDate() ||
                         existedItem.getCategory() != null && !existedItem.getCategory().equals(dbRssItem.getCategory())) {
                     //새로 들어온것이 업데이트 할 필요가 있으면 업데이트를 한다.
+                    //업데이트이기에, 모두 업데이트 할것이 아니라 isRead같은 멤버변수는 DB에 저장된것을 사용해야하기 때문에, 그대로 이용한다.
+                    existedItem.setIsRead(dbRssItem.getIsRead());
                     provider.updateNotice(existedItem);
                     syncResult.stats.numUpdates++;
                 }
