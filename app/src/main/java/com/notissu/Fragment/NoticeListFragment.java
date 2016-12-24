@@ -290,7 +290,7 @@ public class NoticeListFragment extends Fragment {
         mNoticeAdapter = new NoticeAdapter(getContext(),noticeList, starredList);
         mNoticeList.setAdapter(mNoticeAdapter);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setMessage("로딩중입니다...");
+        progressDialog.setMessage("학교 서버가 너무 느려요...");
         if (isMain || isLibrary) {
             if (mNoticeAdapter.getCount() == 0) {
                 mNoticeList.setVisibility(View.GONE);
