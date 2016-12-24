@@ -51,6 +51,13 @@ public class MainActivity extends AppCompatActivity
     private static final String STACK_NAME_KEYWORD = "STACK_NAME_KEYWORD";
     private static final String STACK_NAME_SETTING = "STACK_NAME_SETTING";
 
+    public static final int FLAG_MAIN_NOTICE = 0;
+    public static final int FLAG_LIBRARY_NOTICE = 1;
+    public static final int FLAG_STARRED = 2;
+    public static final int FLAG_KEYWORD = 3;
+    public static final int FLAG_SEARCH = 4;
+    public static final int FLAG_SETTING = 5;
+
     DrawerLayout drawer;
     ActionBarDrawerToggle toggle;
     NavigationView navigationView;
@@ -62,6 +69,9 @@ public class MainActivity extends AppCompatActivity
     LibraryProvider libraryProvider = new LibraryProviderImp();
     KeywordProvider keywordProvider = new KeywordProviderImp();
     StarredProvider starredProvider = new StarredProviderImp();
+
+    //현재 어떤 Fragment가 띄워져 있는지.
+    int presentFegment;
 
 
     @Override
@@ -111,19 +121,15 @@ public class MainActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         boolean isAlarm = intent.getBooleanExtra(Alarm.KEY_IS_ALRAM,false);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         if (!isAlarm) {
+            presentFegment = NoticeListFragment.FLAG_MAIN_NOTICE;
             String title = NavigationMenu.getInstance().getFristItemTitle();
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeTabFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, title));
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            fragmentTransaction.commit();
+            showFragment(FLAG_MAIN_NOTICE, NoticeTabFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, title));
         } else {
             String title = intent.getStringExtra(Alarm.KEY_FIRST_KEYWORD);
             ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(title));
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, title, noticeList));
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            fragmentTransaction.commit();
+            showFragment(FLAG_KEYWORD, NoticeListFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, title, noticeList));
         }
     }
 
@@ -148,22 +154,21 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void hideFloatingActionButton() {
-        fab.hide();
-    };
-    public void showFloatingActionButton() {
-        fab.show();
-    };
-
     @Override
     public void onBackPressed(){
-     DrawerLayout drawer = (DrawerLayout)  findViewById(R.id.drawer_layout);
-        if(drawer.isDrawerOpen(GravityCompat.START)){
+        DrawerLayout drawer = (DrawerLayout)  findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (presentFegment == FLAG_MAIN_NOTICE) {
+                super.onBackPressed();
+            } else {
+                String title = NavigationMenu.getInstance().getFristItemTitle();
+                showFragment(FLAG_MAIN_NOTICE,NoticeTabFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, title));
+            }
+
         }
-        else {
-            super.onBackPressed();
-        }
+
     }
 
     /*
@@ -181,21 +186,21 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_ssu_main) {
             //Main 공지사항
-            showFragment(STACK_NAME_MAIN,NoticeTabFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, itemTitle));
+            showFragment(FLAG_MAIN_NOTICE,NoticeTabFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, itemTitle));
         } else if (id == R.id.nav_ssu_library) {
             //도서관 공지사항
             ArrayList<RssItem> noticeList = new ArrayList<>(libraryProvider.getNotice());
-            showFragment(STACK_NAME_LIBRARY,NoticeListFragment.newInstance(NoticeListFragment.FLAG_LIBRARY_NOTICE, itemTitle, noticeList));
+            showFragment(FLAG_LIBRARY_NOTICE,NoticeListFragment.newInstance(NoticeListFragment.FLAG_LIBRARY_NOTICE, itemTitle, noticeList));
         } else if (id == R.id.nav_starred) {
             //즐겨찾기
             ArrayList<RssItem> noticeList = new ArrayList<>(starredProvider.getStarred());
-            showFragment(STACK_NAME_STARRED,NoticeListFragment.newInstance(NoticeListFragment.FLAG_STARRED, itemTitle, noticeList));
+            showFragment(FLAG_STARRED,NoticeListFragment.newInstance(NoticeListFragment.FLAG_STARRED, itemTitle, noticeList));
         } else if (groupid == R.id.group_keyword) {
             ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(itemTitle));
-            showFragment(STACK_NAME_KEYWORD+itemTitle,NoticeListFragment.newInstance(NoticeListFragment.FLAG_KEYWORD, itemTitle, noticeList));
+            showFragment(FLAG_KEYWORD,NoticeListFragment.newInstance(NoticeListFragment.FLAG_KEYWORD, itemTitle, noticeList));
         } else if (id == R.id.nav_setting) {
             //설정 공지사항
-            showFragment(STACK_NAME_SETTING,SettingFragment.newInstance());
+            showFragment(FLAG_SETTING,SettingFragment.newInstance());
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -203,13 +208,12 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void showFragment(String stackName, Fragment fragment) {
+    private void showFragment(int flag, Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-//        fragmentManager.popBackStack(stackName,FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        presentFegment = flag;
         fragmentTransaction.replace(R.id.main_fragment_container, fragment);
-        fragmentTransaction.addToBackStack(stackName);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
     }
