@@ -166,35 +166,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        /*toolbar.inflateMenu(R.menu.main);
-        mSearchView = (SearchView) toolbar.getMenu().findItem(R.id.menu_search).getActionView();
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                KeywordProvider keywordProvider = RssDatabase.getInstance();
-                ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(s));
-                fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.FLAG_KEYWORD, s, noticeList));
-                fragmentTransaction.addToBackStack(null).commit();
-                return false;
-            }
-            @Override
-            public boolean onQueryTextChange(String s) {
-
-                return false;
-            }
-        });
-
-        mSearchView.setQueryHint("검색 입력");
-        mSearchView.clearFocus();*/
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-
     /*
         Navigation의 메뉴가 클릭 됐을 때 생기는 Event 구현
         */

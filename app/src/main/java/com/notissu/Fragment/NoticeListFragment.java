@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -25,7 +24,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.notissu.Activity.MainActivity;
 import com.notissu.Activity.SearchActivity;
 import com.notissu.Adapter.NoticeAdapter;
 import com.notissu.Database.KeywordProvider;
@@ -41,7 +39,6 @@ import com.notissu.Dialog.RssItemDialog;
 import com.notissu.Model.NavigationMenu;
 import com.notissu.Model.RssItem;
 import com.notissu.R;
-import com.notissu.Database.RssDatabase;
 import com.notissu.SyncAdapter.SyncAdapter;
 import com.notissu.SyncAdapter.SyncUtil;
 import com.notissu.Util.LogUtils;
@@ -137,6 +134,10 @@ public class NoticeListFragment extends Fragment {
         isKeyword = flag == FLAG_KEYWORD;
         isSearch = flag == FLAG_SEARCH;
         category = bundle.getString(KEY_CATEGORY);
+
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("학교 서버가 너무 느려요...");
+
         //ListView에 집어넣을 데이터 List
         ArrayList<RssItem> noticeList = bundle.getParcelableArrayList(KEY_NOTICE_ROWS);
         StarredProvider starredProvider = new StarredProviderImp();
