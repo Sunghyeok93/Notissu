@@ -45,11 +45,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = LogUtils.makeLogTag(MainActivity.class);
-    private static final String STACK_NAME_MAIN = "STACK_NAME_MAIN";
-    private static final String STACK_NAME_LIBRARY = "STACK_NAME_LIBRARY";
-    private static final String STACK_NAME_STARRED = "STACK_NAME_STARRED";
-    private static final String STACK_NAME_KEYWORD = "STACK_NAME_KEYWORD";
-    private static final String STACK_NAME_SETTING = "STACK_NAME_SETTING";
 
     public static final int FLAG_MAIN_NOTICE = 0;
     public static final int FLAG_LIBRARY_NOTICE = 1;
@@ -123,13 +118,13 @@ public class MainActivity extends AppCompatActivity
         boolean isAlarm = intent.getBooleanExtra(Alarm.KEY_IS_ALRAM,false);
 
         if (!isAlarm) {
-            presentFegment = NoticeListFragment.FLAG_MAIN_NOTICE;
+            presentFegment = FLAG_MAIN_NOTICE;
             String title = NavigationMenu.getInstance().getFristItemTitle();
-            showFragment(FLAG_MAIN_NOTICE, NoticeTabFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, title));
+            showFragment(FLAG_MAIN_NOTICE, NoticeTabFragment.newInstance(FLAG_MAIN_NOTICE, title));
         } else {
             String title = intent.getStringExtra(Alarm.KEY_FIRST_KEYWORD);
             ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(title));
-            showFragment(FLAG_KEYWORD, NoticeListFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, title, noticeList));
+            showFragment(FLAG_KEYWORD, NoticeListFragment.newInstance(FLAG_MAIN_NOTICE, title, noticeList));
         }
     }
 
@@ -164,7 +159,7 @@ public class MainActivity extends AppCompatActivity
                 super.onBackPressed();
             } else {
                 String title = NavigationMenu.getInstance().getFristItemTitle();
-                showFragment(FLAG_MAIN_NOTICE,NoticeTabFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, title));
+                showFragment(FLAG_MAIN_NOTICE,NoticeTabFragment.newInstance(FLAG_MAIN_NOTICE, title));
             }
 
         }
@@ -186,18 +181,18 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_ssu_main) {
             //Main 공지사항
-            showFragment(FLAG_MAIN_NOTICE,NoticeTabFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, itemTitle));
+            showFragment(FLAG_MAIN_NOTICE,NoticeTabFragment.newInstance(FLAG_MAIN_NOTICE, itemTitle));
         } else if (id == R.id.nav_ssu_library) {
             //도서관 공지사항
             ArrayList<RssItem> noticeList = new ArrayList<>(libraryProvider.getNotice());
-            showFragment(FLAG_LIBRARY_NOTICE,NoticeListFragment.newInstance(NoticeListFragment.FLAG_LIBRARY_NOTICE, itemTitle, noticeList));
+            showFragment(FLAG_LIBRARY_NOTICE,NoticeListFragment.newInstance(FLAG_LIBRARY_NOTICE, itemTitle, noticeList));
         } else if (id == R.id.nav_starred) {
             //즐겨찾기
             ArrayList<RssItem> noticeList = new ArrayList<>(starredProvider.getStarred());
-            showFragment(FLAG_STARRED,NoticeListFragment.newInstance(NoticeListFragment.FLAG_STARRED, itemTitle, noticeList));
+            showFragment(FLAG_STARRED,NoticeListFragment.newInstance(FLAG_STARRED, itemTitle, noticeList));
         } else if (groupid == R.id.group_keyword) {
             ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(itemTitle));
-            showFragment(FLAG_KEYWORD,NoticeListFragment.newInstance(NoticeListFragment.FLAG_KEYWORD, itemTitle, noticeList));
+            showFragment(FLAG_KEYWORD,NoticeListFragment.newInstance(FLAG_KEYWORD, itemTitle, noticeList));
         } else if (id == R.id.nav_setting) {
             //설정 공지사항
             showFragment(FLAG_SETTING,SettingFragment.newInstance());

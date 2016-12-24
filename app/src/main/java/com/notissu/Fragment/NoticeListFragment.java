@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.notissu.Activity.MainActivity;
 import com.notissu.Activity.SearchActivity;
 import com.notissu.Adapter.NoticeAdapter;
 import com.notissu.Database.KeywordProvider;
@@ -54,12 +55,6 @@ public class NoticeListFragment extends Fragment {
     private static final String KEY_TITLE= "KEY_TITLE";
     private static final String KEY_CATEGORY= "KEY_CATEGORY";
     private static final String KEY_FLAG= "KEY_FLAG";
-
-    public static final int FLAG_MAIN_NOTICE = 0;
-    public static final int FLAG_LIBRARY_NOTICE = 1;
-    public static final int FLAG_STARRED = 2;
-    public static final int FLAG_KEYWORD = 3;
-    public static final int FLAG_SEARCH = 4;
 
     ListView mNoticeList;
     NoticeAdapter mNoticeAdapter;
@@ -128,11 +123,11 @@ public class NoticeListFragment extends Fragment {
         title = bundle.getString(KEY_TITLE);
         getActivity().setTitle(title);
         flag = bundle.getInt(KEY_FLAG);
-        isMain = flag == FLAG_MAIN_NOTICE;
-        isLibrary = flag == FLAG_LIBRARY_NOTICE;
-        isStarred = flag == FLAG_STARRED;
-        isKeyword = flag == FLAG_KEYWORD;
-        isSearch = flag == FLAG_SEARCH;
+        isMain = flag == MainActivity.FLAG_MAIN_NOTICE;
+        isLibrary = flag == MainActivity.FLAG_LIBRARY_NOTICE;
+        isStarred = flag == MainActivity.FLAG_STARRED;
+        isKeyword = flag == MainActivity.FLAG_KEYWORD;
+        isSearch = flag == MainActivity.FLAG_SEARCH;
         category = bundle.getString(KEY_CATEGORY);
 
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
