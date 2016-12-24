@@ -6,11 +6,14 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.crashlytics.android.Crashlytics;
 import com.notissu.R;
 import com.notissu.Database.RssDatabase;
 import com.notissu.SyncAdapter.SyncUtil;
 import com.notissu.Util.ResString;
 import com.notissu.Util.TestUtils;
+
+import io.fabric.sdk.android.Fabric;
 
 import static com.notissu.Util.LogUtils.makeLogTag;
 
@@ -23,6 +26,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_splash);
 
         /*앱이 실행되면 가장 먼저 호출되어야 할 기능이다.
