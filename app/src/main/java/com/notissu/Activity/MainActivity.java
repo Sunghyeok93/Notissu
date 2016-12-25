@@ -14,9 +14,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.notissu.Database.KeywordProvider;
@@ -45,11 +47,13 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = LogUtils.makeLogTag(MainActivity.class);
-    private static final String STACK_NAME_MAIN = "STACK_NAME_MAIN";
-    private static final String STACK_NAME_LIBRARY = "STACK_NAME_LIBRARY";
-    private static final String STACK_NAME_STARRED = "STACK_NAME_STARRED";
-    private static final String STACK_NAME_KEYWORD = "STACK_NAME_KEYWORD";
-    private static final String STACK_NAME_SETTING = "STACK_NAME_SETTING";
+
+    public static final int FLAG_MAIN_NOTICE = 0;
+    public static final int FLAG_LIBRARY_NOTICE = 1;
+    public static final int FLAG_STARRED = 2;
+    public static final int FLAG_KEYWORD = 3;
+    public static final int FLAG_SEARCH = 4;
+    public static final int FLAG_SETTING = 5;
 
     DrawerLayout drawer;
     ActionBarDrawerToggle toggle;
@@ -62,6 +66,9 @@ public class MainActivity extends AppCompatActivity
     LibraryProvider libraryProvider = new LibraryProviderImp();
     KeywordProvider keywordProvider = new KeywordProviderImp();
     StarredProvider starredProvider = new StarredProviderImp();
+
+    //현재 어떤 Fragment가 띄워져 있는지.
+    int presentFegment;
 
 
     @Override
@@ -111,19 +118,15 @@ public class MainActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         boolean isAlarm = intent.getBooleanExtra(Alarm.KEY_IS_ALRAM,false);
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         if (!isAlarm) {
+            presentFegment = FLAG_MAIN_NOTICE;
             String title = NavigationMenu.getInstance().getFristItemTitle();
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeTabFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, title));
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            fragmentTransaction.commit();
+            showFragment(FLAG_MAIN_NOTICE, NoticeTabFragment.newInstance(FLAG_MAIN_NOTICE, title));
         } else {
             String title = intent.getStringExtra(Alarm.KEY_FIRST_KEYWORD);
             ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(title));
-            fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, title, noticeList));
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-            fragmentTransaction.commit();
+            showFragment(FLAG_KEYWORD, NoticeListFragment.newInstance(FLAG_MAIN_NOTICE, title, noticeList));
         }
     }
 
@@ -145,55 +148,31 @@ public class MainActivity extends AppCompatActivity
                 dialogFragment.show(getSupportFragmentManager(),"");
             }
         });
-
+        LinearLayout easterEgg = (LinearLayout) navigationView.getHeaderView(0).findViewById(R.id.nav_easter_egg);
+        easterEgg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "서라야 사랑해♥", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
-
-    public void hideFloatingActionButton() {
-        fab.hide();
-    };
-    public void showFloatingActionButton() {
-        fab.show();
-    };
 
     @Override
     public void onBackPressed(){
-     DrawerLayout drawer = (DrawerLayout)  findViewById(R.id.drawer_layout);
-        if(drawer.isDrawerOpen(GravityCompat.START)){
+        DrawerLayout drawer = (DrawerLayout)  findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }
-        else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        /*toolbar.inflateMenu(R.menu.main);
-        mSearchView = (SearchView) toolbar.getMenu().findItem(R.id.menu_search).getActionView();
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                KeywordProvider keywordProvider = RssDatabase.getInstance();
-                ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(s));
-                fragmentTransaction.replace(R.id.main_fragment_container, NoticeListFragment.newInstance(NoticeListFragment.FLAG_KEYWORD, s, noticeList));
-                fragmentTransaction.addToBackStack(null).commit();
-                return false;
+        } else {
+            if (presentFegment == FLAG_MAIN_NOTICE) {
+                super.onBackPressed();
+            } else {
+                String title = NavigationMenu.getInstance().getFristItemTitle();
+                showFragment(FLAG_MAIN_NOTICE,NoticeTabFragment.newInstance(FLAG_MAIN_NOTICE, title));
             }
-            @Override
-            public boolean onQueryTextChange(String s) {
 
-                return false;
-            }
-        });
+        }
 
-        mSearchView.setQueryHint("검색 입력");
-        mSearchView.clearFocus();*/
-
-        return super.onCreateOptionsMenu(menu);
     }
-
 
     /*
         Navigation의 메뉴가 클릭 됐을 때 생기는 Event 구현
@@ -210,21 +189,21 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_ssu_main) {
             //Main 공지사항
-            showFragment(STACK_NAME_MAIN,NoticeTabFragment.newInstance(NoticeListFragment.FLAG_MAIN_NOTICE, itemTitle));
+            showFragment(FLAG_MAIN_NOTICE,NoticeTabFragment.newInstance(FLAG_MAIN_NOTICE, itemTitle));
         } else if (id == R.id.nav_ssu_library) {
             //도서관 공지사항
             ArrayList<RssItem> noticeList = new ArrayList<>(libraryProvider.getNotice());
-            showFragment(STACK_NAME_LIBRARY,NoticeListFragment.newInstance(NoticeListFragment.FLAG_LIBRARY_NOTICE, itemTitle, noticeList));
+            showFragment(FLAG_LIBRARY_NOTICE,NoticeListFragment.newInstance(FLAG_LIBRARY_NOTICE, itemTitle, noticeList));
         } else if (id == R.id.nav_starred) {
             //즐겨찾기
             ArrayList<RssItem> noticeList = new ArrayList<>(starredProvider.getStarred());
-            showFragment(STACK_NAME_STARRED,NoticeListFragment.newInstance(NoticeListFragment.FLAG_STARRED, itemTitle, noticeList));
+            showFragment(FLAG_STARRED,NoticeListFragment.newInstance(FLAG_STARRED, itemTitle, noticeList));
         } else if (groupid == R.id.group_keyword) {
             ArrayList<RssItem> noticeList = new ArrayList<>(keywordProvider.getKeyword(itemTitle));
-            showFragment(STACK_NAME_KEYWORD+itemTitle,NoticeListFragment.newInstance(NoticeListFragment.FLAG_KEYWORD, itemTitle, noticeList));
+            showFragment(FLAG_KEYWORD,NoticeListFragment.newInstance(FLAG_KEYWORD, itemTitle, noticeList));
         } else if (id == R.id.nav_setting) {
             //설정 공지사항
-            showFragment(STACK_NAME_SETTING,SettingFragment.newInstance());
+            showFragment(FLAG_SETTING,SettingFragment.newInstance());
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -232,13 +211,12 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void showFragment(String stackName, Fragment fragment) {
+    private void showFragment(int flag, Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-//        fragmentManager.popBackStack(stackName,FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        presentFegment = flag;
         fragmentTransaction.replace(R.id.main_fragment_container, fragment);
-        fragmentTransaction.addToBackStack(stackName);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
     }

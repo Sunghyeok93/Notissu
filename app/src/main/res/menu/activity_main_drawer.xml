@@ -23,7 +23,7 @@
             <menu>
                 <item
                     android:id="@+id/nav_starred"
-                    android:icon="@drawable/ic_drawer_starred_24dp"
+                    android:icon="@drawable/ic_drawer_starred"
                     android:title="즐겨찾기" />
             </menu>
         </item>
@@ -42,7 +42,7 @@
         <item
             android:orderInCategory="2"
             android:id="@+id/nav_setting"
-            android:icon="@drawable/ic_drawer_settings_24dp"
+            android:icon="@drawable/ic_drawer_settings"
             android:title="설정" />
     </group>
 </menu>

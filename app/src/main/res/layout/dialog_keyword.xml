@@ -17,7 +17,7 @@
         android:text="알림 받고싶거나 모아서 보고싶은 카워드를 등록해주세요." />
 
     <EditText
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="키워드를 입력하세요."
         android:textSize="13sp"

@@ -44,7 +44,7 @@ public class Alarm {
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification.Builder mBuilder = new Notification.Builder(context);
-        mBuilder.setSmallIcon(R.drawable.ssu_mark);
+        mBuilder.setSmallIcon(R.drawable.notissulogo2);
         mBuilder.setTicker(ResString.getInstance().getString(ResString.RES_ALARM_TICKER));
         mBuilder.setContentTitle(ResString.getInstance().getString(ResString.RES_ALARM_TITLE));
         mBuilder.setContentText(sb.toString() + " 관련 공지사항");
