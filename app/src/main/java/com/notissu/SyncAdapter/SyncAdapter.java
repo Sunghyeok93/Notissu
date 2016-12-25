@@ -19,6 +19,7 @@ import com.notissu.Database.LibraryProviderImp;
 import com.notissu.Database.MainProvider;
 import com.notissu.Database.MainProviderImp;
 import com.notissu.Database.NoticeProvider;
+import com.notissu.Database.RssDatabase;
 import com.notissu.Model.RssItem;
 import com.notissu.Notification.Alarm;
 import com.notissu.Util.IOUtils;
@@ -53,11 +54,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
+        RssDatabase.setInstance(context);
         mContentResolver = context.getContentResolver();
     }
 
     public SyncAdapter(Context context, boolean autoInitialize, boolean allowParallelSyncs) {
         super(context, autoInitialize, allowParallelSyncs);
+        RssDatabase.setInstance(context);
         mContentResolver = context.getContentResolver();
     }
 

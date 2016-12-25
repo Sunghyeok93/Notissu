@@ -277,7 +277,6 @@ public class NoticeListFragment extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "BroadcastReceiver");
             listRefresh();
         }
     };
@@ -289,13 +288,9 @@ public class NoticeListFragment extends Fragment {
         progressDialog.setMessage("학교 서버가 너무 느려요...");
         if (isMain || isLibrary) {
             if (mNoticeAdapter.getCount() == 0) {
-                mNoticeList.setVisibility(View.GONE);
                 progressDialog.show();
-                Log.d(TAG, "visibility gone");
             } else {
                 progressDialog.dismiss();
-                mNoticeList.setVisibility(View.VISIBLE);
-                Log.d(TAG, "visibility visible");
             }
         }
 
