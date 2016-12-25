@@ -3,6 +3,8 @@ package com.notissu.Fragment;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,6 +18,11 @@ public class SettingFragment extends PreferenceFragmentCompat {
     private static final String TAG = LogUtils.makeLogTag(SettingFragment.class);
     private static final String TITLE = "설정";
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.empty,menu);
+        super.onCreateOptionsMenu(menu,inflater);
+    }
 
     public static SettingFragment newInstance() {
         Bundle args = new Bundle();
@@ -26,6 +33,7 @@ public class SettingFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setHasOptionsMenu(true);
         getActivity().setTitle(TITLE);
         addPreferencesFromResource(R.xml.setting_preference);
     }

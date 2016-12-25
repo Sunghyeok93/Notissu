@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
@@ -41,7 +40,6 @@ import com.notissu.Dialog.RssItemDialog;
 import com.notissu.Model.NavigationMenu;
 import com.notissu.Model.RssItem;
 import com.notissu.R;
-import com.notissu.Database.RssDatabase;
 import com.notissu.SyncAdapter.SyncAdapter;
 import com.notissu.SyncAdapter.SyncUtil;
 import com.notissu.Util.LogUtils;
@@ -57,12 +55,6 @@ public class NoticeListFragment extends Fragment {
     private static final String KEY_TITLE= "KEY_TITLE";
     private static final String KEY_CATEGORY= "KEY_CATEGORY";
     private static final String KEY_FLAG= "KEY_FLAG";
-
-    public static final int FLAG_MAIN_NOTICE = 0;
-    public static final int FLAG_LIBRARY_NOTICE = 1;
-    public static final int FLAG_STARRED = 2;
-    public static final int FLAG_KEYWORD = 3;
-    public static final int FLAG_SEARCH = 4;
 
     ListView mNoticeList;
     NoticeAdapter mNoticeAdapter;
@@ -131,12 +123,16 @@ public class NoticeListFragment extends Fragment {
         title = bundle.getString(KEY_TITLE);
         getActivity().setTitle(title);
         flag = bundle.getInt(KEY_FLAG);
-        isMain = flag == FLAG_MAIN_NOTICE;
-        isLibrary = flag == FLAG_LIBRARY_NOTICE;
-        isStarred = flag == FLAG_STARRED;
-        isKeyword = flag == FLAG_KEYWORD;
-        isSearch = flag == FLAG_SEARCH;
+        isMain = flag == MainActivity.FLAG_MAIN_NOTICE;
+        isLibrary = flag == MainActivity.FLAG_LIBRARY_NOTICE;
+        isStarred = flag == MainActivity.FLAG_STARRED;
+        isKeyword = flag == MainActivity.FLAG_KEYWORD;
+        isSearch = flag == MainActivity.FLAG_SEARCH;
         category = bundle.getString(KEY_CATEGORY);
+
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("학교 서버가 너무 느려요...");
+
         //ListView에 집어넣을 데이터 List
         ArrayList<RssItem> noticeList = bundle.getParcelableArrayList(KEY_NOTICE_ROWS);
         StarredProvider starredProvider = new StarredProviderImp();
@@ -281,7 +277,6 @@ public class NoticeListFragment extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "BroadcastReceiver");
             listRefresh();
         }
     };
@@ -293,13 +288,9 @@ public class NoticeListFragment extends Fragment {
         progressDialog.setMessage("학교 서버가 너무 느려요...");
         if (isMain || isLibrary) {
             if (mNoticeAdapter.getCount() == 0) {
-                mNoticeList.setVisibility(View.GONE);
                 progressDialog.show();
-                Log.d(TAG, "visibility gone");
             } else {
                 progressDialog.dismiss();
-                mNoticeList.setVisibility(View.VISIBLE);
-                Log.d(TAG, "visibility visible");
             }
         }
 
