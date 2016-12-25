@@ -14,9 +14,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.notissu.Database.KeywordProvider;
@@ -146,7 +148,13 @@ public class MainActivity extends AppCompatActivity
                 dialogFragment.show(getSupportFragmentManager(),"");
             }
         });
-
+        LinearLayout easterEgg = (LinearLayout) navigationView.getHeaderView(0).findViewById(R.id.nav_easter_egg);
+        easterEgg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "서라야 사랑해♥", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

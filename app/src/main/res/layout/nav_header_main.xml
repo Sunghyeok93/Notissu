@@ -11,5 +11,10 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    <LinearLayout
+        android:id="@+id/nav_easter_egg"
+        android:orientation="vertical"
+        android:layout_width="10dp"
+        android:layout_height="10dp"/>
 
 </LinearLayout>
