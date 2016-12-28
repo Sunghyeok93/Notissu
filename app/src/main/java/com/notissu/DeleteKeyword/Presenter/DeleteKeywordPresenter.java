@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Created by forhack on 2016-12-28.
  */
 
-public class DeleteKeywordPresenterImpl implements DeleteKeywordContract.Presenter {
+public class DeleteKeywordPresenter implements DeleteKeywordContract.Presenter {
     private DeleteKeywordContract.View view;
     private DeleteKeywordAdapterContract.Model adapterModel;
     private DeleteKeywordAdapterContract.View adapterView;

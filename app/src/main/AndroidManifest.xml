@@ -62,7 +62,7 @@
         </service>
 
         <activity
-            android:name=".Activity.UpdatePeriodActivity"
+            android:name=".UpdatePeriod.View.UpdatePeriodActivity"
             android:theme="@style/AppThemeNoActionBar" />
         <activity
             android:name=".DeleteKeyword.View.DeleteKeywordActivity"

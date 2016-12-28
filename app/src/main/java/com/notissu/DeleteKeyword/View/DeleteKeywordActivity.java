@@ -11,11 +11,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.notissu.DeleteKeyword.Adapter.DeleteKeywordAdapter;
 import com.notissu.DeleteKeyword.Presenter.DeleteKeywordContract;
-import com.notissu.DeleteKeyword.Presenter.DeleteKeywordPresenterImpl;
+import com.notissu.DeleteKeyword.Presenter.DeleteKeywordPresenter;
 import com.notissu.R;
 import com.notissu.Util.LogUtils;
 import com.notissu.View.Interface.OnRecyclerItemClickListener;
@@ -36,9 +35,6 @@ public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKe
     @BindView(R.id.delete_keyword_btn_remove_all)
     Button mBtnRemoveAll;
 
-
-    DeleteKeywordAdapter deleteKeywordAdapter;
-
     DeleteKeywordContract.Presenter presenter;
 
     @Override
@@ -50,10 +46,9 @@ public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKe
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        DeleteKeywordAdapter deleteKeywordAdapter = new DeleteKeywordAdapter(this);
 
-        deleteKeywordAdapter = new DeleteKeywordAdapter(this);
-
-        presenter = new DeleteKeywordPresenterImpl();
+        presenter = new DeleteKeywordPresenter();
         presenter.attachView(this);
         presenter.setAdapterModel(deleteKeywordAdapter);
         presenter.setAdapterView(deleteKeywordAdapter);
@@ -72,7 +67,6 @@ public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKe
                         presenter.deleteKeyword(position);
                     }
                 });
-
             }
         });
 
@@ -103,6 +97,11 @@ public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKe
 
     }
 
+    @Override
+    public void showTextNoKeyword() {
+        mRlList.setVisibility(View.GONE);
+    }
+
     private void showDeleteDialog(DialogInterface.OnClickListener onClickListener) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setPositiveButton("삭제", onClickListener);
@@ -114,10 +113,5 @@ public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKe
         });
         alert.setMessage("키워드를 삭제 하시겠습니까?");
         alert.show();
-    }
-
-    @Override
-    public void showTextNoKeyword() {
-        mRlList.setVisibility(View.GONE);
     }
 }
