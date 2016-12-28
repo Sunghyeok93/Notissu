@@ -65,7 +65,7 @@
             android:name=".Activity.UpdatePeriodActivity"
             android:theme="@style/AppThemeNoActionBar" />
         <activity
-            android:name=".Activity.DeleteKeywordActivity"
+            android:name=".DeleteKeyword.View.DeleteKeywordActivity"
             android:theme="@style/AppThemeNoActionBar" />
         <activity
             android:name=".WithUs.WithUsActivity"
