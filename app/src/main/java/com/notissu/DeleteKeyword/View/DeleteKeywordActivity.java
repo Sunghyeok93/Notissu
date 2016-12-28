@@ -2,6 +2,7 @@ package com.notissu.DeleteKeyword.View;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -54,6 +55,7 @@ public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKe
         presenter.setAdapterView(deleteKeywordAdapter);
 
         mRvKeyword.setLayoutManager(new LinearLayoutManager(DeleteKeywordActivity.this));
+        mRvKeyword.addItemDecoration(new DividerItemDecoration(mRvKeyword.getContext(),DividerItemDecoration.VERTICAL));
         mRvKeyword.setAdapter(deleteKeywordAdapter);
 
         presenter.loadKeyword();
