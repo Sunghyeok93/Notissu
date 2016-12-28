@@ -15,6 +15,8 @@ public interface DeleteKeywordAdapterContract {
         void remove(String string);
 
         void addItems(ArrayList<String> items);
+
+        void removeAll();
     }
 
     interface View {
