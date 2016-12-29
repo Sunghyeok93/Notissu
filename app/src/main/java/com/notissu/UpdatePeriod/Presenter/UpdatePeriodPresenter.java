@@ -2,9 +2,11 @@ package com.notissu.UpdatePeriod.Presenter;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 
 import com.notissu.SyncAdapter.SyncUtil;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.notissu.UpdatePeriod.View.UpdatePeriodActivity.KEY_PERIOD;
 
 /**
@@ -14,9 +16,13 @@ import static com.notissu.UpdatePeriod.View.UpdatePeriodActivity.KEY_PERIOD;
 public class UpdatePeriodPresenter implements UpdatePeriodContract.Presenter {
     UpdatePeriodContract.View view;
 
+    public UpdatePeriodPresenter(@NonNull UpdatePeriodContract.View view) {
+        this.view = checkNotNull(view,"UpdatePeriodContract.View cannot be null");
+    }
+
     @Override
-    public void attachView(UpdatePeriodContract.View view) {
-        this.view = view;
+    public void start() {
+
     }
 
     @Override
@@ -46,8 +52,5 @@ public class UpdatePeriodPresenter implements UpdatePeriodContract.Presenter {
                 .putLong(KEY_PERIOD, period).commit();
     }
 
-    @Override
-    public void detachView() {
-        view = null;
-    }
+
 }

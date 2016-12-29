@@ -1,4 +1,4 @@
-package com.notissu.Fragment;
+package com.notissu.NoticeList.View;
 
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -13,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,7 +25,7 @@ import android.widget.TextView;
 
 import com.notissu.Activity.MainActivity;
 import com.notissu.Activity.SearchActivity;
-import com.notissu.Adapter.NoticeAdapter;
+import com.notissu.NoticeList.Adapter.NoticeListAdapter;
 import com.notissu.Database.KeywordProvider;
 import com.notissu.Database.KeywordProviderImp;
 import com.notissu.Database.LibraryProvider;
@@ -39,6 +38,7 @@ import com.notissu.Database.StarredProviderImp;
 import com.notissu.Dialog.RssItemDialog;
 import com.notissu.Model.NavigationMenu;
 import com.notissu.Model.RssItem;
+import com.notissu.NoticeList.Presenter.NoticeListContract;
 import com.notissu.R;
 import com.notissu.SyncAdapter.SyncAdapter;
 import com.notissu.SyncAdapter.SyncUtil;
@@ -46,7 +46,10 @@ import com.notissu.Util.LogUtils;
 
 import java.util.ArrayList;
 
-public class NoticeListFragment extends Fragment {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class NoticeListFragment extends Fragment implements NoticeListContract.View{
     private static final String TAG = LogUtils.makeLogTag(NoticeListFragment.class);
 
     public static final String KEY_SEARCH_QUERY = "KEY_SEARCH_QUERY";
@@ -56,10 +59,12 @@ public class NoticeListFragment extends Fragment {
     private static final String KEY_CATEGORY= "KEY_CATEGORY";
     private static final String KEY_FLAG= "KEY_FLAG";
 
+    @BindView(R.id.notice_list)
     ListView mNoticeList;
-    NoticeAdapter mNoticeAdapter;
+    @BindView(R.id.notice_swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    View mRootView;
+
+    NoticeListAdapter mNoticeListAdapter;
     SearchView mSearchView;
 
     //Progress dialog
@@ -76,6 +81,8 @@ public class NoticeListFragment extends Fragment {
     boolean isStarred;
     boolean isKeyword;
     boolean isSearch;
+
+    NoticeListContract.Presenter presenter;
 
     public static Fragment newInstance(int flag, String title, String category, ArrayList<RssItem> noticeRows) {
         Bundle bundle = new Bundle();
@@ -102,20 +109,19 @@ public class NoticeListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        mRootView = inflater.inflate(R.layout.fragment_notice_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_notice_list, container, false);
         // Inflate the layout for this fragment
+        ButterKnife.bind(this, view);
 
         initWidget();
         settingWidget();
         settingListener();
 
-        return mRootView;
+        return view;
     }
 
     private void initWidget() {
         progressDialog = new ProgressDialog(getContext());
-        mNoticeList = (ListView) mRootView.findViewById(R.id.notice_list);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.notice_swipe_refresh_layout);
     }
 
     private void settingWidget() {
@@ -147,7 +153,7 @@ public class NoticeListFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 FragmentManager manager = getFragmentManager();
                 //읽음표시로 전환하고
-                RssItem rssitem = mNoticeAdapter.getItem(i);
+                RssItem rssitem = mNoticeListAdapter.getItem(i);
                 rssitem.setIsRead(RssItem.READ);
                 MainProvider mainProvider = new MainProviderImp();
                 LibraryProvider libraryProvider = new LibraryProviderImp();
@@ -218,10 +224,10 @@ public class NoticeListFragment extends Fragment {
                 NavigationMenu navigationMenu = NavigationMenu.getInstance();
                 navigationMenu.setMenuNotReadCount();
                 //TextView 업데이트
-                for (int i = 0; i < mNoticeAdapter.getCount(); i++) {
-                    mNoticeAdapter.getItem(i).setIsRead(RssItem.READ);
+                for (int i = 0; i < mNoticeListAdapter.getCount(); i++) {
+                    mNoticeListAdapter.getItem(i).setIsRead(RssItem.READ);
                 }
-                mNoticeAdapter.notifyDataSetChanged();
+                mNoticeListAdapter.notifyDataSetChanged();
                 return true;
             }
         }
@@ -270,7 +276,7 @@ public class NoticeListFragment extends Fragment {
             }
         }
         setAdapter(noticeList, starredList);
-        mNoticeAdapter.notifyDataSetChanged();
+        mNoticeListAdapter.notifyDataSetChanged();
     }
 
     private BroadcastReceiver syncFinishedReceiver = new BroadcastReceiver() {
@@ -282,17 +288,22 @@ public class NoticeListFragment extends Fragment {
     };
 
     private void setAdapter(ArrayList<RssItem> noticeList, ArrayList<RssItem> starredList) {
-        mNoticeAdapter = new NoticeAdapter(getContext(),noticeList, starredList);
-        mNoticeList.setAdapter(mNoticeAdapter);
+        mNoticeListAdapter = new NoticeListAdapter(getContext(),noticeList, starredList);
+        mNoticeList.setAdapter(mNoticeListAdapter);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setMessage("학교 서버가 너무 느려요...");
         if (isMain || isLibrary) {
-            if (mNoticeAdapter.getCount() == 0) {
+            if (mNoticeListAdapter.getCount() == 0) {
                 progressDialog.show();
             } else {
                 progressDialog.dismiss();
             }
         }
+
+    }
+
+    @Override
+    public void setPresenter(NoticeListContract.Presenter presenter) {
 
     }
 }

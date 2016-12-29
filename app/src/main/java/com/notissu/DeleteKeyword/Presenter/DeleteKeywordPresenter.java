@@ -1,5 +1,6 @@
 package com.notissu.DeleteKeyword.Presenter;
 
+import android.support.annotation.NonNull;
 import android.view.Menu;
 
 import com.notissu.Database.KeywordProvider;
@@ -8,7 +9,7 @@ import com.notissu.DeleteKeyword.Adapter.DeleteKeywordAdapterContract;
 import com.notissu.Model.NavigationMenu;
 
 import java.util.ArrayList;
-
+import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Created by forhack on 2016-12-28.
  */
@@ -18,19 +19,17 @@ public class DeleteKeywordPresenter implements DeleteKeywordContract.Presenter {
     private DeleteKeywordAdapterContract.Model adapterModel;
     private DeleteKeywordAdapterContract.View adapterView;
 
-    @Override
-    public void attachView(DeleteKeywordContract.View view) {
-        this.view = view;
+    public DeleteKeywordPresenter(@NonNull DeleteKeywordContract.View view,
+                                  @NonNull DeleteKeywordAdapterContract.Model adapterModel,
+                                  @NonNull DeleteKeywordAdapterContract.View adapterView) {
+        this.view = checkNotNull(view,"DeleteKeywordContract.View cannot be null");
+        this.adapterModel = checkNotNull(adapterModel,"DeleteKeywordAdapterContract.Model cannot be null");
+        this.adapterView = checkNotNull(adapterView,"DeleteKeywordAdapterContract.View cannot be null");
     }
 
     @Override
-    public void setAdapterView(DeleteKeywordAdapterContract.View adapterView) {
-        this.adapterView = adapterView;
-    }
-
-    @Override
-    public void setAdapterModel(DeleteKeywordAdapterContract.Model adapterModel) {
-        this.adapterModel = adapterModel;
+    public void start() {
+        loadKeyword();
     }
 
     @Override
@@ -80,8 +79,5 @@ public class DeleteKeywordPresenter implements DeleteKeywordContract.Presenter {
         }
     }
 
-    @Override
-    public void detachView() {
-        view = null;
-    }
+
 }

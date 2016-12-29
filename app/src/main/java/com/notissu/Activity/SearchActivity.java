@@ -10,7 +10,7 @@ import android.view.View;
 
 import com.notissu.Database.KeywordProvider;
 import com.notissu.Database.KeywordProviderImp;
-import com.notissu.Fragment.NoticeListFragment;
+import com.notissu.NoticeList.View.NoticeListFragment;
 import com.notissu.Model.RssItem;
 import com.notissu.R;
 

@@ -7,8 +7,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.notissu.Database.MainProvider;
 import com.notissu.Database.MainProviderImp;
-import com.notissu.Database.RssDatabase;
-import com.notissu.Fragment.NoticeListFragment;
+import com.notissu.NoticeList.View.NoticeListFragment;
 import com.notissu.Model.RssItem;
 
 import java.util.ArrayList;

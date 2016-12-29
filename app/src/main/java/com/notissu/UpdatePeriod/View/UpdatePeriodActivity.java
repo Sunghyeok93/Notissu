@@ -1,6 +1,7 @@
 package com.notissu.UpdatePeriod.View;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -16,6 +17,8 @@ import com.shawnlin.numberpicker.NumberPicker;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class UpdatePeriodActivity extends AppCompatActivity implements UpdatePeriodContract.View{
     public static final String TAG = LogUtils.makeLogTag(UpdatePeriodActivity.class);
@@ -41,8 +44,7 @@ public class UpdatePeriodActivity extends AppCompatActivity implements UpdatePer
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        presenter = new UpdatePeriodPresenter();
-        presenter.attachView(this);
+        presenter = new UpdatePeriodPresenter(this);
         presenter.loadTime(getApplicationContext());
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -51,12 +53,6 @@ public class UpdatePeriodActivity extends AppCompatActivity implements UpdatePer
                 finish();
             }
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        presenter.detachView();
     }
 
     @OnClick(R.id.update_period_btn_update)
@@ -70,5 +66,10 @@ public class UpdatePeriodActivity extends AppCompatActivity implements UpdatePer
         mTvPeriod.setText(hour + "시간 " + minute + "분");
         mNpHour.setValue(hour);
         mNpMinute.setValue(minute);
+    }
+
+    @Override
+    public void setPresenter(@NonNull UpdatePeriodContract.Presenter presenter) {
+        this.presenter = checkNotNull(presenter);
     }
 }

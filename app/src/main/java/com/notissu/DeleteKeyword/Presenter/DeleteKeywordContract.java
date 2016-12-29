@@ -2,6 +2,8 @@ package com.notissu.DeleteKeyword.Presenter;
 
 import android.content.Context;
 
+import com.notissu.BasePresenter;
+import com.notissu.BaseView;
 import com.notissu.DeleteKeyword.Adapter.DeleteKeywordAdapter;
 import com.notissu.DeleteKeyword.Adapter.DeleteKeywordAdapterContract;
 
@@ -10,19 +12,12 @@ import com.notissu.DeleteKeyword.Adapter.DeleteKeywordAdapterContract;
  */
 
 public interface DeleteKeywordContract {
-    interface View {
+    interface View extends BaseView<Presenter> {
 
         void showTextNoKeyword();
     }
 
-    interface Presenter {
-        void attachView(View view);
-
-        void setAdapterModel(DeleteKeywordAdapterContract.Model adapterModel);
-
-        void setAdapterView(DeleteKeywordAdapterContract.View adapterView);
-
-        void detachView();
+    interface Presenter extends BasePresenter{
 
         void loadKeyword();
 

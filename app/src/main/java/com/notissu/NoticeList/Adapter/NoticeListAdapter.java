@@ -1,9 +1,8 @@
-package com.notissu.Adapter;
+package com.notissu.NoticeList.Adapter;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -15,7 +14,6 @@ import com.notissu.Database.StarredProvider;
 import com.notissu.Database.StarredProviderImp;
 import com.notissu.Model.RssItem;
 import com.notissu.R;
-import com.notissu.Database.RssDatabase;
 import com.notissu.Util.LogUtils;
 
 import java.util.ArrayList;
@@ -24,8 +22,8 @@ import java.util.ArrayList;
  * Created by forhack on 2016-10-18.
  */
 
-public class NoticeAdapter extends ArrayAdapter<RssItem> {
-    private static final String TAG = LogUtils.makeLogTag(NoticeAdapter.class);
+public class NoticeListAdapter extends ArrayAdapter<RssItem> {
+    private static final String TAG = LogUtils.makeLogTag(NoticeListAdapter.class);
     Context context;
     ViewHolder viewHolder;
     //ListView에 보여줄 Item
@@ -36,7 +34,7 @@ public class NoticeAdapter extends ArrayAdapter<RssItem> {
     boolean[] isChecked;
 
 
-    public NoticeAdapter(Context context, ArrayList<RssItem> noticeList, ArrayList<RssItem> starredList) {
+    public NoticeListAdapter(Context context, ArrayList<RssItem> noticeList, ArrayList<RssItem> starredList) {
         super(context, android.R.layout.simple_expandable_list_item_2);
         this.context = context;
         this.noticeList = noticeList;

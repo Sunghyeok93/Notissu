@@ -1,6 +1,7 @@
 package com.notissu.DeleteKeyword.View;
 
 import android.content.DialogInterface;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +23,8 @@ import com.notissu.View.Interface.OnRecyclerItemClickListener;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKeywordContract.View {
     private static final String TAG = LogUtils.makeLogTag(DeleteKeywordActivity.class);
@@ -48,16 +51,13 @@ public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKe
 
         DeleteKeywordAdapter deleteKeywordAdapter = new DeleteKeywordAdapter(this);
 
-        presenter = new DeleteKeywordPresenter();
-        presenter.attachView(this);
-        presenter.setAdapterModel(deleteKeywordAdapter);
-        presenter.setAdapterView(deleteKeywordAdapter);
+        presenter = new DeleteKeywordPresenter(this,deleteKeywordAdapter,deleteKeywordAdapter);
+        presenter.start();
 
         mRvKeyword.setLayoutManager(new LinearLayoutManager(DeleteKeywordActivity.this));
         mRvKeyword.addItemDecoration(new DividerItemDecoration(mRvKeyword.getContext(),DividerItemDecoration.VERTICAL));
         mRvKeyword.setAdapter(deleteKeywordAdapter);
 
-        presenter.loadKeyword();
         deleteKeywordAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(RecyclerView.Adapter adapter, final int position) {
@@ -77,12 +77,6 @@ public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKe
                 finish();
             }
         });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        presenter.detachView();
     }
 
     //전체삭제 버튼
@@ -113,5 +107,10 @@ public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKe
         });
         alert.setMessage("키워드를 삭제 하시겠습니까?");
         alert.show();
+    }
+
+    @Override
+    public void setPresenter(@NonNull DeleteKeywordContract.Presenter presenter) {
+        this.presenter = checkNotNull(presenter);
     }
 }
