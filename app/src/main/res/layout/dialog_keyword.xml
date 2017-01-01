@@ -9,7 +9,6 @@
     android:paddingRight="16dp">
 
     <TextView
-        android:id="@+id/text_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -21,14 +20,14 @@
         android:layout_height="wrap_content"
         android:hint="키워드를 입력하세요."
         android:textSize="13sp"
-        android:id="@+id/edittext_keyword_set"
+        android:id="@+id/add_keyword_et_input"
         />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:id="@+id/button_keyword_set"
+        android:id="@+id/add_keyword_btn_add"
         android:text = "추 가"
         android:onClick = "KeywordClick"
 />
