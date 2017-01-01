@@ -25,6 +25,7 @@ public class DeleteKeywordPresenter implements DeleteKeywordContract.Presenter {
         this.view = checkNotNull(view,"DeleteKeywordContract.View cannot be null");
         this.adapterModel = checkNotNull(adapterModel,"DeleteKeywordAdapterContract.Model cannot be null");
         this.adapterView = checkNotNull(adapterView,"DeleteKeywordAdapterContract.View cannot be null");
+        view.setPresenter(this);
     }
 
     @Override

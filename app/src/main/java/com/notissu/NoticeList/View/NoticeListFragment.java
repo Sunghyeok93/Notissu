@@ -5,13 +5,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,12 +20,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import com.notissu.Activity.MainActivity;
 import com.notissu.Activity.SearchActivity;
+import com.notissu.DeleteKeyword.View.DeleteKeywordActivity;
+import com.notissu.Dialog.RssItemDialog;
 import com.notissu.NoticeList.Adapter.NoticeListAdapter;
 import com.notissu.Database.KeywordProvider;
 import com.notissu.Database.KeywordProviderImp;
@@ -32,17 +31,15 @@ import com.notissu.Database.LibraryProvider;
 import com.notissu.Database.LibraryProviderImp;
 import com.notissu.Database.MainProvider;
 import com.notissu.Database.MainProviderImp;
-import com.notissu.Database.NoticeProvider;
 import com.notissu.Database.StarredProvider;
 import com.notissu.Database.StarredProviderImp;
-import com.notissu.Dialog.RssItemDialog;
-import com.notissu.Model.NavigationMenu;
 import com.notissu.Model.RssItem;
 import com.notissu.NoticeList.Presenter.NoticeListContract;
+import com.notissu.NoticeList.Presenter.NoticeListPresenter;
 import com.notissu.R;
 import com.notissu.SyncAdapter.SyncAdapter;
-import com.notissu.SyncAdapter.SyncUtil;
 import com.notissu.Util.LogUtils;
+import com.notissu.View.Interface.OnRecyclerItemClickListener;
 
 import java.util.ArrayList;
 
@@ -54,52 +51,36 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
 
     public static final String KEY_SEARCH_QUERY = "KEY_SEARCH_QUERY";
 
-    private static final String KEY_NOTICE_ROWS = "KEY_NOTICE_ROWS";
-    private static final String KEY_TITLE= "KEY_TITLE";
-    private static final String KEY_CATEGORY= "KEY_CATEGORY";
-    private static final String KEY_FLAG= "KEY_FLAG";
+    public static final String KEY_TITLE= "KEY_TITLE";
+    public static final String KEY_CATEGORY= "KEY_CATEGORY";
+    public static final String KEY_FLAG= "KEY_FLAG";
 
     @BindView(R.id.notice_list)
-    ListView mNoticeList;
+    RecyclerView mNoticeList;
     @BindView(R.id.notice_swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    NoticeListAdapter mNoticeListAdapter;
     SearchView mSearchView;
 
     //Progress dialog
-    ProgressDialog progressDialog;
-
-    //이 List가 Main인지 Library 인지 starred인지 keyword인지 구별 flag
-    int flag;
-    String title;
-    //main일 때만 사용하는 멤버변수, 어느 카테고리인지 알려준다.
-    String category;
-
-    boolean isMain;
-    boolean isLibrary;
-    boolean isStarred;
-    boolean isKeyword;
-    boolean isSearch;
+    ProgressDialog mProgressDialog;
 
     NoticeListContract.Presenter presenter;
 
-    public static Fragment newInstance(int flag, String title, String category, ArrayList<RssItem> noticeRows) {
+    public static Fragment newInstance(int flag, String title, int category) {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_TITLE, title);
-        bundle.putString(KEY_CATEGORY, category);
+        bundle.putInt(KEY_CATEGORY, category);
         bundle.putInt(KEY_FLAG,flag);
-        bundle.putParcelableArrayList(KEY_NOTICE_ROWS,noticeRows);
         Fragment fragment = new NoticeListFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    public static Fragment newInstance(int flag, String title, ArrayList<RssItem> noticeRows) {
+    public static Fragment newInstance(int flag, String title) {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_TITLE,title);
         bundle.putInt(KEY_FLAG,flag);
-        bundle.putParcelableArrayList(KEY_NOTICE_ROWS,noticeRows);
         Fragment fragment = new NoticeListFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -110,126 +91,98 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_notice_list, container, false);
-        // Inflate the layout for this fragment
         ButterKnife.bind(this, view);
+        mProgressDialog = new ProgressDialog(getContext());
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setMessage("학교 서버가 너무 느려요...");
 
-        initWidget();
-        settingWidget();
-        settingListener();
+        NoticeListAdapter noticeListAdapter = new NoticeListAdapter(getContext());
+        mNoticeList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mNoticeList.addItemDecoration(new DividerItemDecoration(mNoticeList.getContext(),DividerItemDecoration.VERTICAL));
+        mNoticeList.setAdapter(noticeListAdapter);
+        presenter = new NoticeListPresenter(getArguments(), this, noticeListAdapter, noticeListAdapter);
+        presenter.start();
+
+        noticeListAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, RecyclerView.Adapter adapter, int position) {
+                presenter.onItemClick(itemView, position);
+            }
+        });
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                presenter.fetchNotice();
+                presenter.refreshList();
+            }
+        });
 
         return view;
     }
 
-    private void initWidget() {
-        progressDialog = new ProgressDialog(getContext());
-    }
-
-    private void settingWidget() {
-        Bundle bundle = getArguments();
-        title = bundle.getString(KEY_TITLE);
+    @Override
+    public void showTitle(String title) {
         getActivity().setTitle(title);
-        flag = bundle.getInt(KEY_FLAG);
-        isMain = flag == MainActivity.FLAG_MAIN_NOTICE;
-        isLibrary = flag == MainActivity.FLAG_LIBRARY_NOTICE;
-        isStarred = flag == MainActivity.FLAG_STARRED;
-        isKeyword = flag == MainActivity.FLAG_KEYWORD;
-        isSearch = flag == MainActivity.FLAG_SEARCH;
-        category = bundle.getString(KEY_CATEGORY);
-
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setMessage("학교 서버가 너무 느려요...");
-
-        //ListView에 집어넣을 데이터 List
-        ArrayList<RssItem> noticeList = bundle.getParcelableArrayList(KEY_NOTICE_ROWS);
-        StarredProvider starredProvider = new StarredProviderImp();
-        //즐겨찾기에 추가된 List
-        ArrayList<RssItem> starredList = new ArrayList<>(starredProvider.getStarred());
-        setAdapter(noticeList, starredList);
     }
 
-    private void settingListener() {
-        mNoticeList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                FragmentManager manager = getFragmentManager();
-                //읽음표시로 전환하고
-                RssItem rssitem = mNoticeListAdapter.getItem(i);
-                rssitem.setIsRead(RssItem.READ);
-                MainProvider mainProvider = new MainProviderImp();
-                LibraryProvider libraryProvider = new LibraryProviderImp();
-                //RssItem Update
-                //두개를 다 업데이트 함으로써 어떤걸 업데이트할지 결정된다.
-                mainProvider.updateNotice(rssitem);
-                libraryProvider.updateNotice(rssitem);
-                //Navigation 업데이트
-                NavigationMenu navigationMenu = NavigationMenu.getInstance();
-                navigationMenu.setMenuNotReadCount();
-                //TextView 업데이트
-                TextView tvSubject = (TextView) view.findViewById(R.id.notice_tv_subject);
-                tvSubject.setTextColor(Color.parseColor("#aaaaaa"));
-                tvSubject.setTypeface(Typeface.DEFAULT);
-                //Dialog 시작
-                DialogFragment mydialog = RssItemDialog.newInstance(rssitem);
-                mydialog.show(manager,"");
-            }
-
-        });
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refresh();
-            }
-        });
-
+    @Override
+    public void showProgress() {
+        mProgressDialog.show();
     }
 
+    @Override
+    public void hideProgress() {
+        mProgressDialog.dismiss();
+    }
+
+    @Override
+    public void showRssDialog(RssItem rssitem) {
+        DialogFragment mydialog = RssItemDialog.newInstance(rssitem);
+        mydialog.show(getFragmentManager(),"");
+    }
+
+    @Override
+    public void showSearch(String query) {
+        Intent intent = new Intent(getContext(), SearchActivity.class);
+        intent.putExtra(KEY_SEARCH_QUERY,query);
+        getActivity().startActivity(intent);
+        mSearchView.clearFocus();
+    }
+
+    @Override
+    public void showOptionMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main,menu);
+        mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                presenter.addSearch(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public void hideRefreshing() {
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if (isMain || isLibrary) {
-            inflater.inflate(R.menu.main,menu);
-            mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-            mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    Intent intent = new Intent(getContext(), SearchActivity.class);
-                    intent.putExtra(KEY_SEARCH_QUERY,query);
-                    getActivity().startActivity(intent);
-                    mSearchView.clearFocus();
-                    return true;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    return false;
-                }
-            });
-
-        }
+        presenter.loadOptionMenu(menu,inflater);
         super.onCreateOptionsMenu(menu,inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_read_all) {
-            if (isMain || isLibrary) {
-                NoticeProvider noticeProvider = null;
-                if (isMain) {
-                    noticeProvider = new MainProviderImp();
-                } else if (isLibrary) {
-                    noticeProvider = new LibraryProviderImp();
-                }
-                noticeProvider.updateAllReadCount();
-                //Navigation 업데이트
-                NavigationMenu navigationMenu = NavigationMenu.getInstance();
-                navigationMenu.setMenuNotReadCount();
-                //TextView 업데이트
-                for (int i = 0; i < mNoticeListAdapter.getCount(); i++) {
-                    mNoticeListAdapter.getItem(i).setIsRead(RssItem.READ);
-                }
-                mNoticeListAdapter.notifyDataSetChanged();
-                return true;
-            }
+            presenter.readAllItem();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -247,63 +200,16 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
         getActivity().unregisterReceiver(syncFinishedReceiver);
     }
 
-    private void refresh() {
-        if (isMain || isLibrary) {
-            SyncUtil.TriggerRefresh();
-        }
-        listRefresh();
-        mSwipeRefreshLayout.setRefreshing(false);
-    }
-
-    private void listRefresh() {
-        StarredProvider starredProvider = new StarredProviderImp();
-        ArrayList<RssItem> noticeList = null;
-        ArrayList<RssItem> starredList = new ArrayList<>(starredProvider.getStarred());
-        if (isMain || isLibrary) {
-            if (isMain) {
-                MainProvider mainProvider = new MainProviderImp();
-                noticeList = new ArrayList<>(mainProvider.getSsuNotice(category));
-            } else if (isLibrary) {
-                LibraryProvider libraryProvider = new LibraryProviderImp();
-                noticeList = new ArrayList<>(libraryProvider.getNotice());
-            }
-        } else if (isStarred || isKeyword) {
-            if (isStarred) {
-                noticeList = starredList;
-            } else if (isKeyword) {
-                KeywordProvider keywordProvider = new KeywordProviderImp();
-                noticeList = new ArrayList<>(keywordProvider.getKeyword(title));
-            }
-        }
-        setAdapter(noticeList, starredList);
-        mNoticeListAdapter.notifyDataSetChanged();
-    }
-
     private BroadcastReceiver syncFinishedReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            listRefresh();
+            presenter.refreshList();
         }
     };
 
-    private void setAdapter(ArrayList<RssItem> noticeList, ArrayList<RssItem> starredList) {
-        mNoticeListAdapter = new NoticeListAdapter(getContext(),noticeList, starredList);
-        mNoticeList.setAdapter(mNoticeListAdapter);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setMessage("학교 서버가 너무 느려요...");
-        if (isMain || isLibrary) {
-            if (mNoticeListAdapter.getCount() == 0) {
-                progressDialog.show();
-            } else {
-                progressDialog.dismiss();
-            }
-        }
-
-    }
-
     @Override
-    public void setPresenter(NoticeListContract.Presenter presenter) {
-
+    public void setPresenter(@NonNull NoticeListContract.Presenter presenter) {
+        this.presenter = presenter;
     }
 }

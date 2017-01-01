@@ -7,6 +7,10 @@ import java.util.ArrayList;
  */
 
 public interface DeleteKeywordAdapterContract {
+    interface View {
+        void refresh();
+    }
+
     interface Model {
         int getCount();
 
@@ -18,9 +22,4 @@ public interface DeleteKeywordAdapterContract {
 
         void removeAll();
     }
-
-    interface View {
-        void refresh();
-    }
-
 }

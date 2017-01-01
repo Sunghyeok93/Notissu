@@ -9,9 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.notissu.Adapter.NoticeFragmentPagerAdapter;
+import com.notissu.Database.MainProvider;
 import com.notissu.R;
 import com.notissu.Util.LogUtils;
-import com.notissu.Util.ResString;
 
 public class NoticeTabFragment extends Fragment {
     private static final String TAG= LogUtils.makeLogTag(NoticeTabFragment.class);
@@ -52,14 +52,14 @@ public class NoticeTabFragment extends Fragment {
         String title = getArguments().getString(KEY_TITLE);
         int flag = getArguments().getInt(KEY_FLAG);
 
-        String[] categoryList = ResString.getInstance().getStringArray(ResString.RES_SSU_NOTICES);
+        String[] categoryList = MainProvider.NOTICE_CATEGORY;
 
         for (int i=0;i<categoryList.length;i++) {
             tabLayout.addTab(tabLayout.newTab().setText(categoryList[i]));
         }
 
         NoticeFragmentPagerAdapter noticeFragmentPagerAdapter =
-        new NoticeFragmentPagerAdapter(getChildFragmentManager(), getContext(), flag, title, tabLayout.getTabCount(), categoryList);
+        new NoticeFragmentPagerAdapter(getChildFragmentManager(), flag, title, tabLayout.getTabCount());
 
         viewPager.setAdapter(noticeFragmentPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));

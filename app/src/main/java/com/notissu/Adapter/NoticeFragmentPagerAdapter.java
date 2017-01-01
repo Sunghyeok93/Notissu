@@ -20,27 +20,21 @@ import static com.notissu.Util.LogUtils.makeLogTag;
 
 public class NoticeFragmentPagerAdapter extends FragmentStatePagerAdapter{
     private static final String TAG = makeLogTag(NoticeFragmentPagerAdapter.class);
-    private Context mContext;
     private String mTitle;
     private int tabCount;
     private int flag;
-    private String[] categoryList;
 
 
-    public NoticeFragmentPagerAdapter(FragmentManager fm, Context context, int flag, String title, int tabCount, String[] categoryList) {
+    public NoticeFragmentPagerAdapter(FragmentManager fm, int flag, String title, int tabCount) {
         super(fm);
-        this.mContext = context;
         this.mTitle = title;
         this.tabCount = tabCount;
         this.flag = flag;
-        this.categoryList = categoryList;
     }
 
     @Override
     public Fragment getItem(int position) {
-        MainProvider mainProvider = new MainProviderImp();
-        ArrayList<RssItem> noticeRows = new ArrayList<>(mainProvider.getSsuNotice(categoryList[position]));
-        return NoticeListFragment.newInstance(flag, mTitle, categoryList[position], noticeRows);
+        return NoticeListFragment.newInstance(flag, mTitle, position);
     }
 
 

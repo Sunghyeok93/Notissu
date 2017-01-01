@@ -18,6 +18,7 @@ public class UpdatePeriodPresenter implements UpdatePeriodContract.Presenter {
 
     public UpdatePeriodPresenter(@NonNull UpdatePeriodContract.View view) {
         this.view = checkNotNull(view,"UpdatePeriodContract.View cannot be null");
+        view.setPresenter(this);
     }
 
     @Override

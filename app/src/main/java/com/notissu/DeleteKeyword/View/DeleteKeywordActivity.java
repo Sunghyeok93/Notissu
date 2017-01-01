@@ -60,7 +60,7 @@ public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKe
 
         deleteKeywordAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
             @Override
-            public void onItemClick(RecyclerView.Adapter adapter, final int position) {
+            public void onItemClick(View itemView, RecyclerView.Adapter adapter, final int position) {
                 showDeleteDialog(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

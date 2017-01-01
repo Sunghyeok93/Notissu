@@ -40,13 +40,13 @@ public class DeleteKeywordAdapter extends RecyclerView.Adapter<DeleteKeywordAdap
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.tvKeyword.setText(getItem(position));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (onRecyclerItemClickListener != null) {
-                    onRecyclerItemClickListener.onItemClick(DeleteKeywordAdapter.this, position);
+                    onRecyclerItemClickListener.onItemClick(holder.itemView, DeleteKeywordAdapter.this, position);
                 }
             }
         });
