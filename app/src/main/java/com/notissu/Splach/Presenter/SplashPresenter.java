@@ -1,14 +1,11 @@
 package com.notissu.Splach.Presenter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 
-import com.notissu.Activity.MainActivity;
 import com.notissu.Database.RssDatabase;
-import com.notissu.Splach.View.SplashActivity;
 import com.notissu.SyncAdapter.SyncUtil;
 import com.notissu.Util.ResString;
 import com.notissu.Util.TestUtils;

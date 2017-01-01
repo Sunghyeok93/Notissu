@@ -6,7 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import com.notissu.Activity.MainActivity;
+import com.notissu.Main.View.MainActivity;
 import com.notissu.R;
 import com.notissu.Util.ResString;
 

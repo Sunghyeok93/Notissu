@@ -2,12 +2,11 @@ package com.notissu.Splach.View;
 
 import android.content.Intent;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.crashlytics.android.Crashlytics;
-import com.notissu.Activity.MainActivity;
+import com.notissu.Main.View.MainActivity;
 import com.notissu.R;
 import com.notissu.Splach.Presenter.SplashContract;
 import com.notissu.Splach.Presenter.SplashPresenter;

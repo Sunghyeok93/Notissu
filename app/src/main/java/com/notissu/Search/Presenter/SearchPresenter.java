@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 
-import com.notissu.Activity.MainActivity;
+import com.notissu.Main.View.MainActivity;
 import com.notissu.NoticeList.View.NoticeListFragment;
 
 import static com.google.common.base.Preconditions.checkNotNull;

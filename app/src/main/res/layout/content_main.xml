@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.notissu.Activity.MainActivity"
+    tools:context="com.notissu.Main.View.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
     <include layout="@layout/part_notice_list"/>

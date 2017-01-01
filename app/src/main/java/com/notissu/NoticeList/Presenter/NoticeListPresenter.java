@@ -23,11 +23,11 @@ import com.notissu.SyncAdapter.SyncUtil;
 import java.util.ArrayList;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.notissu.Activity.MainActivity.FLAG_KEYWORD;
-import static com.notissu.Activity.MainActivity.FLAG_LIBRARY_NOTICE;
-import static com.notissu.Activity.MainActivity.FLAG_MAIN_NOTICE;
-import static com.notissu.Activity.MainActivity.FLAG_SEARCH;
-import static com.notissu.Activity.MainActivity.FLAG_STARRED;
+import static com.notissu.Main.View.MainActivity.FLAG_KEYWORD;
+import static com.notissu.Main.View.MainActivity.FLAG_LIBRARY_NOTICE;
+import static com.notissu.Main.View.MainActivity.FLAG_MAIN_NOTICE;
+import static com.notissu.Main.View.MainActivity.FLAG_SEARCH;
+import static com.notissu.Main.View.MainActivity.FLAG_STARRED;
 import static com.notissu.NoticeList.View.NoticeListFragment.KEY_CATEGORY;
 import static com.notissu.NoticeList.View.NoticeListFragment.KEY_FLAG;
 import static com.notissu.NoticeList.View.NoticeListFragment.KEY_TITLE;
