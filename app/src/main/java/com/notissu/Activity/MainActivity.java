@@ -26,7 +26,7 @@ import com.notissu.Database.LibraryProvider;
 import com.notissu.Database.LibraryProviderImp;
 import com.notissu.Database.StarredProvider;
 import com.notissu.Database.StarredProviderImp;
-import com.notissu.Dialog.AddKeywordDialog;
+import com.notissu.AddKeywordDialog.View.AddKeywordDialog;
 import com.notissu.NoticeList.View.NoticeListFragment;
 import com.notissu.NoticeTab.View.NoticeTabFragment;
 import com.notissu.Setting.SettingFragment;

@@ -22,7 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.notissu.Search.View.SearchActivity;
-import com.notissu.Dialog.RssItemDialog;
+import com.notissu.RssDialog.View.RssItemDialog;
 import com.notissu.NoticeList.Adapter.NoticeListAdapter;
 import com.notissu.Model.RssItem;
 import com.notissu.NoticeList.Presenter.NoticeListContract;
