@@ -1,12 +1,9 @@
-package com.notissu.Fragment;
+package com.notissu.Setting;
 
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceFragmentCompat;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.notissu.R;
 import com.notissu.Util.LogUtils;

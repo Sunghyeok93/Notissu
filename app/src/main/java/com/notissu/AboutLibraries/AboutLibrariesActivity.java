@@ -5,8 +5,6 @@ import android.os.Bundle;
 import com.mikepenz.aboutlibraries.Libs;
 import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.mikepenz.aboutlibraries.ui.LibsActivity;
-import com.notissu.Fragment.SettingFragment;
-import com.notissu.R;
 import com.notissu.Util.ResString;
 
 public class AboutLibrariesActivity extends LibsActivity {
