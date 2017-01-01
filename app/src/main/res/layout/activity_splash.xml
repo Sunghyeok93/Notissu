@@ -4,7 +4,7 @@
     android:id="@+id/activity_splash"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.notissu.Activity.SplashActivity">
+    tools:context="com.notissu.Splach.View.SplashActivity">
 
     <ImageView
         android:layout_width="200dp"
