@@ -1,4 +1,4 @@
-package com.notissu.Fragment;
+package com.notissu.NoticeTab.View;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -8,22 +8,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.notissu.Adapter.NoticeFragmentPagerAdapter;
 import com.notissu.Database.MainProvider;
+import com.notissu.NoticeTab.Adapter.NoticeTabPagerAdapter;
+import com.notissu.NoticeTab.Presenter.NoticeTabContract;
+import com.notissu.NoticeTab.Presenter.NoticeTabPresenter;
 import com.notissu.R;
 import com.notissu.Util.LogUtils;
 
-public class NoticeTabFragment extends Fragment {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class NoticeTabFragment extends Fragment implements NoticeTabContract.View{
     private static final String TAG= LogUtils.makeLogTag(NoticeTabFragment.class);
-    private static final String KEY_TITLE= "KEY_TITLE";
-    private static final String KEY_FLAG= "KEY_FLAG";
+    public static final String KEY_TITLE= "KEY_TITLE";
+    public static final String KEY_FLAG= "KEY_FLAG";
+    @BindView(R.id.tab_tab_layout)
     TabLayout tabLayout;
+    @BindView(R.id.tab_view_pager)
     ViewPager viewPager;
-    View rootView;
+
+    NoticeTabContract.Presenter presenter;
 
     public static NoticeTabFragment newInstance(int flag, String title) {
         Bundle args = new Bundle();
-
         args.putInt(KEY_FLAG,flag);
         args.putString(KEY_TITLE,title);
         NoticeTabFragment fragment = new NoticeTabFragment();
@@ -34,38 +41,17 @@ public class NoticeTabFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_notice_tab, container, false);
+        View view = inflater.inflate(R.layout.fragment_notice_tab, container, false);
+        ButterKnife.bind(this, view);
 
-        initWidget();
-        settingWidget();
-        settingListener();
-        return rootView;
-    }
+        NoticeTabPagerAdapter noticeTabPagerAdapter = new NoticeTabPagerAdapter(getChildFragmentManager());
 
-    private void initWidget() {
-        tabLayout = (TabLayout) rootView.findViewById(R.id.tab_tab_layout);
-        viewPager = (ViewPager) rootView.findViewById(R.id.tab_view_pager);
-    }
+        presenter = new NoticeTabPresenter(getArguments(),this, noticeTabPagerAdapter, noticeTabPagerAdapter);
+        presenter.start();
 
-    private void settingWidget() {
-        //타이틀 변경
-        String title = getArguments().getString(KEY_TITLE);
-        int flag = getArguments().getInt(KEY_FLAG);
-
-        String[] categoryList = MainProvider.NOTICE_CATEGORY;
-
-        for (int i=0;i<categoryList.length;i++) {
-            tabLayout.addTab(tabLayout.newTab().setText(categoryList[i]));
-        }
-
-        NoticeFragmentPagerAdapter noticeFragmentPagerAdapter =
-        new NoticeFragmentPagerAdapter(getChildFragmentManager(), flag, title, tabLayout.getTabCount());
-
-        viewPager.setAdapter(noticeFragmentPagerAdapter);
+        viewPager.setAdapter(noticeTabPagerAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-    }
 
-    private void settingListener() {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -82,7 +68,24 @@ public class NoticeTabFragment extends Fragment {
 
             }
         });
+        return view;
     }
 
+    @Override
+    public void setPresenter(NoticeTabContract.Presenter presenter) {
+        this.presenter = presenter;
+    }
 
+    @Override
+    public void addTabs() {
+        String[] categoryList = MainProvider.NOTICE_CATEGORY;
+        for (int i = 0; i<categoryList.length; i++) {
+            tabLayout.addTab(tabLayout.newTab().setText(categoryList[i]));
+        }
+    }
+
+    @Override
+    public int getTabCount() {
+        return tabLayout.getTabCount();
+    }
 }

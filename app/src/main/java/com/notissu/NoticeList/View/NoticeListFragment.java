@@ -100,6 +100,7 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
         mNoticeList.setLayoutManager(new LinearLayoutManager(getContext()));
         mNoticeList.addItemDecoration(new DividerItemDecoration(mNoticeList.getContext(),DividerItemDecoration.VERTICAL));
         mNoticeList.setAdapter(noticeListAdapter);
+
         presenter = new NoticeListPresenter(getArguments(), this, noticeListAdapter, noticeListAdapter);
         presenter.start();
 

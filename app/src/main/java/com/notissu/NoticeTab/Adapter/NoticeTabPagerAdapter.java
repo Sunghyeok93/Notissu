@@ -1,16 +1,11 @@
-package com.notissu.Adapter;
+package com.notissu.NoticeTab.Adapter;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.notissu.Database.MainProvider;
-import com.notissu.Database.MainProviderImp;
-import com.notissu.NoticeList.View.NoticeListFragment;
 import com.notissu.Model.RssItem;
-
-import java.util.ArrayList;
+import com.notissu.NoticeList.View.NoticeListFragment;
 
 import static com.notissu.Util.LogUtils.makeLogTag;
 
@@ -18,18 +13,15 @@ import static com.notissu.Util.LogUtils.makeLogTag;
  * Created by forhack on 2016-10-21.
  */
 
-public class NoticeFragmentPagerAdapter extends FragmentStatePagerAdapter{
-    private static final String TAG = makeLogTag(NoticeFragmentPagerAdapter.class);
+public class NoticeTabPagerAdapter extends FragmentStatePagerAdapter
+        implements NoticeTabPagerAdapterContract.Model, NoticeTabPagerAdapterContract.View{
+    private static final String TAG = makeLogTag(NoticeTabPagerAdapter.class);
     private String mTitle;
     private int tabCount;
     private int flag;
 
-
-    public NoticeFragmentPagerAdapter(FragmentManager fm, int flag, String title, int tabCount) {
+    public NoticeTabPagerAdapter(FragmentManager fm) {
         super(fm);
-        this.mTitle = title;
-        this.tabCount = tabCount;
-        this.flag = flag;
     }
 
     @Override
@@ -37,6 +29,12 @@ public class NoticeFragmentPagerAdapter extends FragmentStatePagerAdapter{
         return NoticeListFragment.newInstance(flag, mTitle, position);
     }
 
+    @Override
+    public void setData(String title, int flag, int tabCount) {
+        this.mTitle = title;
+        this.flag = flag;
+        this.tabCount = tabCount;
+    }
 
     @Override
     public int getCount() {
