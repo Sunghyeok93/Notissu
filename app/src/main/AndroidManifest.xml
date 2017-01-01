@@ -73,7 +73,7 @@
         <activity
             android:name=".AboutLibraries.AboutLibrariesActivity"
             android:theme="@style/AppThemeNoActionBar" />
-        <activity android:name=".Activity.SearchActivity"
+        <activity android:name=".Search.View.SearchActivity"
             android:theme="@style/AppThemeNoActionBar"/>
         <meta-data
             android:name="io.fabric.ApiKey"

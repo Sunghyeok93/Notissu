@@ -21,18 +21,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.notissu.Activity.SearchActivity;
-import com.notissu.DeleteKeyword.View.DeleteKeywordActivity;
+import com.notissu.Search.View.SearchActivity;
 import com.notissu.Dialog.RssItemDialog;
 import com.notissu.NoticeList.Adapter.NoticeListAdapter;
-import com.notissu.Database.KeywordProvider;
-import com.notissu.Database.KeywordProviderImp;
-import com.notissu.Database.LibraryProvider;
-import com.notissu.Database.LibraryProviderImp;
-import com.notissu.Database.MainProvider;
-import com.notissu.Database.MainProviderImp;
-import com.notissu.Database.StarredProvider;
-import com.notissu.Database.StarredProviderImp;
 import com.notissu.Model.RssItem;
 import com.notissu.NoticeList.Presenter.NoticeListContract;
 import com.notissu.NoticeList.Presenter.NoticeListPresenter;
@@ -40,8 +31,6 @@ import com.notissu.R;
 import com.notissu.SyncAdapter.SyncAdapter;
 import com.notissu.Util.LogUtils;
 import com.notissu.View.Interface.OnRecyclerItemClickListener;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

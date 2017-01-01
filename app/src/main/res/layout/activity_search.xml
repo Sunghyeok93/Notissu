@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.notissu.Activity.SearchActivity">
+    tools:context="com.notissu.Search.View.SearchActivity">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/activity_search_abl"
+        android:id="@+id/search_abl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
