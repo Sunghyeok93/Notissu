@@ -7,7 +7,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
-import com.notissu.UpdatePeriod.View.UpdatePeriodActivity;
+import com.notissu.UI.UpdatePeriod.View.UpdatePeriodActivity;
 import com.notissu.Util.LogUtils;
 
 /**

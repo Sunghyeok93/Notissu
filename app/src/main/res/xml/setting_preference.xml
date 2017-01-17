@@ -7,14 +7,14 @@
             android:key="pf_folder_display_option"
             android:title="@string/setting_title_update_period">
             <intent
-                android:targetClass="com.notissu.UpdatePeriod.View.UpdatePeriodActivity"
+                android:targetClass="com.notissu.UI.UpdatePeriod.View.UpdatePeriodActivity"
                 android:targetPackage="com.notissu" />
         </android.support.v7.preference.Preference>
 
         <android.support.v7.preference.Preference
             android:title="@string/setting_title_delete_keyword">
             <intent
-                android:targetClass="com.notissu.DeleteKeyword.View.DeleteKeywordActivity"
+                android:targetClass="com.notissu.UI.DeleteKeyword.View.DeleteKeywordActivity"
                 android:targetPackage="com.notissu" />
         </android.support.v7.preference.Preference>
 
@@ -25,14 +25,14 @@
         <!--<android.support.v7.preference.Preference
             android:title="@string/setting_title_with_us">
             <intent
-                android:targetClass="com.notissu.WithUs.WithUsActivity"
+                android:targetClass="WithUsActivity"
                 android:targetPackage="com.notissu" />
             </android.support.v7.preference.Preference>-->
 
         <android.support.v7.preference.Preference
             android:title="@string/setting_title_about_libraries">
             <intent
-                android:targetClass="com.notissu.AboutLibraries.AboutLibrariesActivity"
+                android:targetClass="com.notissu.UI.AboutLibraries.AboutLibrariesActivity"
                 android:targetPackage="com.notissu" />
         </android.support.v7.preference.Preference>
 
