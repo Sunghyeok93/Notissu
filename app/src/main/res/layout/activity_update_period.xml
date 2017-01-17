@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.notissu.UpdatePeriod.View.UpdatePeriodActivity">
+    tools:context="com.notissu.UI.UpdatePeriod.View.UpdatePeriodActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/update_period_btn_abl"
