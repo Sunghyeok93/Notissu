@@ -3,6 +3,7 @@ package com.notissu.UI.WebView.Presenter;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.notissu.UI.NoticeList.View.NoticeListFragment;
 import com.notissu.UI.RssDialog.View.RssItemDialog;
 
 /**
@@ -21,11 +22,10 @@ public class WebViewPresenter implements WebViewContract.Presenter {
 
     @Override
     public void start() {
-        String title = mBundle.getString(RssItemDialog.KEY_TITLE);
+        String title = mBundle.getString(NoticeListFragment.KEY_RSS_TITLE);
         mView.setTitle(title);
 
-        String link = mBundle.getString(RssItemDialog.KEY_LINK);
-
+        String link = mBundle.getString(NoticeListFragment.KEY_RSS_LINK);
         mView.showWebView(link);
 
     }

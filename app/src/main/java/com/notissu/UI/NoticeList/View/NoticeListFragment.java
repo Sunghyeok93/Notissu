@@ -29,6 +29,7 @@ import com.notissu.UI.NoticeList.Presenter.NoticeListContract;
 import com.notissu.UI.NoticeList.Presenter.NoticeListPresenter;
 import com.notissu.R;
 import com.notissu.SyncAdapter.SyncAdapter;
+import com.notissu.UI.WebView.View.WebViewActivity;
 import com.notissu.Util.LogUtils;
 import com.notissu.View.Interface.OnRecyclerItemClickListener;
 
@@ -43,6 +44,9 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
     public static final String KEY_TITLE= "KEY_TITLE";
     public static final String KEY_CATEGORY= "KEY_CATEGORY";
     public static final String KEY_FLAG= "KEY_FLAG";
+
+    public static final String KEY_RSS_TITLE= "KEY_RSS_TITLE";
+    public static final String KEY_RSS_LINK= "KEY_RSS_LINK";
 
     @BindView(R.id.notice_list)
     RecyclerView mNoticeList;
@@ -127,12 +131,6 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
     }
 
     @Override
-    public void showRssDialog(RssItem rssitem) {
-        DialogFragment mydialog = RssItemDialog.newInstance(rssitem);
-        mydialog.show(getFragmentManager(),"");
-    }
-
-    @Override
     public void showSearch(String query) {
         Intent intent = new Intent(getContext(), SearchActivity.class);
         intent.putExtra(KEY_SEARCH_QUERY,query);
@@ -161,6 +159,14 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
     @Override
     public void hideRefreshing() {
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void showNotice(String title, String link) {
+        Intent intent = new Intent(getContext(), WebViewActivity.class);
+        intent.putExtra(KEY_RSS_LINK,link);
+        intent.putExtra(KEY_RSS_TITLE,title);
+        startActivity(intent);
     }
 
     @Override

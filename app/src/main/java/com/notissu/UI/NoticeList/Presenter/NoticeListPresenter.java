@@ -95,7 +95,7 @@ public class NoticeListPresenter implements NoticeListContract.Presenter{
         adapterView.setItemRead(itemView);
 
         //Dialog 시작
-        view.showRssDialog(rssitem);
+        view.showNotice(rssitem.getTitle(),rssitem.getLink());
 
     }
 

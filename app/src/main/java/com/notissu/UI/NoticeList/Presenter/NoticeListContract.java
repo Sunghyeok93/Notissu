@@ -19,13 +19,13 @@ public interface NoticeListContract {
 
         void hideProgress();
 
-        void showRssDialog(RssItem rssitem);
-
         void showSearch(String query);
 
         void showOptionMenu(Menu menu, MenuInflater inflater);
 
         void hideRefreshing();
+
+        void showNotice(String title, String link);
     }
 
     interface Presenter extends BasePresenter {
