@@ -1,7 +1,6 @@
 package com.notissu.UI.RssDialog.View;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -14,6 +13,7 @@ import com.notissu.Model.RssItem;
 import com.notissu.R;
 import com.notissu.UI.RssDialog.Presenter.RssItemContract;
 import com.notissu.UI.RssDialog.Presenter.RssItemPresenter;
+import com.notissu.UI.WebView.View.WebViewActivity;
 import com.notissu.Util.LogUtils;
 
 import butterknife.BindView;
@@ -26,6 +26,8 @@ import butterknife.ButterKnife;
 public class RssItemDialog extends DialogFragment implements RssItemContract.View{
     public static final String TAG = LogUtils.makeLogTag(RssItemDialog.class);
     public static final String KEY_RSSITEM = "KEY_RSSITEM";
+    public static final String KEY_LINK = "KEY_LINK";
+    public static final String KEY_TITLE = "KEY_TITLE";
     @BindView(R.id.rssitem_tv_title)
     TextView mTvTitle;
     @BindView(R.id.rssitem_tv_time)
@@ -78,10 +80,10 @@ public class RssItemDialog extends DialogFragment implements RssItemContract.Vie
     }
 
     @Override
-    public void showBrowser(String link) {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(link));
+    public void showBrowser(String title, String link) {
+        Intent intent = new Intent(getContext(), WebViewActivity.class);
+        intent.putExtra(KEY_LINK,link);
+        intent.putExtra(KEY_TITLE,title);
         startActivity(intent);
         dismiss();
     }

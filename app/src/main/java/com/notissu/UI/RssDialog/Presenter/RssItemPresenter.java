@@ -34,6 +34,6 @@ public class RssItemPresenter implements RssItemContract.Presenter {
 
     @Override
     public void addBrowser() {
-        view.showBrowser(rssitem.getLink());
+        view.showBrowser(rssitem.getTitle(), rssitem.getLink());
     }
 }

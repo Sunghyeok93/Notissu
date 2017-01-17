@@ -14,7 +14,7 @@ public interface RssItemContract {
 
         void showTime(String publishDateLong);
 
-        void showBrowser(String link);
+        void showBrowser(String title, String link);
     }
 
     interface Presenter extends BasePresenter {
