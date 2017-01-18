@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.notissu.UI.Search.View.SearchActivity;
-import com.notissu.UI.RssDialog.View.RssItemDialog;
 import com.notissu.UI.NoticeList.Adapter.NoticeListAdapter;
 import com.notissu.Model.RssItem;
 import com.notissu.UI.NoticeList.Presenter.NoticeListContract;

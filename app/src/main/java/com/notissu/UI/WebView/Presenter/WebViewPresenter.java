@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.notissu.UI.NoticeList.View.NoticeListFragment;
-import com.notissu.UI.RssDialog.View.RssItemDialog;
 
 /**
  * Created by forhack on 2017-01-17.
