@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/delete_keyword_btn_abl"
         android:layout_width="match_parent"
@@ -23,9 +23,10 @@
         android:id="@+id/delete_keyword_rl_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <ListView
-            android:id="@+id/delete_keyword_lv_keyword"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/delete_keyword_rv_keyword"
             android:layout_above="@+id/delete_keyword_ll_footer"
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
         <LinearLayout
@@ -43,10 +44,9 @@
 
 
     <TextView
-            android:text="등록된 키워드가 없습니다."
-            android:id = "@+id/delete_keyword_all"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+        android:text="등록된 키워드가 없습니다."
+        android:id = "@+id/delete_keyword_tv_no"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </LinearLayout>

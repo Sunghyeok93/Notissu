@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-        tools:context="com.notissu.Fragment.NoticeListFragment">
+        tools:context="com.notissu.UI.NoticeList.View.NoticeListFragment">
 
         <include
             layout="@layout/part_notice_list"

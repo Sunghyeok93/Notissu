@@ -36,22 +36,24 @@ public class MainProviderImp implements MainProvider {
     @Override
     public List<RssItem> getSsuNotice(String category) {
         switch (category) {
-            case "전체":
-                return getNotice(NOTICE_SSU_ALL);
-            case "학사":
-                return getNotice(NOTICE_SSU_HACKSA);
-            case "장학":
-                return getNotice(NOTICE_SSU_JANGHACK);
-            case "국제교류":
-                return getNotice(NOTICE_SSU_KUCKJE);
-            case "모집,채용":
-                return getNotice(NOTICE_SSU_MOJIP);
-            case "교내행사":
-                return getNotice(NOTICE_SSU_KYONE);
-            case "교외행사":
-                return getNotice(NOTICE_SSU_KYOWAE);
-            case "봉사":
-                return getNotice(NOTICE_SSU_BONGSA);
+            case NOTICE_SSU_ALL:
+                return getNotice(category);
+            case NOTICE_SSU_HACKSA:
+                return getNotice(category);
+            case NOTICE_SSU_JANGHACK:
+                return getNotice(category);
+            case NOTICE_SSU_KUCKJE:
+                return getNotice(category);
+            case NOTICE_SSU_WAEKUCK:
+                return getNotice(category);
+            case NOTICE_SSU_MOJIP:
+                return getNotice(category);
+            case NOTICE_SSU_KYONE:
+                return getNotice(category);
+            case NOTICE_SSU_KYOWAE:
+                return getNotice(category);
+            case NOTICE_SSU_BONGSA:
+                return getNotice(category);
             default:
                 return getNotice(NOTICE_SSU_ALL);
         }

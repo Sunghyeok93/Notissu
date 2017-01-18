@@ -6,7 +6,7 @@
     android:id="@+id/activity_with_us"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.notissu.WithUs.WithUsActivity">
+    tools:context="com.notissu.UI.WithUs.WithUsActivity">
     <android.support.design.widget.AppBarLayout
         android:id="@+id/with_us_btn_abl"
         android:layout_width="match_parent"

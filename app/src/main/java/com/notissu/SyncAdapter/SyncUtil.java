@@ -4,15 +4,11 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.PeriodicSync;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
-import com.notissu.Activity.UpdatePeriodActivity;
+import com.notissu.UI.UpdatePeriod.View.UpdatePeriodActivity;
 import com.notissu.Util.LogUtils;
-
-import java.util.List;
 
 /**
  * Created by forhack on 2016-11-26.
