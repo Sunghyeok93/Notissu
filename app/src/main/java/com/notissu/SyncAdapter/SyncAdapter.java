@@ -7,10 +7,10 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
-import android.content.pm.ProviderInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.notissu.Database.KeywordProvider;
 import com.notissu.Database.KeywordProviderImp;
@@ -32,7 +32,12 @@ import com.rometools.rome.io.XmlReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -74,6 +79,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle bundle, String s, ContentProviderClient contentProviderClient, SyncResult syncResult) {
         Log.i(TAG, "Beginning network synchronization");
         try {
+            if (!isTimeForUpdate()) return;
+
             HashMap<String,RssItem> mainMap = null;
             HashMap<String,RssItem> libraryMap = null;
 
@@ -125,6 +132,25 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             syncResult.databaseError = true;
         }
         Log.i(TAG, "Network synchronization complete");
+    }
+
+    private boolean isTimeForUpdate() {
+        Date currentTime = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY,9);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
+        Date startTime = calendar.getTime();
+        calendar.set(Calendar.HOUR_OF_DAY,18);
+        Date endTime = calendar.getTime();
+
+        boolean isAfter = currentTime.after(startTime);
+        boolean isBefore = currentTime.before(endTime);
+        if (isAfter && isBefore) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private HashMap<String, RssItem> checkAndAdd(String url, SyncResult syncResult, int flag) throws IOException, FeedException{
