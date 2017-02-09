@@ -10,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.notissu.Model.Notice;
-import com.notissu.Model.RssItem;
 import com.notissu.R;
 import com.notissu.Util.LogUtils;
 import com.notissu.View.Interface.OnRecyclerItemClickListener;
@@ -49,9 +48,9 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        Notice notice = getItem(position);
+        final Notice notice = getItem(position);
         holder.tvSubject.setText(notice.getTitle());
-        holder.tvTime.setText(notice.getDate());
+        holder.tvTime.setText(notice.getShortDate());
         holder.cbStar.setChecked(notice.isStarred());
 
         if (notice.isRead()) {
@@ -72,7 +71,7 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
         holder.llWrapper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnStarredClickListener.onClick(v, position);
+                mOnStarredClickListener.onClick(v, notice);
             }
         });
     }

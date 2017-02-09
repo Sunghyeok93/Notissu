@@ -1,5 +1,7 @@
 package com.notissu.UI.NoticeList.Adapter;
 
+import android.view.View;
+
 import com.notissu.Model.Notice;
 import com.notissu.Model.RssItem;
 import com.notissu.View.Interface.OnRecyclerItemClickListener;
@@ -31,6 +33,6 @@ public interface NoticeListAdapterContract {
     }
 
     interface OnStarredClickListner {
-        void onClick(android.view.View view, int position);
+        void onClick(android.view.View view, Notice notice);
     }
 }

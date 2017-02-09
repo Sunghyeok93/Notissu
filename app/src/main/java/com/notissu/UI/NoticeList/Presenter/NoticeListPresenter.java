@@ -10,8 +10,6 @@ import android.widget.CheckBox;
 import com.notissu.Database.LibraryProviderImp;
 import com.notissu.Database.MainProviderImp;
 import com.notissu.Database.NoticeProvider;
-import com.notissu.Database.StarredProvider;
-import com.notissu.Database.StarredProviderImp;
 import com.notissu.Fetcher.NoticeFetcher;
 import com.notissu.Model.NavigationMenu;
 import com.notissu.Model.Notice;
@@ -144,8 +142,7 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
         } else if (isLibrary()) {
 
         } else if (isStarred()) {
-            List<Notice> noticeList = mRealm.where(Notice.class).equalTo("isStarred", true).findAll();
-            setList(noticeList);
+            fetchStarred();
         } else if (isKeyword()) {
 
         } else if (isSearch()) {
@@ -159,24 +156,28 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
     }
 
     @Override
-    public void onStarredClick(View view, final int position) {
+    public void onStarredClick(View view, final Notice notice) {
         final CheckBox cb = (CheckBox) view.findViewById(R.id.notice_cb_star);
 
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                Notice item = mAdapterModel.getItem(position);
                 //클릭되고 난 다음이라 isChecked는 체크되는 순간이다.
                 if (cb.isChecked()) {
                     cb.setChecked(false);
-                    realm.where(Notice.class).equalTo("id", item.getId()).findFirst().deleteFromRealm();
+                    realm.where(Notice.class).equalTo("id", notice.getId()).findFirst().deleteFromRealm();
                 } else {
                     cb.setChecked(true);
-                    item.setStarred(true);
-                    realm.copyToRealmOrUpdate(item);
+                    notice.setStarred(true);
+                    realm.copyToRealmOrUpdate(notice);
                 }
             }
         });
+    }
+
+    private void fetchStarred() {
+        List<Notice> noticeList = mRealm.where(Notice.class).equalTo("isStarred", true).findAll();
+        setList(noticeList);
     }
 
     private NoticeListContract.OnFetchNoticeListListener onFetchNoticeListListener = new NoticeListContract.OnFetchNoticeListListener() {

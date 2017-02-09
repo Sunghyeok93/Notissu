@@ -84,9 +84,13 @@ public class Notice extends RealmObject implements Parcelable {
         return title;
     }
 
-    public String getDate() {
+    public String getShortDate() {
         String pieceDate[] = date.split("-");
         return pieceDate[1] + "-" + pieceDate[2];
+    }
+
+    public String getDate() {
+        return date;
     }
 
     public boolean isStarred() {

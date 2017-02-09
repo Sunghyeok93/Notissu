@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.notissu.Model.Notice;
 import com.notissu.UI.NoticeList.Adapter.NoticeListAdapterContract;
 import com.notissu.UI.Search.View.SearchActivity;
 import com.notissu.UI.NoticeList.Adapter.NoticeListAdapter;
@@ -106,8 +107,8 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
 
         noticeListAdapter.setOnStarredClickListener(new NoticeListAdapterContract.OnStarredClickListner() {
             @Override
-            public void onClick(View view, int position) {
-                mPresenter.onStarredClick(view, position);
+            public void onClick(View view, Notice notice) {
+                mPresenter.onStarredClick(view, notice);
             }
         });
 

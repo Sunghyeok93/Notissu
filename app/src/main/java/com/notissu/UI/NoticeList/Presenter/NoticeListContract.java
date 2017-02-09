@@ -2,9 +2,11 @@ package com.notissu.UI.NoticeList.Presenter;
 
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 
 import com.notissu.BasePresenter;
 import com.notissu.BaseView;
+import com.notissu.Model.Notice;
 import com.notissu.UI.NoticeList.Adapter.NoticeListAdapter;
 
 /**
@@ -44,7 +46,7 @@ public interface NoticeListContract {
 
         void fetchNoticeList();
 
-        void onStarredClick(android.view.View view, int position);
+        void onStarredClick(android.view.View view, Notice notice);
     }
 
     interface OnFetchNoticeListListener {

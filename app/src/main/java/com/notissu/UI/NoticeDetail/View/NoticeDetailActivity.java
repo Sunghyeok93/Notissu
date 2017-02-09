@@ -104,7 +104,7 @@ public class NoticeDetailActivity extends AppCompatActivity implements NoticeDet
     @Override
     public void setViews(Notice notice) {
         mTitle.setText(notice.getTitle());
-        mDate.setText(notice.getDate());
+        mDate.setText(notice.getShortDate());
     }
 
     @Override
