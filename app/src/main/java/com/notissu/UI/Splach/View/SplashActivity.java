@@ -17,16 +17,12 @@ import static com.notissu.Util.LogUtils.makeLogTag;
 
 public class SplashActivity extends AppCompatActivity implements SplashContract.View{
     private static final String TAG = makeLogTag(SplashActivity.class);
-    public static final int INTENT_MAIN = 0;
-    // Splash screen timer
-    public static final int SPLASH_TIME_OUT = 1000;
-    Handler handler;
 
-    SplashContract.Presenter presenter;
+    SplashContract.Presenter mPresenter;
 
     @Override
     public void setPresenter(SplashContract.Presenter presenter) {
-        this.presenter = presenter;
+        this.mPresenter = presenter;
     }
 
     @Override
@@ -35,16 +31,14 @@ public class SplashActivity extends AppCompatActivity implements SplashContract.
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_splash);
 
-        presenter = new SplashPresenter(this);
-        presenter.setPreference(this);
-        presenter.start();
+        mPresenter = new SplashPresenter(this);
+        mPresenter.start();
     }
 
     @Override
     public void showMain() {
         Intent i = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(i);
-        // close this activity
         finish();
     }
 }

@@ -6,13 +6,6 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.notissu.Database.KeywordProvider;
-import com.notissu.Database.KeywordProviderImp;
-import com.notissu.Database.LibraryProvider;
-import com.notissu.Database.LibraryProviderImp;
-import com.notissu.Database.MainProvider;
-import com.notissu.Database.MainProviderImp;
-import com.notissu.Database.RssDatabase;
 import com.notissu.R;
 
 import java.util.ArrayList;
@@ -25,7 +18,10 @@ import java.util.ArrayList;
 public class NavigationMenu {
     private static NavigationMenu navigationMenu = new NavigationMenu();
     private NavigationView menu;
-    private NavigationMenu() {}
+
+    private NavigationMenu() {
+    }
+
     private int id;
 
     private TextView mTvMainCount;
@@ -60,7 +56,7 @@ public class NavigationMenu {
         if (count == 0) {
             mTvMainCount.setText("");
         } else {
-            mTvMainCount.setText(count+"");
+            mTvMainCount.setText(count + "");
         }
     }
 
@@ -68,7 +64,7 @@ public class NavigationMenu {
         if (count == 0) {
             mTvLibraryCount.setText("");
         } else {
-            mTvLibraryCount.setText(count+"");
+            mTvLibraryCount.setText(count + "");
         }
     }
 
@@ -79,7 +75,7 @@ public class NavigationMenu {
             MenuItem menuItem = keywordMenu.getItem(i);
             //먼저 Keyword List에 새로운 키워드가 있는지 확인하고,
             KeywordPair menuKeyword = new KeywordPair(menuItem);
-            for (int j = 0; j <mTvKeywordCount.size(); j++) {
+            for (int j = 0; j < mTvKeywordCount.size(); j++) {
                 KeywordPair listKeyword = mTvKeywordCount.get(j);
                 if (!menuKeyword.equals(listKeyword)) {
                     //없을 때만 새롭가 추가한다.
@@ -94,16 +90,16 @@ public class NavigationMenu {
         if (count == 0) {
             textView.setText("");
         } else {
-            textView.setText(count+"");
+            textView.setText(count + "");
         }
     }
 
     public void setMenuNotReadCount() {
-        MainProvider mainProvider = new MainProviderImp();
+        /*MainProvider mainProvider = new MainProviderImp();
         LibraryProvider libraryProvider = new LibraryProviderImp();
         KeywordProvider keywordProvider = new KeywordProviderImp();
         setMainNotReadCount(mainProvider.getNotReadCount());
-        setLibraryNotReadCount(libraryProvider.getNotReadCount());
+        setLibraryNotReadCount(libraryProvider.getNotReadCount());*/
 
         /*키워드 추가 기능은 잠시 멈춰둔다. 동적으로 삽입하는 키워드에 ActionView를 넣지 못한다.*/
         /*//키워드의 변화를 체크해서 Array에 담는다.

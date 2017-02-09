@@ -7,9 +7,6 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.CheckBox;
 
-import com.notissu.Database.LibraryProviderImp;
-import com.notissu.Database.MainProviderImp;
-import com.notissu.Database.NoticeProvider;
 import com.notissu.Fetcher.NoticeFetcher;
 import com.notissu.Model.NavigationMenu;
 import com.notissu.Model.Notice;
@@ -25,11 +22,11 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.notissu.UI.Main.View.MainActivity.FLAG_KEYWORD;
-import static com.notissu.UI.Main.View.MainActivity.FLAG_LIBRARY_NOTICE;
-import static com.notissu.UI.Main.View.MainActivity.FLAG_MAIN_NOTICE;
-import static com.notissu.UI.Main.View.MainActivity.FLAG_SEARCH;
-import static com.notissu.UI.Main.View.MainActivity.FLAG_STARRED;
+import static com.notissu.UI.Main.Presenter.MainContract.FLAG_KEYWORD;
+import static com.notissu.UI.Main.Presenter.MainContract.FLAG_LIBRARY_NOTICE;
+import static com.notissu.UI.Main.Presenter.MainContract.FLAG_MAIN_NOTICE;
+import static com.notissu.UI.Main.Presenter.MainContract.FLAG_SEARCH;
+import static com.notissu.UI.Main.Presenter.MainContract.FLAG_STARRED;
 import static com.notissu.UI.NoticeList.View.NoticeListFragment.KEY_CATEGORY;
 import static com.notissu.UI.NoticeList.View.NoticeListFragment.KEY_FLAG;
 import static com.notissu.UI.NoticeList.View.NoticeListFragment.KEY_TITLE;
@@ -111,13 +108,13 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
     @Override
     public void readAllItem() {
         if (isMain() || isLibrary()) {
-            NoticeProvider noticeProvider = null;
+            /*NoticeProvider noticeProvider = null;
             if (isMain()) {
                 noticeProvider = new MainProviderImp();
             } else if (isLibrary()) {
                 noticeProvider = new LibraryProviderImp();
             }
-            noticeProvider.updateAllReadCount();
+            noticeProvider.updateAllReadCount();*/
             //Navigation 업데이트
             NavigationMenu navigationMenu = NavigationMenu.getInstance();
             navigationMenu.setMenuNotReadCount();

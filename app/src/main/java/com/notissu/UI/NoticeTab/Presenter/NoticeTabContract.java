@@ -2,6 +2,7 @@ package com.notissu.UI.NoticeTab.Presenter;
 
 import com.notissu.BasePresenter;
 import com.notissu.BaseView;
+import com.notissu.UI.NoticeTab.Adapter.NoticeTabPagerAdapter;
 
 /**
  * Created by forhack on 2017-01-01.
@@ -22,16 +23,23 @@ public interface NoticeTabContract {
             NOTICE_SSU_FOREIGN, NOTICE_SSU_RECRUIT, NOTICE_SSU_INNER,
             NOTICE_SSU_OUTER, NOTICE_SSU_VOLUNTEER
     };
+    String KEY_TITLE = "KEY_TITLE";
+    String KEY_FLAG = "KEY_FLAG";
 
     interface View extends BaseView<Presenter> {
 
-        void addTabs();
+        void addTabs(String[] noticeCategory);
 
         int getTabCount();
+
+        void setAdapter(NoticeTabPagerAdapter noticeTabPagerAdapter);
     }
 
     interface Presenter extends BasePresenter {
 
+        void setAdapter(NoticeTabPagerAdapter noticeTabPagerAdapter);
+
+        void setTab(String[] noticeCategory);
     }
 
 }

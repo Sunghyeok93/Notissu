@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 
-import com.notissu.UI.Main.View.MainActivity;
+import com.notissu.UI.Main.Presenter.MainContract;
 import com.notissu.UI.NoticeList.View.NoticeListFragment;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -29,7 +29,7 @@ public class SearchPresenter implements SearchContract.Presenter {
         String query = bundle.getString(NoticeListFragment.KEY_SEARCH_QUERY);
         view.showTitle(query);
 
-        Fragment fragment = NoticeListFragment.newInstance(MainActivity.FLAG_SEARCH, query);
+        Fragment fragment = NoticeListFragment.newInstance(MainContract.FLAG_SEARCH, query);
         view.showSearch(fragment);
 
     }

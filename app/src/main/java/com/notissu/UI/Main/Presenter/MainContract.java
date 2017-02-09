@@ -10,6 +10,13 @@ import com.notissu.BaseView;
  */
 
 public interface MainContract {
+    int FLAG_MAIN_NOTICE = 0;
+    int FLAG_LIBRARY_NOTICE = 1;
+    int FLAG_STARRED = 2;
+    int FLAG_KEYWORD = 3;
+    int FLAG_SEARCH = 4;
+    int FLAG_SETTING = 5;
+
     interface View extends BaseView<Presenter> {
 
         void showNavigation();

@@ -1,12 +1,8 @@
 package com.notissu.UI.NoticeList.Adapter;
 
-import android.view.View;
-
 import com.notissu.Model.Notice;
-import com.notissu.Model.RssItem;
 import com.notissu.View.Interface.OnRecyclerItemClickListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

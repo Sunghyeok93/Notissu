@@ -13,7 +13,7 @@ import static com.notissu.Util.LogUtils.makeLogTag;
  */
 
 public class NoticeTabPagerAdapter extends FragmentStatePagerAdapter
-        implements NoticeTabPagerAdapterContract.Model, NoticeTabPagerAdapterContract.View{
+        implements NoticeTabPagerAdapterContract.Model, NoticeTabPagerAdapterContract.View {
     private static final String TAG = makeLogTag(NoticeTabPagerAdapter.class);
     private String mTitle;
     private int tabCount;
@@ -38,5 +38,10 @@ public class NoticeTabPagerAdapter extends FragmentStatePagerAdapter
     @Override
     public int getCount() {
         return tabCount;
+    }
+
+    @Override
+    public void refresh() {
+        notifyDataSetChanged();
     }
 }

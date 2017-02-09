@@ -36,13 +36,6 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, MainContract.View {
     private static final String TAG = LogUtils.makeLogTag(MainActivity.class);
 
-    public static final int FLAG_MAIN_NOTICE = 0;
-    public static final int FLAG_LIBRARY_NOTICE = 1;
-    public static final int FLAG_STARRED = 2;
-    public static final int FLAG_KEYWORD = 3;
-    public static final int FLAG_SEARCH = 4;
-    public static final int FLAG_SETTING = 5;
-
     @BindView(R.id.main_drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.main_nav_view)
@@ -52,18 +45,18 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.main_fab)
     FloatingActionButton fab;
 
-    ActionBarDrawerToggle toggle;
+    private ActionBarDrawerToggle toggle;
 
-    AddKeywordDialog addKeywordDialog;
+    private AddKeywordDialog addKeywordDialog;
 
     //현재 어떤 Fragment가 띄워져 있는지.
-    int presentFegment;
+    private int mPresenterFragment;
 
-    MainContract.Presenter presenter;
+    private MainContract.Presenter mPresenter;
 
     @Override
     public void setPresenter(MainContract.Presenter presenter) {
-        this.presenter = presenter;
+        this.mPresenter = presenter;
     }
 
     @Override
@@ -73,8 +66,8 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
 
-        presenter = new MainPresenter(getIntent().getExtras(), this);
-        presenter.start();
+        mPresenter = new MainPresenter(getIntent().getExtras(), this);
+        mPresenter.start();
 
         Alarm.cancel(getApplicationContext());
         toggle = new ActionBarDrawerToggle(
@@ -102,14 +95,14 @@ public class MainActivity extends AppCompatActivity
             public void onAdd(Bundle bundle) {
                 String name = bundle.getString(AddKeywordDialog.KEY_KEYWORD);
                 if (name != null)
-                    presenter.onAddNewItem(name);
+                    mPresenter.onAddNewItem(name);
             }
         });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.onFabClick();
+                mPresenter.onFabClick();
             }
         });
 
@@ -124,17 +117,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (presentFegment == FLAG_MAIN_NOTICE) {
+            if (mPresenterFragment == MainContract.FLAG_MAIN_NOTICE) {
                 super.onBackPressed();
             } else {
-                int presentFegment = FLAG_MAIN_NOTICE;
+                int presentFegment = MainContract.FLAG_MAIN_NOTICE;
                 String title = NavigationMenu.getInstance().getFristItemTitle();
                 Fragment fragment = NoticeTabFragment.newInstance(presentFegment, title);
-                showFragment(presentFegment,fragment);
+                showFragment(presentFegment, fragment);
             }
         }
     }
@@ -154,28 +147,28 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_ssu_main) {
             //Main 공지사항
-            int flag = FLAG_MAIN_NOTICE;
+            int flag = MainContract.FLAG_MAIN_NOTICE;
             Fragment fragment = NoticeTabFragment.newInstance(flag, itemTitle);
-            showFragment(flag,fragment);
+            showFragment(flag, fragment);
         } else if (id == R.id.nav_ssu_library) {
             //도서관 공지사항
-            int flag = FLAG_LIBRARY_NOTICE;
+            int flag = MainContract.FLAG_LIBRARY_NOTICE;
             Fragment fragment = NoticeListFragment.newInstance(flag, itemTitle);
-            showFragment(flag,fragment);
+            showFragment(flag, fragment);
         } else if (id == R.id.nav_starred) {
             //즐겨찾기
-            int flag = FLAG_STARRED;
+            int flag = MainContract.FLAG_STARRED;
             Fragment fragment = NoticeListFragment.newInstance(flag, itemTitle);
-            showFragment(flag,fragment);
+            showFragment(flag, fragment);
         } else if (groupid == R.id.group_keyword) {
-            int flag = FLAG_KEYWORD;
+            int flag = MainContract.FLAG_KEYWORD;
             Fragment fragment = NoticeListFragment.newInstance(flag, itemTitle);
-            showFragment(flag,fragment);
+            showFragment(flag, fragment);
         } else if (id == R.id.nav_setting) {
             //설정 공지사항
-            int flag = FLAG_SETTING;
+            int flag = MainContract.FLAG_SETTING;
             Fragment fragment = SettingFragment.newInstance();
-            showFragment(flag,fragment);
+            showFragment(flag, fragment);
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -186,7 +179,7 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        this.presentFegment = presentFegment;
+        this.mPresenterFragment = presentFegment;
         fragmentTransaction.replace(R.id.main_fragment_container, fragment);
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
@@ -194,7 +187,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void showAddKeyword() {
-        addKeywordDialog.show(getSupportFragmentManager(),"");
+        addKeywordDialog.show(getSupportFragmentManager(), "");
     }
 
     @Override

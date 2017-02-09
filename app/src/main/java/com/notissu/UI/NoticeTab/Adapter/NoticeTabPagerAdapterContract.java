@@ -6,6 +6,7 @@ package com.notissu.UI.NoticeTab.Adapter;
 
 public interface NoticeTabPagerAdapterContract {
     interface View {
+        void refresh();
     }
 
     interface Model {

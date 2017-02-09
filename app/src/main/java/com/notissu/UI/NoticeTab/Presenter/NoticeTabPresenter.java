@@ -3,8 +3,8 @@ package com.notissu.UI.NoticeTab.Presenter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.notissu.UI.NoticeTab.Adapter.NoticeTabPagerAdapter;
 import com.notissu.UI.NoticeTab.Adapter.NoticeTabPagerAdapterContract;
-import com.notissu.UI.NoticeTab.View.NoticeTabFragment;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -13,33 +13,38 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 
 public class NoticeTabPresenter implements NoticeTabContract.Presenter {
-    private NoticeTabContract.View view;
+    private NoticeTabContract.View mView;
 
-    private Bundle bundle;
+    private Bundle mBundle;
 
-    private NoticeTabPagerAdapterContract.Model adapterModel;
-    private NoticeTabPagerAdapterContract.View adapterView;
+    private NoticeTabPagerAdapterContract.Model mAdapterModel;
+    private NoticeTabPagerAdapterContract.View mAdapterView;
 
     public NoticeTabPresenter(Bundle arguments,
-                              @NonNull NoticeTabContract.View view,
-                              @NonNull NoticeTabPagerAdapterContract.Model adapterModel,
-                              @NonNull NoticeTabPagerAdapterContract.View adapterView) {
-        this.bundle = arguments;
-        this.view = checkNotNull(view);
-        this.adapterModel = adapterModel;
-        this.adapterView = adapterView;
+                              @NonNull NoticeTabContract.View view) {
+        this.mBundle = arguments;
+        this.mView = checkNotNull(view);
 
         view.setPresenter(this);
     }
 
     @Override
     public void start() {
-        //타이틀 변경
-        String title = bundle.getString(NoticeTabFragment.KEY_TITLE);
-        int flag = bundle.getInt(NoticeTabFragment.KEY_FLAG);
+    }
 
-        view.addTabs();
+    @Override
+    public void setAdapter(NoticeTabPagerAdapter noticeTabPagerAdapter) {
+        mAdapterModel = noticeTabPagerAdapter;
+        mAdapterView = noticeTabPagerAdapter;
+        mView.setAdapter(noticeTabPagerAdapter);
+    }
 
-        adapterModel.setData(title,flag, view.getTabCount());
+    @Override
+    public void setTab(String[] noticeCategory) {
+        String title = mBundle.getString(NoticeTabContract.KEY_TITLE);
+        int flag = mBundle.getInt(NoticeTabContract.KEY_FLAG);
+        mView.addTabs(noticeCategory);
+        mAdapterModel.setData(title, flag, noticeCategory.length);
+        mAdapterView.refresh();
     }
 }

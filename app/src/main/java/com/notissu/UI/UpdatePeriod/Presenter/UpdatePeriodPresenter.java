@@ -4,7 +4,6 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
-import com.notissu.SyncAdapter.SyncUtil;
 import com.notissu.UI.UpdatePeriod.View.UpdatePeriodActivity;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -17,7 +16,7 @@ public class UpdatePeriodPresenter implements UpdatePeriodContract.Presenter {
     UpdatePeriodContract.View view;
 
     public UpdatePeriodPresenter(@NonNull UpdatePeriodContract.View view) {
-        this.view = checkNotNull(view,"UpdatePeriodContract.View cannot be null");
+        this.view = checkNotNull(view, "UpdatePeriodContract.View cannot be null");
         view.setPresenter(this);
     }
 
@@ -40,14 +39,12 @@ public class UpdatePeriodPresenter implements UpdatePeriodContract.Presenter {
             hour = 0;
             minute = 0;
         }
-        view.updateTime((int)hour,(int)minute);
+        view.updateTime((int) hour, (int) minute);
     }
 
     @Override
     public void updatePeriod(Context context, int hour, int minute) {
-        long period = (hour*60*60) + (minute*60);
-
-        SyncUtil.updateSyncFrequency(period);
+        long period = (hour * 60 * 60) + (minute * 60);
 
         PreferenceManager.getDefaultSharedPreferences(context).edit()
                 .putLong(UpdatePeriodActivity.KEY_PERIOD, period).commit();
