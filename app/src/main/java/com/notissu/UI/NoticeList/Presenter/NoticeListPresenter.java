@@ -138,6 +138,7 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
 
     @Override
     public void fetchNoticeList() {
+        mView.showProgress();
         if (isMain()) {
             NoticeFetcher noticeFetcher = new NoticeFetcher(onFetchNoticeListListener);
             noticeFetcher.fetchNoticeList(NoticeTabContract.NOTICE_CATEGORY[category], 1);
@@ -155,6 +156,7 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
     private void setList(List<Notice> noticeList) {
         mAdapterModel.setLists(noticeList);
         mAdapterView.refresh();
+        mView.hideProgress();
     }
 
     @Override
