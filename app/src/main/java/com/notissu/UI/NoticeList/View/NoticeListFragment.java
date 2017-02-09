@@ -1,13 +1,10 @@
 package com.notissu.UI.NoticeList.View;
 
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
@@ -21,31 +18,30 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.notissu.UI.NoticeList.Adapter.NoticeListAdapterContract;
 import com.notissu.UI.Search.View.SearchActivity;
 import com.notissu.UI.NoticeList.Adapter.NoticeListAdapter;
-import com.notissu.Model.RssItem;
 import com.notissu.UI.NoticeList.Presenter.NoticeListContract;
 import com.notissu.UI.NoticeList.Presenter.NoticeListPresenter;
 import com.notissu.R;
-import com.notissu.SyncAdapter.SyncAdapter;
-import com.notissu.UI.WebView.View.WebViewActivity;
+import com.notissu.UI.NoticeDetail.View.NoticeDetailActivity;
 import com.notissu.Util.LogUtils;
 import com.notissu.View.Interface.OnRecyclerItemClickListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NoticeListFragment extends Fragment implements NoticeListContract.View{
+public class NoticeListFragment extends Fragment implements NoticeListContract.View {
     private static final String TAG = LogUtils.makeLogTag(NoticeListFragment.class);
 
     public static final String KEY_SEARCH_QUERY = "KEY_SEARCH_QUERY";
 
-    public static final String KEY_TITLE= "KEY_TITLE";
-    public static final String KEY_CATEGORY= "KEY_CATEGORY";
-    public static final String KEY_FLAG= "KEY_FLAG";
+    public static final String KEY_TITLE = "KEY_TITLE";
+    public static final String KEY_CATEGORY = "KEY_CATEGORY";
+    public static final String KEY_FLAG = "KEY_FLAG";
 
-    public static final String KEY_RSS_TITLE= "KEY_RSS_TITLE";
-    public static final String KEY_RSS_LINK= "KEY_RSS_LINK";
+    public static final String KEY_RSS_TITLE = "KEY_RSS_TITLE";
+    public static final String KEY_NOTICE_ID = "KEY_NOTICE_ID";
 
     @BindView(R.id.notice_list)
     RecyclerView mNoticeList;
@@ -57,13 +53,13 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
     //Progress dialog
     ProgressDialog mProgressDialog;
 
-    NoticeListContract.Presenter presenter;
+    NoticeListContract.Presenter mPresenter;
 
     public static Fragment newInstance(int flag, String title, int category) {
         Bundle bundle = new Bundle();
         bundle.putString(KEY_TITLE, title);
         bundle.putInt(KEY_CATEGORY, category);
-        bundle.putInt(KEY_FLAG,flag);
+        bundle.putInt(KEY_FLAG, flag);
         Fragment fragment = new NoticeListFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -71,8 +67,8 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
 
     public static Fragment newInstance(int flag, String title) {
         Bundle bundle = new Bundle();
-        bundle.putString(KEY_TITLE,title);
-        bundle.putInt(KEY_FLAG,flag);
+        bundle.putString(KEY_TITLE, title);
+        bundle.putInt(KEY_FLAG, flag);
         Fragment fragment = new NoticeListFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -83,35 +79,46 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         View view = inflater.inflate(R.layout.fragment_notice_list, container, false);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+
+        mPresenter = new NoticeListPresenter(getArguments(), this);
+        mPresenter.start();
+
+        NoticeListAdapter noticeListAdapter = new NoticeListAdapter();
+        mPresenter.setAdapter(noticeListAdapter);
+
         mProgressDialog = new ProgressDialog(getContext());
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.setMessage("학교 서버가 너무 느려요...");
 
-        NoticeListAdapter noticeListAdapter = new NoticeListAdapter(getContext());
-        mNoticeList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mNoticeList.addItemDecoration(new DividerItemDecoration(mNoticeList.getContext(),DividerItemDecoration.VERTICAL));
-        mNoticeList.setAdapter(noticeListAdapter);
-
-        presenter = new NoticeListPresenter(getArguments(), this, noticeListAdapter, noticeListAdapter);
-        presenter.start();
-
         noticeListAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View itemView, RecyclerView.Adapter adapter, int position) {
-                presenter.onItemClick(itemView, position);
+                mPresenter.onItemClick(itemView, position);
+            }
+        });
+
+        noticeListAdapter.setOnStarredClickListener(new NoticeListAdapterContract.OnStarredClickListner() {
+            @Override
+            public void onClick(View view, int position) {
+                mPresenter.onStarredClick(view, position);
             }
         });
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.fetchNotice();
-                presenter.refreshList();
+                mPresenter.fetchNoticeList();
             }
         });
 
-        return view;
+        mPresenter.fetchNoticeList();
     }
 
     @Override
@@ -132,19 +139,19 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
     @Override
     public void showSearch(String query) {
         Intent intent = new Intent(getContext(), SearchActivity.class);
-        intent.putExtra(KEY_SEARCH_QUERY,query);
+        intent.putExtra(KEY_SEARCH_QUERY, query);
         getActivity().startActivity(intent);
         mSearchView.clearFocus();
     }
 
     @Override
     public void showOptionMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.main,menu);
+        inflater.inflate(R.menu.main, menu);
         mSearchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                presenter.addSearch(query);
+                mPresenter.addSearch(query);
                 return true;
             }
 
@@ -161,50 +168,35 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
     }
 
     @Override
-    public void showNotice(String title, String link) {
-        Intent intent = new Intent(getContext(), WebViewActivity.class);
-        intent.putExtra(KEY_RSS_LINK,link);
-        intent.putExtra(KEY_RSS_TITLE,title);
+    public void showNotice(int noticeId) {
+        Intent intent = new Intent(getContext(), NoticeDetailActivity.class);
+        intent.putExtra(KEY_NOTICE_ID, noticeId);
         startActivity(intent);
     }
 
     @Override
+    public void setAdapter(NoticeListAdapter noticeListAdapter) {
+        mNoticeList.setLayoutManager(new LinearLayoutManager(getContext()));
+        mNoticeList.addItemDecoration(new DividerItemDecoration(mNoticeList.getContext(),DividerItemDecoration.VERTICAL));
+        mNoticeList.setAdapter(noticeListAdapter);
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        presenter.loadOptionMenu(menu,inflater);
-        super.onCreateOptionsMenu(menu,inflater);
+        mPresenter.loadOptionMenu(menu, inflater);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_read_all) {
-            presenter.readAllItem();
+            mPresenter.readAllItem();
         }
         return super.onOptionsItemSelected(item);
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getActivity().registerReceiver(syncFinishedReceiver, new IntentFilter(SyncAdapter.SYNC_FINISHED));
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        getActivity().unregisterReceiver(syncFinishedReceiver);
-    }
-
-    private BroadcastReceiver syncFinishedReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            presenter.refreshList();
-        }
-    };
-
     @Override
     public void setPresenter(@NonNull NoticeListContract.Presenter presenter) {
-        this.presenter = presenter;
+        this.mPresenter = presenter;
     }
 }

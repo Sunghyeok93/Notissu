@@ -1,9 +1,11 @@
 package com.notissu.UI.NoticeList.Adapter;
 
+import com.notissu.Model.Notice;
 import com.notissu.Model.RssItem;
 import com.notissu.View.Interface.OnRecyclerItemClickListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by forhack on 2016-12-29.
@@ -19,17 +21,16 @@ public interface NoticeListAdapterContract {
     interface Model {
         void setOnRecyclerItemClickListener(OnRecyclerItemClickListener onRecyclerItemClickListener);
 
-        void setLists(ArrayList<RssItem> noticeList, ArrayList<RssItem> starredList);
-
         int getCount();
 
-        RssItem getItem(int i);
+        Notice getItem(int i);
 
-        void remove(RssItem item);
+        void setLists(List<Notice> noticeList);
 
-        void addItems(ArrayList<RssItem> items);
-
-        void removeAll();
+        void setOnStarredClickListener(OnStarredClickListner onStarredClickListener);
     }
 
+    interface OnStarredClickListner {
+        void onClick(android.view.View view, int position);
+    }
 }

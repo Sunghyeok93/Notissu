@@ -5,22 +5,24 @@ import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.CheckBox;
 
-import com.notissu.Database.KeywordProvider;
-import com.notissu.Database.KeywordProviderImp;
-import com.notissu.Database.LibraryProvider;
 import com.notissu.Database.LibraryProviderImp;
-import com.notissu.Database.MainProvider;
 import com.notissu.Database.MainProviderImp;
 import com.notissu.Database.NoticeProvider;
 import com.notissu.Database.StarredProvider;
 import com.notissu.Database.StarredProviderImp;
+import com.notissu.Fetcher.NoticeFetcher;
 import com.notissu.Model.NavigationMenu;
-import com.notissu.Model.RssItem;
+import com.notissu.Model.Notice;
+import com.notissu.R;
+import com.notissu.UI.NoticeList.Adapter.NoticeListAdapter;
 import com.notissu.UI.NoticeList.Adapter.NoticeListAdapterContract;
-import com.notissu.SyncAdapter.SyncUtil;
+import com.notissu.UI.NoticeTab.Presenter.NoticeTabContract;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import io.realm.Realm;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.notissu.UI.Main.View.MainActivity.FLAG_KEYWORD;
@@ -36,78 +38,73 @@ import static com.notissu.UI.NoticeList.View.NoticeListFragment.KEY_TITLE;
  * Created by forhack on 2016-12-29.
  */
 
-public class NoticeListPresenter implements NoticeListContract.Presenter{
-    private NoticeListContract.View view;
-    private NoticeListAdapterContract.Model adapterModel;
-    private NoticeListAdapterContract.View adapterView;
+public class NoticeListPresenter implements NoticeListContract.Presenter {
+    private NoticeListContract.View mView;
+    private NoticeListAdapterContract.Model mAdapterModel;
+    private NoticeListAdapterContract.View mAdapterView;
 
     private Bundle bundle;
 
     //이 List가 Main인지 Library 인지 starred인지 keyword인지 구별 flag
     private int flag;
     //main일 때만 사용하는 멤버변수, 어느 카테고리인지 알려준다.
-    int category;
+    private int category;
     //Actionbar에 표시될 Title Keyword에서는 검색 키로 활용됨
-    String title;
+    private String title;
 
-    public NoticeListPresenter(Bundle bundle,
-                               @NonNull NoticeListContract.View view,
-                               @NonNull NoticeListAdapterContract.Model adapterModel,
-                               @NonNull NoticeListAdapterContract.View adapterView) {
+    private Realm mRealm = Realm.getDefaultInstance();
+
+    public NoticeListPresenter(Bundle bundle, @NonNull NoticeListContract.View view) {
         this.bundle = bundle;
-        this.view = checkNotNull(view,"NoticeListContract.View cannot be null");
-        this.adapterModel = checkNotNull(adapterModel,"NoticeListAdapterContract.Model cannot be null");
-        this.adapterView = checkNotNull(adapterView,"NoticeListAdapterContract.View cannot be null");
+        this.mView = checkNotNull(view, "NoticeListContract.View cannot be null");
         view.setPresenter(this);
+
+        title = bundle.getString(KEY_TITLE);
+        flag = bundle.getInt(KEY_FLAG);
+        category = bundle.getInt(KEY_CATEGORY);
     }
 
     @Override
     public void start() {
-        title = bundle.getString(KEY_TITLE);
-        flag = bundle.getInt(KEY_FLAG);
-        category = bundle.getInt(KEY_CATEGORY);
-
         //타이틀 설정
-        view.showTitle(title);
-
-        refreshList();
+        mView.showTitle(title);
     }
 
     @Override
     public void onItemClick(View itemView, int position) {
         //읽음표시로 변경
-        RssItem rssitem = adapterModel.getItem(position);
-        rssitem.setIsRead(RssItem.READ);
+        final Notice notice = mAdapterModel.getItem(position);
+        notice.setRead(true);
 
-        MainProvider mainProvider = new MainProviderImp();
-        LibraryProvider libraryProvider = new LibraryProviderImp();
-
-        //RssItem Update
-        //두개를 다 업데이트 함으로써 어떤걸 업데이트할지 결정된다.
-        mainProvider.updateNotice(rssitem);
-        libraryProvider.updateNotice(rssitem);
+        //Notice Update
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(notice);
+            }
+        });
 
         //Navigation 업데이트
         NavigationMenu navigationMenu = NavigationMenu.getInstance();
         navigationMenu.setMenuNotReadCount();
 
         //TextView 업데이트
-        adapterView.setItemRead(itemView);
+        mAdapterView.setItemRead(itemView);
 
         //Dialog 시작
-        view.showNotice(rssitem.getTitle(),rssitem.getLink());
+        mView.showNotice(notice.getId());
 
     }
 
     @Override
     public void addSearch(String query) {
-        view.showSearch(query);
+        mView.showSearch(query);
     }
 
     @Override
     public void loadOptionMenu(Menu menu, MenuInflater inflater) {
         if (isMain() || isLibrary()) {
-            view.showOptionMenu(menu,inflater);
+            mView.showOptionMenu(menu, inflater);
         }
     }
 
@@ -125,77 +122,69 @@ public class NoticeListPresenter implements NoticeListContract.Presenter{
             NavigationMenu navigationMenu = NavigationMenu.getInstance();
             navigationMenu.setMenuNotReadCount();
             //TextView 업데이트
-            for (int i = 0; i < adapterModel.getCount(); i++) {
-                adapterModel.getItem(i).setIsRead(RssItem.READ);
+            for (int i = 0; i < mAdapterModel.getCount(); i++) {
+                mAdapterModel.getItem(i).setRead(true);
             }
-            adapterView.refresh();
+            mAdapterView.refresh();
         }
     }
 
     @Override
-    public void fetchNotice() {
-        if (isMain() || isLibrary()) {
-            SyncUtil.TriggerRefresh();
-        }
+    public void setAdapter(NoticeListAdapter noticeListAdapter) {
+        mAdapterModel = noticeListAdapter;
+        mAdapterView = noticeListAdapter;
+        mView.setAdapter(noticeListAdapter);
     }
 
     @Override
-    public void refreshList() {
-        //어뎁터에 DB에서 가져온 List 장착
+    public void fetchNoticeList() {
+        NoticeFetcher noticeFetcher = new NoticeFetcher(onFetchNoticeListListener);
+        noticeFetcher.fetchNoticeList(NoticeTabContract.NOTICE_CATEGORY[category], 1);
+    }
+
+    @Override
+    public void onStarredClick(View view, int position) {
         StarredProvider starredProvider = new StarredProviderImp();
-        ArrayList<RssItem> starredList = new ArrayList<>(starredProvider.getStarred());
-        ArrayList<RssItem> noticeList = null;
-        if (isMain()) {
-            MainProvider provider = new MainProviderImp();
-            String[] categoryList = MainProvider.NOTICE_CATEGORY;
-            noticeList = new ArrayList<>(provider.getSsuNotice(categoryList[category]));
-        } else if (isLibrary()) {
-            LibraryProvider provider = new LibraryProviderImp();
-            noticeList = new ArrayList<>(provider.getNotice());
-        } else if (isStarred()) {
-            StarredProvider provider = new StarredProviderImp();
-            noticeList = new ArrayList<>(provider.getStarred());
-        } else if (isKeyword() || isSearch()) {
-            KeywordProvider provider = new KeywordProviderImp();
-            noticeList = new ArrayList<>(provider.getKeyword(title));
-        }
-        adapterModel.setLists(noticeList,starredList);
-        adapterView.refresh();
+        CheckBox cb = (CheckBox) view.findViewById(R.id.notice_cb_star);
 
-        //불러오는 중이라면 show Progress
-        if (isMain() || isLibrary()) {
-            if (adapterModel.getCount() == 0) {
-                view.showProgress();
-            } else {
-                view.hideProgress();
-            }
-        }
-
-        view.hideRefreshing();
+        //클릭되고 난 다음이라 isChecked는 체크되는 순간이다.
+        /*if (cb.isChecked()) {
+            cb.setChecked(false);
+            starredProvider.deleteStarred(title);
+            isChecked[position] = false;
+        } else {
+            cb.setChecked(true);
+            starredProvider.addStarred(title);
+            isChecked[position] = true;
+        }*/
     }
 
-    @Override
-    public boolean isMain() {
+    private NoticeListContract.OnFetchNoticeListListener onFetchNoticeListListener = new NoticeListContract.OnFetchNoticeListListener() {
+        @Override
+        public void onFetchNoticeList(String response) {
+            List<Notice> noticeList = Notice.fromJson(response);
+            mAdapterModel.setLists(noticeList);
+            mAdapterView.refresh();
+        }
+    };
+
+    private boolean isMain() {
         return flag == FLAG_MAIN_NOTICE;
     }
 
-    @Override
-    public boolean isLibrary() {
+    private boolean isLibrary() {
         return flag == FLAG_LIBRARY_NOTICE;
     }
 
-    @Override
-    public boolean isStarred() {
+    private boolean isStarred() {
         return flag == FLAG_STARRED;
     }
 
-    @Override
-    public boolean isKeyword() {
+    private boolean isKeyword() {
         return flag == FLAG_KEYWORD;
     }
 
-    @Override
-    public boolean isSearch() {
+    private boolean isSearch() {
         return flag == FLAG_SEARCH;
     }
 }

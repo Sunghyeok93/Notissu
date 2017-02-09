@@ -5,7 +5,7 @@ import android.view.MenuInflater;
 
 import com.notissu.BasePresenter;
 import com.notissu.BaseView;
-import com.notissu.Model.RssItem;
+import com.notissu.UI.NoticeList.Adapter.NoticeListAdapter;
 
 /**
  * Created by forhack on 2016-12-29.
@@ -25,16 +25,12 @@ public interface NoticeListContract {
 
         void hideRefreshing();
 
-        void showNotice(String title, String link);
+        void showNotice(int noticeId);
+
+        void setAdapter(NoticeListAdapter noticeListAdapter);
     }
 
     interface Presenter extends BasePresenter {
-
-        boolean isMain();
-        boolean isLibrary();
-        boolean isStarred();
-        boolean isKeyword();
-        boolean isSearch();
 
         void onItemClick(android.view.View itemView, int position);
 
@@ -44,9 +40,16 @@ public interface NoticeListContract {
 
         void readAllItem();
 
-        void fetchNotice();
+        void setAdapter(NoticeListAdapter noticeListAdapter);
 
-        void refreshList();
+        void fetchNoticeList();
+
+        void onStarredClick(android.view.View view, int position);
     }
+
+    interface OnFetchNoticeListListener {
+        void onFetchNoticeList(String response);
+    }
+
 
 }
