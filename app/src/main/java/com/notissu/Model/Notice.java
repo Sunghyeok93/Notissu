@@ -106,14 +106,14 @@ public class Notice extends RealmObject implements Parcelable {
     }
 
     private static void setStarred(List<Notice> noticeList) {
-        /*RealmResults<Notice> resultList = Realm.getDefaultInstance().where(Notice.class).findAll();
+        RealmResults<Notice> resultList = Realm.getDefaultInstance().where(Notice.class).findAll();
         for (Notice notice : noticeList) {
             for (Notice resultNotice : resultList) {
                 if (notice.getId() == resultNotice.getId()) {
                     notice.setStarred(resultNotice.isStarred());
                 }
             }
-        }*/
+        }
     }
 
     public static List<Notice> fromJson(String response) {

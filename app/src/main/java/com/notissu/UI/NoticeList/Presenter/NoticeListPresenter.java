@@ -138,33 +138,52 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
 
     @Override
     public void fetchNoticeList() {
-        NoticeFetcher noticeFetcher = new NoticeFetcher(onFetchNoticeListListener);
-        noticeFetcher.fetchNoticeList(NoticeTabContract.NOTICE_CATEGORY[category], 1);
+        if (isMain()) {
+            NoticeFetcher noticeFetcher = new NoticeFetcher(onFetchNoticeListListener);
+            noticeFetcher.fetchNoticeList(NoticeTabContract.NOTICE_CATEGORY[category], 1);
+        } else if (isLibrary()) {
+
+        } else if (isStarred()) {
+            List<Notice> noticeList = mRealm.where(Notice.class).equalTo("isStarred", true).findAll();
+            setList(noticeList);
+        } else if (isKeyword()) {
+
+        } else if (isSearch()) {
+
+        }
+    }
+
+    private void setList(List<Notice> noticeList) {
+        mAdapterModel.setLists(noticeList);
+        mAdapterView.refresh();
     }
 
     @Override
-    public void onStarredClick(View view, int position) {
-        StarredProvider starredProvider = new StarredProviderImp();
-        CheckBox cb = (CheckBox) view.findViewById(R.id.notice_cb_star);
+    public void onStarredClick(View view, final int position) {
+        final CheckBox cb = (CheckBox) view.findViewById(R.id.notice_cb_star);
 
-        //클릭되고 난 다음이라 isChecked는 체크되는 순간이다.
-        /*if (cb.isChecked()) {
-            cb.setChecked(false);
-            starredProvider.deleteStarred(title);
-            isChecked[position] = false;
-        } else {
-            cb.setChecked(true);
-            starredProvider.addStarred(title);
-            isChecked[position] = true;
-        }*/
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                Notice item = mAdapterModel.getItem(position);
+                //클릭되고 난 다음이라 isChecked는 체크되는 순간이다.
+                if (cb.isChecked()) {
+                    cb.setChecked(false);
+                    realm.where(Notice.class).equalTo("id", item.getId()).findFirst().deleteFromRealm();
+                } else {
+                    cb.setChecked(true);
+                    item.setStarred(true);
+                    realm.copyToRealmOrUpdate(item);
+                }
+            }
+        });
     }
 
     private NoticeListContract.OnFetchNoticeListListener onFetchNoticeListListener = new NoticeListContract.OnFetchNoticeListListener() {
         @Override
         public void onFetchNoticeList(String response) {
             List<Notice> noticeList = Notice.fromJson(response);
-            mAdapterModel.setLists(noticeList);
-            mAdapterView.refresh();
+            setList(noticeList);
         }
     };
 
