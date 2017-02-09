@@ -54,7 +54,7 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
         holder.tvTime.setText(notice.getDate());
         holder.cbStar.setChecked(notice.isStarred());
 
-        if (notice.isRead() == true) {
+        if (notice.isRead()) {
             holder.tvSubject.setTextColor(Color.parseColor("#aaaaaa"));
             holder.tvSubject.setTypeface(Typeface.DEFAULT);
         } else {
