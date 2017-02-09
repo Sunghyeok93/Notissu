@@ -17,6 +17,10 @@ public interface NoticeDetailContract {
         void hideAttchedFiles();
 
         void showDownload(DownloadManager.Request request);
+
+        void showProgress();
+
+        void hideProgress();
     }
 
     interface Presenter {

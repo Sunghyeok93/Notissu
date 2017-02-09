@@ -40,6 +40,7 @@ public class NoticeDetailPresenter implements NoticeDetailContract.Presenter,
 
     @Override
     public void fetchNoticeDetail() {
+        mView.showProgress();
         mNoticeDetail = mRealm.where(NoticeDetail.class).equalTo("notice_id", noticeId).findFirst();
         if (mNoticeDetail == null) {
             NoticeFetcher fetcher = new NoticeFetcher(this);
@@ -92,5 +93,6 @@ public class NoticeDetailPresenter implements NoticeDetailContract.Presenter,
         }
 
         mView.showNoticeDetail(mNoticeDetail);
+        mView.hideProgress();
     }
 }

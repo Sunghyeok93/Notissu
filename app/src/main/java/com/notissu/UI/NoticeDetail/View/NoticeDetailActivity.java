@@ -1,6 +1,7 @@
 package com.notissu.UI.NoticeDetail.View;
 
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -45,6 +46,8 @@ public class NoticeDetailActivity extends AppCompatActivity implements NoticeDet
     private NoticeDetailContract.Presenter mPresenter;
     private DownloadManager mDownloadManager;
 
+    private ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +56,10 @@ public class NoticeDetailActivity extends AppCompatActivity implements NoticeDet
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setMessage("학교 서버가 너무 느려요...");
 
         mDownloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
 
@@ -122,5 +129,15 @@ public class NoticeDetailActivity extends AppCompatActivity implements NoticeDet
     @Override
     public void showDownload(DownloadManager.Request request) {
         mDownloadManager.enqueue(request);
+    }
+
+    @Override
+    public void showProgress() {
+        mProgressDialog.show();
+    }
+
+    @Override
+    public void hideProgress() {
+        mProgressDialog.dismiss();
     }
 }
