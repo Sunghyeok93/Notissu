@@ -7,9 +7,6 @@ import android.view.MenuInflater;
 
 import com.notissu.R;
 import com.notissu.Util.LogUtils;
-/**
- * Created by Sunghyeok on 2016-12-04.
- */
 
 public class SettingFragment extends PreferenceFragmentCompat {
     private static final String TAG = LogUtils.makeLogTag(SettingFragment.class);
@@ -17,8 +14,8 @@ public class SettingFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.empty,menu);
-        super.onCreateOptionsMenu(menu,inflater);
+        inflater.inflate(R.menu.empty, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     public static SettingFragment newInstance() {
