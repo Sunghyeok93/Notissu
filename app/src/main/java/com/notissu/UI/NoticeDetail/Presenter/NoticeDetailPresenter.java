@@ -4,6 +4,7 @@ import android.app.DownloadManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 
 import com.notissu.Fetcher.NoticeFetcher;
 import com.notissu.Model.AttachedFile;
@@ -14,14 +15,20 @@ import com.notissu.UI.NoticeList.View.NoticeListFragment;
 
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+
 public class NoticeDetailPresenter implements NoticeDetailContract.Presenter,
         NoticeDetailContract.OnFetchNoticeDetailListener {
+    private static final String TAG = NoticeDetailPresenter.class.getSimpleName();
     private NoticeDetailContract.View mView;
     private AttachedFileAdapterContract.Model mAdapterModel;
     private AttachedFileAdapterContract.View mAdapterView;
 
     private Bundle mBundle;
     private NoticeDetail mNoticeDetail;
+
+    private Realm mRealm = Realm.getDefaultInstance();
 
     private int noticeId;
 
@@ -33,8 +40,13 @@ public class NoticeDetailPresenter implements NoticeDetailContract.Presenter,
 
     @Override
     public void fetchNoticeDetail() {
-        NoticeFetcher fetcher = new NoticeFetcher(this);
-        fetcher.fetchNoticeDetail(noticeId);
+        mNoticeDetail = mRealm.where(NoticeDetail.class).equalTo("notice_id", noticeId).findFirst();
+        if (mNoticeDetail == null) {
+            NoticeFetcher fetcher = new NoticeFetcher(this);
+            fetcher.fetchNoticeDetail(noticeId);
+        } else {
+            showNoticeDetail();
+        }
     }
 
     @Override
@@ -61,7 +73,17 @@ public class NoticeDetailPresenter implements NoticeDetailContract.Presenter,
     @Override
     public void onFetchNoticeDetail(String response) {
         mNoticeDetail = NoticeDetail.fromJson(response);
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(mNoticeDetail);
+            }
+        });
 
+        showNoticeDetail();
+    }
+
+    private void showNoticeDetail() {
         mAdapterModel.setAttachedFileList(mNoticeDetail.getAttachedFileList());
         mAdapterView.refresh();
 

@@ -57,9 +57,9 @@ public class NoticeDetailActivity extends AppCompatActivity implements NoticeDet
         mDownloadManager = (DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
 
         mPresenter = new NoticeDetailPresenter(getIntent().getExtras(), this);
-        mPresenter.fetchNoticeDetail();
 
         AttachedFileAdapter attachedFileAdapter = new AttachedFileAdapter();
+        mPresenter.setAttchedFileAdapter(attachedFileAdapter);
         attachedFileAdapter.setOnRecyclerItemClickListener(new AttachedFileAdapterContract.OnRecyclerItemClickListener() {
             @Override
             public void onItemClick(View itemView, RecyclerView.Adapter adapter, int position) {
@@ -83,8 +83,8 @@ public class NoticeDetailActivity extends AppCompatActivity implements NoticeDet
                 }
             }
         });
-        mPresenter.setAttchedFileAdapter(attachedFileAdapter);
 
+        mPresenter.fetchNoticeDetail();
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
