@@ -3,6 +3,7 @@
     package="com.notissu">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- Required for fetching feed data. -->
     <uses-permission android:name="android.permission.INTERNET" />

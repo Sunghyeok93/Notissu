@@ -52,7 +52,8 @@ public class NoticeDetailPresenter implements NoticeDetailContract.Presenter,
         // FIXME: 2017-01-19 다운로드 관련 클래스 생기면 빠질 부분
         DownloadManager.Request request = new DownloadManager.Request(urlToDownload);
         request.setTitle(attachedFile.getTitle());
-        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, pathSegments.get(pathSegments.size()-1));
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, attachedFile.getTitle());
         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).mkdirs();
         mView.showDownload(request);
     }
