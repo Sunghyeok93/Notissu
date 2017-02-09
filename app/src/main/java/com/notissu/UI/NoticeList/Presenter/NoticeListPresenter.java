@@ -21,6 +21,8 @@ import com.notissu.UI.NoticeTab.Presenter.NoticeTabContract;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.notissu.UI.Main.View.MainActivity.FLAG_KEYWORD;
@@ -176,7 +178,8 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
     }
 
     private void fetchStarred() {
-        List<Notice> noticeList = mRealm.where(Notice.class).equalTo("isStarred", true).findAll();
+        RealmResults<Notice> noticeList = mRealm.where(Notice.class).equalTo("isStarred", true).findAll();
+        noticeList = noticeList.sort("date", Sort.DESCENDING);
         setList(noticeList);
     }
 
