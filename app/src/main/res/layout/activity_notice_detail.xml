@@ -6,7 +6,7 @@
     android:id="@+id/activity_notice_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.notissu.UI.NoticeDetail.View.NoticeDetailActivity">
+    tools:context="com.notissu.UI.NoticeList.Detail.NoticeDetailActivity">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

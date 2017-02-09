@@ -6,9 +6,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.notissu.BaseApplication;
-import com.notissu.UI.NoticeDetail.Presenter.NoticeDetailContract;
-import com.notissu.UI.NoticeList.Presenter.NoticeListContract;
-import com.notissu.UI.NoticeTab.Presenter.NoticeTabContract;
+import com.notissu.UI.NoticeList.Detail.NoticeDetailContract;
+import com.notissu.UI.NoticeList.NoticeListContract;
+import com.notissu.UI.NoticeTab.NoticeTabContract;
 
 /**
  * Created by forhack on 2017-02-06.
