@@ -14,6 +14,12 @@ import com.notissu.UI.NoticeList.Adapter.NoticeListAdapter;
  */
 
 public interface NoticeListContract {
+    String KEY_SEARCH_QUERY = "KEY_SEARCH_QUERY";
+    String KEY_TITLE = "KEY_TITLE";
+    String KEY_CATEGORY = "KEY_CATEGORY";
+    String KEY_FLAG = "KEY_FLAG";
+    String KEY_NOTICE_ID = "KEY_NOTICE_ID";
+
     interface View extends BaseView<Presenter> {
         void showTitle(String title);
 
@@ -44,7 +50,7 @@ public interface NoticeListContract {
 
         void setAdapter(NoticeListAdapter noticeListAdapter);
 
-        void fetchNoticeList();
+        void fetchNotice();
 
         void onStarredClick(android.view.View view, Notice notice);
     }
@@ -54,4 +60,7 @@ public interface NoticeListContract {
     }
 
 
+    interface OnFetchSearchListener {
+        void onFetchKeyword(String response);
+    }
 }

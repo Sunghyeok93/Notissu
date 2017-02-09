@@ -35,32 +35,23 @@ import butterknife.ButterKnife;
 public class NoticeListFragment extends Fragment implements NoticeListContract.View {
     private static final String TAG = LogUtils.makeLogTag(NoticeListFragment.class);
 
-    public static final String KEY_SEARCH_QUERY = "KEY_SEARCH_QUERY";
-
-    public static final String KEY_TITLE = "KEY_TITLE";
-    public static final String KEY_CATEGORY = "KEY_CATEGORY";
-    public static final String KEY_FLAG = "KEY_FLAG";
-
-    public static final String KEY_RSS_TITLE = "KEY_RSS_TITLE";
-    public static final String KEY_NOTICE_ID = "KEY_NOTICE_ID";
-
     @BindView(R.id.notice_list)
     RecyclerView mNoticeList;
     @BindView(R.id.notice_swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-    SearchView mSearchView;
+    private SearchView mSearchView;
 
     //Progress dialog
-    ProgressDialog mProgressDialog;
+    private ProgressDialog mProgressDialog;
 
-    NoticeListContract.Presenter mPresenter;
+    private NoticeListContract.Presenter mPresenter;
 
     public static Fragment newInstance(int flag, String title, int category) {
         Bundle bundle = new Bundle();
-        bundle.putString(KEY_TITLE, title);
-        bundle.putInt(KEY_CATEGORY, category);
-        bundle.putInt(KEY_FLAG, flag);
+        bundle.putInt(NoticeListContract.KEY_FLAG, flag);
+        bundle.putString(NoticeListContract.KEY_TITLE, title);
+        bundle.putInt(NoticeListContract.KEY_CATEGORY, category);
         Fragment fragment = new NoticeListFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -68,8 +59,8 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
 
     public static Fragment newInstance(int flag, String title) {
         Bundle bundle = new Bundle();
-        bundle.putString(KEY_TITLE, title);
-        bundle.putInt(KEY_FLAG, flag);
+        bundle.putInt(NoticeListContract.KEY_FLAG, flag);
+        bundle.putString(NoticeListContract.KEY_TITLE, title);
         Fragment fragment = new NoticeListFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -115,11 +106,11 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.fetchNoticeList();
+                mPresenter.fetchNotice();
             }
         });
 
-        mPresenter.fetchNoticeList();
+        mPresenter.fetchNotice();
     }
 
     @Override
@@ -140,7 +131,7 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
     @Override
     public void showSearch(String query) {
         Intent intent = new Intent(getContext(), SearchActivity.class);
-        intent.putExtra(KEY_SEARCH_QUERY, query);
+        intent.putExtra(NoticeListContract.KEY_SEARCH_QUERY, query);
         getActivity().startActivity(intent);
         mSearchView.clearFocus();
     }
@@ -171,14 +162,14 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
     @Override
     public void showNotice(int noticeId) {
         Intent intent = new Intent(getContext(), NoticeDetailActivity.class);
-        intent.putExtra(KEY_NOTICE_ID, noticeId);
+        intent.putExtra(NoticeListContract.KEY_NOTICE_ID, noticeId);
         startActivity(intent);
     }
 
     @Override
     public void setAdapter(NoticeListAdapter noticeListAdapter) {
         mNoticeList.setLayoutManager(new LinearLayoutManager(getContext()));
-        mNoticeList.addItemDecoration(new DividerItemDecoration(mNoticeList.getContext(),DividerItemDecoration.VERTICAL));
+        mNoticeList.addItemDecoration(new DividerItemDecoration(mNoticeList.getContext(), DividerItemDecoration.VERTICAL));
         mNoticeList.setAdapter(noticeListAdapter);
     }
 

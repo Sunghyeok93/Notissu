@@ -1,24 +1,26 @@
-package com.notissu.UI.AddKeywordDialog.Presenter;
+package com.notissu.UI.Main.AddKeywordDialog.Presenter;
 
 import android.os.Bundle;
 
 import com.notissu.BasePresenter;
 import com.notissu.BaseView;
+import com.notissu.Model.Keyword;
 
 /**
  * Created by forhack on 2017-01-01.
  */
 
 public interface AddKeywordContract {
+
     interface View extends BaseView<Presenter> {
 
-        void close();
-
-        void enableAdd(Bundle bundle);
     }
 
     interface Presenter extends BasePresenter {
 
-        void addKeyword(String keyword);
+    }
+
+    interface OnAddKeywordListner {
+        void onAdd(Keyword keyword);
     }
 }

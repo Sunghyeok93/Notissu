@@ -4,19 +4,17 @@ import android.app.DownloadManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 
 import com.notissu.Fetcher.NoticeFetcher;
 import com.notissu.Model.AttachedFile;
 import com.notissu.Model.NoticeDetail;
 import com.notissu.UI.NoticeDetail.Adapter.AttachedFileAdapter;
 import com.notissu.UI.NoticeDetail.Adapter.AttachedFileAdapterContract;
-import com.notissu.UI.NoticeList.View.NoticeListFragment;
+import com.notissu.UI.NoticeList.Presenter.NoticeListContract;
 
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class NoticeDetailPresenter implements NoticeDetailContract.Presenter,
         NoticeDetailContract.OnFetchNoticeDetailListener {
@@ -35,7 +33,7 @@ public class NoticeDetailPresenter implements NoticeDetailContract.Presenter,
     public NoticeDetailPresenter(Bundle bundle, NoticeDetailContract.View view) {
         this.mView = view;
         this.mBundle = bundle;
-        noticeId = mBundle.getInt(NoticeListFragment.KEY_NOTICE_ID);
+        noticeId = mBundle.getInt(NoticeListContract.KEY_NOTICE_ID);
     }
 
     @Override

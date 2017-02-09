@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 
 import com.notissu.BasePresenter;
 import com.notissu.BaseView;
+import com.notissu.Model.Keyword;
 
 /**
  * Created by forhack on 2017-01-01.
@@ -21,7 +22,7 @@ public interface MainContract {
 
         void showNavigation();
 
-        void addMenuKeyword(int newId, String keyword);
+        void addMenuKeyword(Keyword keyword);
 
         void showFragment(int presentFegment, Fragment fragment);
 
@@ -32,6 +33,6 @@ public interface MainContract {
 
         void onFabClick();
 
-        void onAddNewItem(String itemName);
+        void onAddNewItem(Keyword keyword);
     }
 }

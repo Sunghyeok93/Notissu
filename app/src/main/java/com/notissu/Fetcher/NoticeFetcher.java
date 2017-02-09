@@ -17,7 +17,9 @@ import com.notissu.UI.NoticeTab.Presenter.NoticeTabContract;
 public class NoticeFetcher {
     private RequestQueue mQueue;
     private NoticeListContract.OnFetchNoticeListListener mOnFetchNoticeListListener;
+    private NoticeListContract.OnFetchSearchListener mOnFetchSearchListener;
     private NoticeDetailContract.OnFetchNoticeDetailListener mOnFetchNoticeDetailListener;
+
 
     public NoticeFetcher(NoticeListContract.OnFetchNoticeListListener onFetchNoticeListListener) {
         mQueue = BaseApplication.getRequestQueue();
@@ -27,6 +29,11 @@ public class NoticeFetcher {
     public NoticeFetcher(NoticeDetailContract.OnFetchNoticeDetailListener mOnFetchNoticeDetailListener) {
         mQueue = BaseApplication.getRequestQueue();
         this.mOnFetchNoticeDetailListener = mOnFetchNoticeDetailListener;
+    }
+
+    public NoticeFetcher(NoticeListContract.OnFetchSearchListener onFetchSearchListener) {
+        mQueue = BaseApplication.getRequestQueue();
+        mOnFetchSearchListener = onFetchSearchListener;
     }
 
     public void fetchNoticeList(String categoryKo, int pageNum) {
@@ -41,6 +48,37 @@ public class NoticeFetcher {
             @Override
             public void onErrorResponse(VolleyError error) {
                 System.out.print("");
+            }
+        });
+        mQueue.add(request);
+    }
+
+    public void fetchNoticeDetail(int noticeId) {
+        String url = BaseApplication.BASE_URL + "view/" + noticeId;
+        StringRequest request = new StringRequestUTF8(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mOnFetchNoticeDetailListener.onFetchNoticeDetail(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        mQueue.add(request);
+    }
+
+    public void fetchSearchList(String keyword, int pageNum) {
+        //Category=%s 에 인자가 아무것도 들어가지 않으면 전체 카테고리로 검색
+        String url = String.format(BaseApplication.BASE_SEARCH_URL, pageNum, "", "TITLE", keyword);
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                mOnFetchSearchListener.onFetchKeyword(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
             }
         });
         mQueue.add(request);
@@ -82,20 +120,5 @@ public class NoticeFetcher {
         }
 
         return serverCategory;
-    }
-
-    public void fetchNoticeDetail(int noticeId) {
-        String url = BaseApplication.BASE_URL + "view/" + noticeId;
-        StringRequest request = new StringRequestUTF8(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                mOnFetchNoticeDetailListener.onFetchNoticeDetail(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-        mQueue.add(request);
     }
 }

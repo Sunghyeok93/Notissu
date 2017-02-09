@@ -15,6 +15,7 @@ import io.realm.RealmConfiguration;
 public class BaseApplication extends Application {
     private static RequestQueue mQueue;
     public static final String BASE_URL = "http://1004xlsrn.gonetis.com:8500/";
+    public static final String BASE_SEARCH_URL = "http://m.ssu.ac.kr/html/themes/m/html/notice_univ_list.jsp?curPage=%d&sCategory=%s&sKeyType=%s&sKeyword=%s";
 
     @Override
     public void onCreate() {

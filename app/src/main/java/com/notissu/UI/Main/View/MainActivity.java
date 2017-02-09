@@ -17,7 +17,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.notissu.UI.AddKeywordDialog.View.AddKeywordDialog;
+import com.notissu.Model.Keyword;
+import com.notissu.UI.Main.AddKeywordDialog.Presenter.AddKeywordContract;
+import com.notissu.UI.Main.AddKeywordDialog.View.AddKeywordDialog;
 import com.notissu.UI.Main.Presenter.MainContract;
 import com.notissu.UI.Main.Presenter.MainPresenter;
 import com.notissu.UI.NoticeList.View.NoticeListFragment;
@@ -45,9 +47,9 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.main_fab)
     FloatingActionButton fab;
 
-    private ActionBarDrawerToggle toggle;
+    private ActionBarDrawerToggle mToggle;
 
-    private AddKeywordDialog addKeywordDialog;
+    private AddKeywordDialog mAddKeywordDialog;
 
     //현재 어떤 Fragment가 띄워져 있는지.
     private int mPresenterFragment;
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity
         mPresenter.start();
 
         Alarm.cancel(getApplicationContext());
-        toggle = new ActionBarDrawerToggle(
+        mToggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -84,18 +86,16 @@ public class MainActivity extends AppCompatActivity
                 NavigationMenu.getInstance().setMenuNotReadCount();
             }
         };
-        toggle.syncState();
-        drawer.setDrawerListener(toggle);
+        mToggle.syncState();
+        drawer.setDrawerListener(mToggle);
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        addKeywordDialog = AddKeywordDialog.newInstance();
-        addKeywordDialog.setOnAddKeywordListner(new AddKeywordDialog.OnAddKeywordListner() {
+        mAddKeywordDialog = AddKeywordDialog.newInstance();
+        mAddKeywordDialog.setOnAddKeywordListner(new AddKeywordContract.OnAddKeywordListner() {
             @Override
-            public void onAdd(Bundle bundle) {
-                String name = bundle.getString(AddKeywordDialog.KEY_KEYWORD);
-                if (name != null)
-                    mPresenter.onAddNewItem(name);
+            public void onAdd(Keyword keyword) {
+                mPresenter.onAddNewItem(keyword);
             }
         });
 
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void showAddKeyword() {
-        addKeywordDialog.show(getSupportFragmentManager(), "");
+        mAddKeywordDialog.show(getSupportFragmentManager(), "");
     }
 
     @Override
@@ -204,8 +204,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void addMenuKeyword(int newId, String keyword) {
-        Menu menu = NavigationMenu.getInstance().getKeywordMenu();
-        menu.add(R.id.group_keyword, newId, 1, keyword).setIcon(R.drawable.ic_menu_send);
+    public void addMenuKeyword(Keyword keyword) {
+        NavigationMenu navigationMenu = NavigationMenu.getInstance();
+        Menu menu = navigationMenu.getKeywordMenu();
+        int newId = navigationMenu.getNewId();
+        menu.add(R.id.group_keyword, newId, 1, keyword.getTitle()).setIcon(R.drawable.ic_menu_send);
     }
 }

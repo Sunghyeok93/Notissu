@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.CheckBox;
 
 import com.notissu.Fetcher.NoticeFetcher;
+import com.notissu.Model.Keyword;
 import com.notissu.Model.NavigationMenu;
 import com.notissu.Model.Notice;
 import com.notissu.R;
@@ -15,6 +16,7 @@ import com.notissu.UI.NoticeList.Adapter.NoticeListAdapter;
 import com.notissu.UI.NoticeList.Adapter.NoticeListAdapterContract;
 import com.notissu.UI.NoticeTab.Presenter.NoticeTabContract;
 
+import java.security.Key;
 import java.util.List;
 
 import io.realm.Realm;
@@ -27,9 +29,9 @@ import static com.notissu.UI.Main.Presenter.MainContract.FLAG_LIBRARY_NOTICE;
 import static com.notissu.UI.Main.Presenter.MainContract.FLAG_MAIN_NOTICE;
 import static com.notissu.UI.Main.Presenter.MainContract.FLAG_SEARCH;
 import static com.notissu.UI.Main.Presenter.MainContract.FLAG_STARRED;
-import static com.notissu.UI.NoticeList.View.NoticeListFragment.KEY_CATEGORY;
-import static com.notissu.UI.NoticeList.View.NoticeListFragment.KEY_FLAG;
-import static com.notissu.UI.NoticeList.View.NoticeListFragment.KEY_TITLE;
+import static com.notissu.UI.NoticeList.Presenter.NoticeListContract.KEY_CATEGORY;
+import static com.notissu.UI.NoticeList.Presenter.NoticeListContract.KEY_FLAG;
+import static com.notissu.UI.NoticeList.Presenter.NoticeListContract.KEY_TITLE;
 
 /**
  * Created by forhack on 2016-12-29.
@@ -133,23 +135,6 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
         mView.setAdapter(noticeListAdapter);
     }
 
-    @Override
-    public void fetchNoticeList() {
-        mView.showProgress();
-        if (isMain()) {
-            NoticeFetcher noticeFetcher = new NoticeFetcher(onFetchNoticeListListener);
-            noticeFetcher.fetchNoticeList(NoticeTabContract.NOTICE_CATEGORY[category], 1);
-        } else if (isLibrary()) {
-
-        } else if (isStarred()) {
-            fetchStarred();
-        } else if (isKeyword()) {
-
-        } else if (isSearch()) {
-
-        }
-    }
-
     private void setList(List<Notice> noticeList) {
         mAdapterModel.setLists(noticeList);
         mAdapterView.refresh();
@@ -176,6 +161,31 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
         });
     }
 
+    @Override
+    public void fetchNotice() {
+        mView.showProgress();
+        if (isMain()) {
+            NoticeFetcher noticeFetcher = new NoticeFetcher(onFetchNoticeListListener);
+            noticeFetcher.fetchNoticeList(NoticeTabContract.NOTICE_CATEGORY[category], 1);
+        } else if (isLibrary()) {
+
+        } else if (isStarred()) {
+            fetchStarred();
+        } else if (isKeyword()) {
+            NoticeFetcher noticeFetcher = new NoticeFetcher(onFetchSearchListener);
+            noticeFetcher.fetchSearchList(title,1);
+            fetchKeyword();
+        } else if (isSearch()) {
+
+        }
+    }
+
+    private void fetchKeyword() {
+        String keyword = title;
+        List<Notice> noticeList = mRealm.where(Notice.class).contains("title", keyword).findAll();
+        setList(noticeList);
+    }
+
     private void fetchStarred() {
         RealmResults<Notice> noticeList = mRealm.where(Notice.class).equalTo("isStarred", true).findAll();
         noticeList = noticeList.sort("date", Sort.DESCENDING);
@@ -186,6 +196,14 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
         @Override
         public void onFetchNoticeList(String response) {
             List<Notice> noticeList = Notice.fromJson(response);
+            setList(noticeList);
+        }
+    };
+
+    private NoticeListContract.OnFetchSearchListener onFetchSearchListener = new NoticeListContract.OnFetchSearchListener() {
+        @Override
+        public void onFetchKeyword(String response) {
+            List<Notice> noticeList = Notice.fromHtml(response);
             setList(noticeList);
         }
     };
