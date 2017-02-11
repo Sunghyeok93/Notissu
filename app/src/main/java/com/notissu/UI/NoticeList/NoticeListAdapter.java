@@ -19,6 +19,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.RealmList;
 
 /**
  * Created by forhack on 2016-10-18.
@@ -111,6 +112,18 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
     @Override
     public void setOnStarredClickListener(NoticeListAdapterContract.OnStarredClickListner onStarredClickListener) {
         this.mOnStarredClickListener = onStarredClickListener;
+    }
+
+    @Override
+    public void readAll() {
+        for (int i = 0; i <mNoticeList.size(); i++) {
+            getItem(i).setRead(true);
+        }
+    }
+
+    @Override
+    public List<Notice> getList() {
+        return mNoticeList;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

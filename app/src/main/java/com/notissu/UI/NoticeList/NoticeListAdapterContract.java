@@ -5,6 +5,9 @@ import com.notissu.View.Interface.OnRecyclerItemClickListener;
 
 import java.util.List;
 
+import io.realm.RealmList;
+import io.realm.RealmModel;
+
 /**
  * Created by forhack on 2016-12-29.
  */
@@ -26,6 +29,10 @@ public interface NoticeListAdapterContract {
         void setLists(List<Notice> noticeList);
 
         void setOnStarredClickListener(OnStarredClickListner onStarredClickListener);
+
+        void readAll();
+
+        List<Notice> getList();
     }
 
     interface OnStarredClickListner {

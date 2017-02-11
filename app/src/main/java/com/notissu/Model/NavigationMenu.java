@@ -94,26 +94,6 @@ public class NavigationMenu {
         }
     }
 
-    public void setMenuNotReadCount() {
-        /*MainProvider mainProvider = new MainProviderImp();
-        LibraryProvider libraryProvider = new LibraryProviderImp();
-        KeywordProvider keywordProvider = new KeywordProviderImp();
-        setMainNotReadCount(mainProvider.getNotReadCount());
-        setLibraryNotReadCount(libraryProvider.getNotReadCount());*/
-
-        /*키워드 추가 기능은 잠시 멈춰둔다. 동적으로 삽입하는 키워드에 ActionView를 넣지 못한다.*/
-        /*//키워드의 변화를 체크해서 Array에 담는다.
-        setKeywordTvArray();
-
-        //변화된 Array를 이용해서 Keyword Count를 세팅한다.
-        for (int i = 0; i < mTvKeywordCount.size(); i++) {
-            KeywordPair keywordPair = mTvKeywordCount.get(i);
-            TextView textView = keywordPair.getTvCount();
-            setKeywodNotReadCount(textView, keywordProvider.getNotReadCount(keywordPair.getKeyword()));
-        }*/
-
-    }
-
     public int getNewId() {
         return id++;
     }

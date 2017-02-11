@@ -75,13 +75,11 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                NavigationMenu.getInstance().setMenuNotReadCount();
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                NavigationMenu.getInstance().setMenuNotReadCount();
             }
         };
         mToggle.syncState();
@@ -198,7 +196,6 @@ public class MainActivity extends AppCompatActivity
     public void showNavigation() {
         NavigationMenu navigationMenu = NavigationMenu.getInstance();
         navigationMenu.setMenu(navigationView);
-        navigationMenu.setMenuNotReadCount();
     }
 
     @Override

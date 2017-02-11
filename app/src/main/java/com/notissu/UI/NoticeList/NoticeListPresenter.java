@@ -79,10 +79,6 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
             }
         });
 
-        //Navigation 업데이트
-        NavigationMenu navigationMenu = NavigationMenu.getInstance();
-        navigationMenu.setMenuNotReadCount();
-
         //TextView 업데이트
         mAdapterView.setItemRead(itemView);
 
@@ -101,21 +97,15 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
     @Override
     public void readAllItem() {
         if (isMain() || isLibrary()) {
-            /*NoticeProvider noticeProvider = null;
-            if (isMain()) {
-                noticeProvider = new MainProviderImp();
-            } else if (isLibrary()) {
-                noticeProvider = new LibraryProviderImp();
-            }
-            noticeProvider.updateAllReadCount();*/
-            //Navigation 업데이트
-            NavigationMenu navigationMenu = NavigationMenu.getInstance();
-            navigationMenu.setMenuNotReadCount();
             //TextView 업데이트
-            for (int i = 0; i < mAdapterModel.getCount(); i++) {
-                mAdapterModel.getItem(i).setRead(true);
-            }
+            mAdapterModel.readAll();
             mAdapterView.refresh();
+            mRealm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realm.copyToRealmOrUpdate(mAdapterModel.getList());
+                }
+            });
         }
     }
 
