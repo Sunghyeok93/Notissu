@@ -118,6 +118,15 @@ public class NavigationMenu {
         return id++;
     }
 
+    public void removeKeywordAll() {
+        Menu menu = getKeywordMenu();
+        int menuSize = menu.size();
+        for (int i = 0; i < menuSize; i++) {
+            int itemId = menu.getItem(0).getItemId();
+            menu.removeItem(itemId);
+        }
+    }
+
     class KeywordPair {
         private String keyword;
         private TextView tvCount;

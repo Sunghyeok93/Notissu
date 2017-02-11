@@ -1,14 +1,15 @@
 package com.notissu.UI.Setting.DeleteKeyword;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.notissu.Model.Keyword;
 import com.notissu.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,19 +22,14 @@ import com.notissu.View.Interface.OnRecyclerItemClickListener;
 
 public class DeleteKeywordAdapter extends RecyclerView.Adapter<DeleteKeywordAdapter.ViewHolder>
         implements DeleteKeywordAdapterContract.Model, DeleteKeywordAdapterContract.View{
-    Context context;
     //ListView에 보여줄 Item
-    ArrayList<String> keywordList = new ArrayList<>();
+    List<Keyword> keywordList = new ArrayList<>();
 
     private OnRecyclerItemClickListener onRecyclerItemClickListener;
 
-    public DeleteKeywordAdapter(Context context) {
-        this.context = context;
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(context, R.layout.row_delete_keyword, null);
+        View view = View.inflate(parent.getContext(), R.layout.row_delete_keyword, null);
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(lp);
         return new DeleteKeywordAdapter.ViewHolder(view);
@@ -41,7 +37,7 @@ public class DeleteKeywordAdapter extends RecyclerView.Adapter<DeleteKeywordAdap
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.tvKeyword.setText(getItem(position));
+        holder.tvKeyword.setText(getItem(position).getTitle());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +64,7 @@ public class DeleteKeywordAdapter extends RecyclerView.Adapter<DeleteKeywordAdap
     }
 
     @Override
-    public String getItem(int i) {
+    public Keyword getItem(int i) {
         return keywordList.get(i);
     }
 
@@ -78,8 +74,8 @@ public class DeleteKeywordAdapter extends RecyclerView.Adapter<DeleteKeywordAdap
     }
 
     @Override
-    public void addItems(ArrayList<String> items) {
-        keywordList = items;
+    public void setData(List<Keyword> data) {
+        keywordList = data;
     }
 
     @Override

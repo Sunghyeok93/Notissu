@@ -29,13 +29,13 @@ public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKe
     @BindView(R.id.delete_keyword_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.delete_keyword_rl_list)
-    RelativeLayout mRlList;
+    RelativeLayout mKeywordContainer;
     @BindView(R.id.delete_keyword_rv_keyword)
-    RecyclerView mRvKeyword;
+    RecyclerView mList;
     @BindView(R.id.delete_keyword_btn_remove_all)
     Button mBtnRemoveAll;
 
-    DeleteKeywordContract.Presenter presenter;
+    private DeleteKeywordContract.Presenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +46,11 @@ public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKe
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        DeleteKeywordAdapter deleteKeywordAdapter = new DeleteKeywordAdapter(this);
+        DeleteKeywordAdapter deleteKeywordAdapter = new DeleteKeywordAdapter();
 
-        presenter = new DeleteKeywordPresenter(this,deleteKeywordAdapter,deleteKeywordAdapter);
-        presenter.start();
-
-        mRvKeyword.setLayoutManager(new LinearLayoutManager(DeleteKeywordActivity.this));
-        mRvKeyword.addItemDecoration(new DividerItemDecoration(mRvKeyword.getContext(),DividerItemDecoration.VERTICAL));
-        mRvKeyword.setAdapter(deleteKeywordAdapter);
+        mPresenter = new DeleteKeywordPresenter(this);
+        mPresenter.setAdapter(deleteKeywordAdapter);
+        mPresenter.fetchKeyword();
 
         deleteKeywordAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
             @Override
@@ -61,12 +58,11 @@ public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKe
                 showDeleteDialog(new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        presenter.deleteKeyword(position);
+                        mPresenter.deleteKeyword(position);
                     }
                 });
             }
         });
-
 
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +78,7 @@ public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKe
         showDeleteDialog(new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                presenter.deleteKeywordAll();
+                mPresenter.deleteKeywordAll();
             }
         });
 
@@ -90,7 +86,14 @@ public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKe
 
     @Override
     public void showTextNoKeyword() {
-        mRlList.setVisibility(View.GONE);
+        mKeywordContainer.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void setAdapter(DeleteKeywordAdapter deleteKeywordAdapter) {
+        mList.setLayoutManager(new LinearLayoutManager(DeleteKeywordActivity.this));
+        mList.addItemDecoration(new DividerItemDecoration(mList.getContext(),DividerItemDecoration.VERTICAL));
+        mList.setAdapter(deleteKeywordAdapter);
     }
 
     private void showDeleteDialog(DialogInterface.OnClickListener onClickListener) {
@@ -108,6 +111,6 @@ public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKe
 
     @Override
     public void setPresenter(@NonNull DeleteKeywordContract.Presenter presenter) {
-        this.presenter = checkNotNull(presenter);
+        this.mPresenter = checkNotNull(presenter);
     }
 }

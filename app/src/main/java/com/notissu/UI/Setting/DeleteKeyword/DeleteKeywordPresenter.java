@@ -3,7 +3,12 @@ package com.notissu.UI.Setting.DeleteKeyword;
 import android.support.annotation.NonNull;
 import android.view.Menu;
 
+import com.notissu.Model.Keyword;
 import com.notissu.Model.NavigationMenu;
+
+import java.util.List;
+
+import io.realm.Realm;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -12,42 +17,33 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 
 public class DeleteKeywordPresenter implements DeleteKeywordContract.Presenter {
-    private DeleteKeywordContract.View view;
-    private DeleteKeywordAdapterContract.Model adapterModel;
-    private DeleteKeywordAdapterContract.View adapterView;
+    private DeleteKeywordContract.View mView;
+    private DeleteKeywordAdapterContract.Model mAdapterModel;
+    private DeleteKeywordAdapterContract.View mAdapterView;
 
-    public DeleteKeywordPresenter(@NonNull DeleteKeywordContract.View view,
-                                  @NonNull DeleteKeywordAdapterContract.Model adapterModel,
-                                  @NonNull DeleteKeywordAdapterContract.View adapterView) {
-        this.view = checkNotNull(view, "DeleteKeywordContract.View cannot be null");
-        this.adapterModel = checkNotNull(adapterModel, "DeleteKeywordAdapterContract.Model cannot be null");
-        this.adapterView = checkNotNull(adapterView, "DeleteKeywordAdapterContract.View cannot be null");
+    private Realm mRealm = Realm.getDefaultInstance();
+
+    public DeleteKeywordPresenter(@NonNull DeleteKeywordContract.View view) {
+        this.mView = checkNotNull(view, "DeleteKeywordContract.View cannot be null");
         view.setPresenter(this);
     }
 
     @Override
     public void start() {
-        loadKeyword();
-    }
-
-    @Override
-    public void loadKeyword() {
-        /*KeywordProvider mKeywordProvider = new KeywordProviderImp();
-        ArrayList<String> keywordListDB = new ArrayList<String>(mKeywordProvider.getKeyword());
-        adapterModel.addItems(keywordListDB);
-        adapterView.refresh();
-        if (adapterModel.getCount() == 0) {
-            view.showTextNoKeyword();
-        }*/
     }
 
     @Override
     public void deleteKeyword(int position) {
-        final String title = adapterModel.getItem(position);
+        final String title = mAdapterModel.getItem(position).getTitle();
         //키워드를 지울 때 무엇을 해야할까?
         //1. DB에서 지워져야한다.
-        /*KeywordProvider mKeywordProvider = new KeywordProviderImp();
-        mKeywordProvider.deleteKeyword(title);*/
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.where(Keyword.class).equalTo("title", title).findFirst().deleteFromRealm();
+            }
+        });
+
         //2. Menu에서 지워져야한다.
         Menu menu = NavigationMenu.getInstance().getKeywordMenu();
         int menuSize = menu.size();
@@ -61,21 +57,46 @@ public class DeleteKeywordPresenter implements DeleteKeywordContract.Presenter {
                 break;
             }
         }
+
         //3. 화면을 갱신해야한다.
-        adapterModel.remove(title);
-        adapterView.refresh();
-        if (adapterModel.getCount() == 0) {
-            view.showTextNoKeyword();
+        mAdapterView.refresh();
+        if (mAdapterModel.getCount() == 0) {
+            mView.showTextNoKeyword();
         }
     }
 
     @Override
     public void deleteKeywordAll() {
-        int keywordSize = adapterModel.getCount();
-        for (int i = 0; i < keywordSize; i++) {
-            deleteKeyword(0);
-        }
+        //1. DB에서 지워져야한다.
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.where(Keyword.class).findAll().deleteAllFromRealm();
+            }
+        });
+
+        //2. Menu에서 지워져야한다.
+        NavigationMenu navigationMenu = NavigationMenu.getInstance();
+        navigationMenu.removeKeywordAll();
+
+        //3. 화면을 갱신해야한다.
+        mView.showTextNoKeyword();
     }
 
+    @Override
+    public void setAdapter(DeleteKeywordAdapter deleteKeywordAdapter) {
+        mAdapterModel = deleteKeywordAdapter;
+        mAdapterView = deleteKeywordAdapter;
+        mView.setAdapter(deleteKeywordAdapter);
+    }
 
+    @Override
+    public void fetchKeyword() {
+        List<Keyword> keywordList = mRealm.where(Keyword.class).findAll();
+        mAdapterModel.setData(keywordList);
+        mAdapterView.refresh();
+        if (mAdapterModel.getCount() == 0) {
+            mView.showTextNoKeyword();
+        }
+    }
 }

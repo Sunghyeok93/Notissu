@@ -11,14 +11,18 @@ public interface DeleteKeywordContract {
     interface View extends BaseView<Presenter> {
 
         void showTextNoKeyword();
+
+        void setAdapter(DeleteKeywordAdapter deleteKeywordAdapter);
     }
 
     interface Presenter extends BasePresenter{
 
-        void loadKeyword();
-
         void deleteKeyword(int position);
 
         void deleteKeywordAll();
+
+        void setAdapter(DeleteKeywordAdapter deleteKeywordAdapter);
+
+        void fetchKeyword();
     }
 }

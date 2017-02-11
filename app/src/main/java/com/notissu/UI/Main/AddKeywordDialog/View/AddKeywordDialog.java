@@ -58,6 +58,7 @@ public class AddKeywordDialog extends DialogFragment implements AddKeywordContra
         Keyword keyword = new Keyword(mEtText.getText().toString());
         mOnAddKeywordListner.onAdd(keyword);
         dismiss();
+        mEtText.setText("");
     }
 
     public void setOnAddKeywordListner(AddKeywordContract.OnAddKeywordListner onAddKeywordListner) {
