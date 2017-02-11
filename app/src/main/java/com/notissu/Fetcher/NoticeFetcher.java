@@ -114,6 +114,9 @@ public class NoticeFetcher {
             case NoticeTabContract.NOTICE_SSU_OUTER:
                 serverCategory = "outer";
                 break;
+            case NoticeTabContract.NOTICE_SSU_LIBRARY:
+                serverCategory = "library";
+                break;
             default:
                 serverCategory = "all";
                 break;

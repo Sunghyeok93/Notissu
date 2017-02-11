@@ -149,7 +149,8 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
             NoticeFetcher noticeFetcher = new NoticeFetcher(onFetchNoticeListListener);
             noticeFetcher.fetchNoticeList(NoticeTabContract.NOTICE_CATEGORY[category], 1);
         } else if (isLibrary()) {
-
+            NoticeFetcher noticeFetcher = new NoticeFetcher(onFetchNoticeListListener);
+            noticeFetcher.fetchNoticeList(NoticeTabContract.NOTICE_SSU_LIBRARY, 1);
         } else if (isStarred()) {
             fetchStarred();
         } else if (isKeyword()) {

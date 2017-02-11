@@ -22,6 +22,7 @@ public interface NoticeTabContract {
             NOTICE_SSU_FOREIGN, NOTICE_SSU_RECRUIT, NOTICE_SSU_INNER,
             NOTICE_SSU_OUTER, NOTICE_SSU_VOLUNTEER
     };
+    String NOTICE_SSU_LIBRARY = "도서관";
     String KEY_TITLE = "KEY_TITLE";
     String KEY_FLAG = "KEY_FLAG";
 
