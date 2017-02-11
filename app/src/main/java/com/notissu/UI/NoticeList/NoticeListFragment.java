@@ -122,6 +122,7 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
     @Override
     public void hideProgress() {
         mProgressDialog.dismiss();
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private void showSearch(String query) {
@@ -147,11 +148,6 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
                 return false;
             }
         });
-    }
-
-    @Override
-    public void hideRefreshing() {
-        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

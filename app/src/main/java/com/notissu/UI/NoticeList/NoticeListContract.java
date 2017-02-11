@@ -27,8 +27,6 @@ public interface NoticeListContract {
 
         void showOptionMenu(Menu menu, MenuInflater inflater);
 
-        void hideRefreshing();
-
         void showNotice(int noticeId);
 
         void setAdapter(NoticeListAdapter noticeListAdapter);
