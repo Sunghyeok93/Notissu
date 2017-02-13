@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.CheckBox;
 
 import com.notissu.Fetcher.NoticeFetcher;
-import com.notissu.Model.NavigationMenu;
 import com.notissu.Model.Notice;
 import com.notissu.R;
 import com.notissu.UI.NoticeTab.NoticeTabContract;
@@ -116,12 +115,6 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
         mView.setAdapter(noticeListAdapter);
     }
 
-    private void setList(List<Notice> noticeList) {
-        mAdapterModel.setLists(noticeList);
-        mAdapterView.refresh();
-        mView.hideProgress();
-    }
-
     @Override
     public void onStarredClick(View view, final Notice notice) {
         final CheckBox cb = (CheckBox) view.findViewById(R.id.notice_cb_star);
@@ -143,22 +136,22 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
     }
 
     @Override
-    public void fetchNotice() {
+    public void fetchNotice(int page) {
         mView.showProgress();
         if (isMain()) {
             NoticeFetcher noticeFetcher = new NoticeFetcher(onFetchNoticeListListener);
-            noticeFetcher.fetchNoticeList(NoticeTabContract.NOTICE_CATEGORY[category], 1);
+            noticeFetcher.fetchNoticeList(NoticeTabContract.NOTICE_CATEGORY[category], page);
         } else if (isLibrary()) {
             NoticeFetcher noticeFetcher = new NoticeFetcher(onFetchNoticeListListener);
-            noticeFetcher.fetchNoticeList(NoticeTabContract.NOTICE_SSU_LIBRARY, 1);
+            noticeFetcher.fetchNoticeList(NoticeTabContract.NOTICE_SSU_LIBRARY, page);
         } else if (isStarred()) {
             fetchStarred();
         } else if (isKeyword()) {
             NoticeFetcher noticeFetcher = new NoticeFetcher(onFetchSearchListener);
-            noticeFetcher.fetchSearchList(title,1);
+            noticeFetcher.fetchSearchList(title, page);
         } else if (isSearch()) {
             NoticeFetcher noticeFetcher = new NoticeFetcher(onFetchSearchListener);
-            noticeFetcher.fetchSearchList(title,1);
+            noticeFetcher.fetchSearchList(title, page);
         }
     }
 
@@ -171,6 +164,10 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
     private NoticeListContract.OnFetchNoticeListListener onFetchNoticeListListener = new NoticeListContract.OnFetchNoticeListListener() {
         @Override
         public void onFetchNoticeList(String response) {
+            if (response.equals("{}")) {
+                mView.hideProgress();
+                return;
+            }
             List<Notice> noticeList = Notice.fromJson(response);
             setList(noticeList);
         }
@@ -183,6 +180,12 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
             setList(noticeList);
         }
     };
+
+    private void setList(List<Notice> noticeList) {
+        mAdapterModel.addList(noticeList);
+        mAdapterView.refresh();
+        mView.hideProgress();
+    }
 
     private boolean isMain() {
         return flag == FLAG_MAIN_NOTICE;

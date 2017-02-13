@@ -26,13 +26,13 @@ public interface NoticeListAdapterContract {
 
         Notice getItem(int i);
 
-        void setLists(List<Notice> noticeList);
-
         void setOnStarredClickListener(OnStarredClickListner onStarredClickListener);
 
         void readAll();
 
         List<Notice> getList();
+
+        void addList(List<Notice> noticeList);
     }
 
     interface OnStarredClickListner {

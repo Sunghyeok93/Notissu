@@ -93,11 +93,6 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
     }
 
     @Override
-    public void setLists(List<Notice> noticeList) {
-        mNoticeList = noticeList;
-    }
-
-    @Override
     public void refresh() {
         notifyDataSetChanged();
     }
@@ -124,6 +119,13 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
     @Override
     public List<Notice> getList() {
         return mNoticeList;
+    }
+
+    @Override
+    public void addList(List<Notice> noticeList) {
+        for (int i = 0; i < noticeList.size(); i++) {
+            mNoticeList.add(noticeList.get(i));
+        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

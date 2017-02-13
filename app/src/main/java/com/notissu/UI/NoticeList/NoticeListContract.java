@@ -42,7 +42,7 @@ public interface NoticeListContract {
 
         void setAdapter(NoticeListAdapter noticeListAdapter);
 
-        void fetchNotice();
+        void fetchNotice(int page);
 
         void onStarredClick(android.view.View view, Notice notice);
     }

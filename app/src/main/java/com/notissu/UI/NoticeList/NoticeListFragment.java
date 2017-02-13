@@ -11,6 +11,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +24,7 @@ import com.notissu.UI.NoticeList.Search.SearchActivity;
 import com.notissu.R;
 import com.notissu.UI.NoticeList.Detail.NoticeDetailActivity;
 import com.notissu.Util.LogUtils;
+import com.notissu.View.Interface.EndlessRecyclerViewScrollListener;
 import com.notissu.View.Interface.OnRecyclerItemClickListener;
 
 import butterknife.BindView;
@@ -83,7 +85,7 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
 
         mProgressDialog = new ProgressDialog(getContext());
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.setMessage("학교 서버가 너무 느려요...");
+        mProgressDialog.setMessage("잠시만 기다려 주세요...");
 
         noticeListAdapter.setOnRecyclerItemClickListener(new OnRecyclerItemClickListener() {
             @Override
@@ -102,11 +104,11 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPresenter.fetchNotice();
+                mPresenter.fetchNotice(1);
             }
         });
 
-        mPresenter.fetchNotice();
+        mPresenter.fetchNotice(1);
     }
 
     @Override
@@ -159,9 +161,17 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
 
     @Override
     public void setAdapter(NoticeListAdapter noticeListAdapter) {
-        mNoticeList.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        mNoticeList.setLayoutManager(linearLayoutManager);
         mNoticeList.addItemDecoration(new DividerItemDecoration(mNoticeList.getContext(), DividerItemDecoration.VERTICAL));
         mNoticeList.setAdapter(noticeListAdapter);
+        mNoticeList.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                mPresenter.fetchNotice(page+1);
+                Log.d(TAG, "page = " + page + ", totalItemsCount = " + totalItemsCount);
+            }
+        });
     }
 
     @Override
