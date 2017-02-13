@@ -125,7 +125,7 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
                 //클릭되고 난 다음이라 isChecked는 체크되는 순간이다.
                 if (cb.isChecked()) {
                     cb.setChecked(false);
-                    realm.where(Notice.class).equalTo("id", notice.getId()).findFirst().deleteFromRealm();
+                    realm.where(Notice.class).equalTo("notice_id", notice.getId()).findFirst().deleteFromRealm();
                 } else {
                     cb.setChecked(true);
                     notice.setStarred(true);
