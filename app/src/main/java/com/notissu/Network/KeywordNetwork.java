@@ -31,7 +31,7 @@ public class KeywordNetwork {
         this.mOnFetchKeywordListener = onFetchKeywordListener;
     }
 
-    public void sendKeyword(final String title) {
+    public void sendKeyword(final String title, final String hash) {
         String token = FirebaseInstanceId.getInstance().getToken();
         String url = BASE_URL + token + "/";
         StringRequest request = new StringRequestUTF8(Request.Method.POST, url, new Response.Listener<String>() {
@@ -48,6 +48,7 @@ public class KeywordNetwork {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("keyword", title);
+                params.put("hash", hash);
                 return params;
             }
         };

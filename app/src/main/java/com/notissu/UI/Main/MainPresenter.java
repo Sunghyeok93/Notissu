@@ -12,6 +12,7 @@ import com.notissu.Network.KeywordNetwork;
 import com.notissu.UI.NoticeList.NoticeListFragment;
 import com.notissu.UI.NoticeTab.NoticeTabFragment;
 import com.notissu.Notification.Alarm;
+import com.notissu.Util.Encoder;
 
 import java.util.List;
 
@@ -81,11 +82,13 @@ public class MainPresenter implements MainContract.Presenter {
 
         mView.addMenuKeyword(keyword);
 
+
+        String hash = Encoder.toSHA256(keyword.getTitle());
         KeywordNetwork sender = new KeywordNetwork();
-        sender.sendKeyword(keyword.getTitle());
+        sender.sendKeyword(keyword.getTitle(), hash);
 
         //키워드 구독하기
-        FirebaseMessaging.getInstance().subscribeToTopic(keyword.getTitle());
+        FirebaseMessaging.getInstance().subscribeToTopic(hash);
 
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
