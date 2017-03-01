@@ -80,21 +80,13 @@ public class MainPresenter implements MainContract.Presenter {
             }
         }
 
-        mView.addMenuKeyword(keyword);
-
-
-        String hash = Encoder.toSHA256(keyword.getTitle());
+        keyword.setHash(Encoder.toSHA256(keyword.getTitle()));
         KeywordNetwork sender = new KeywordNetwork();
-        sender.sendKeyword(keyword.getTitle(), hash);
+        sender.sendKeyword(keyword.getTitle(), keyword.getHash());
 
         //키워드 구독하기
-        FirebaseMessaging.getInstance().subscribeToTopic(hash);
+        FirebaseMessaging.getInstance().subscribeToTopic(keyword.getHash());
 
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.copyToRealmOrUpdate(keyword);
-            }
-        });
+        mView.addMenuKeyword(keyword);
     }
 }

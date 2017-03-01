@@ -10,9 +10,9 @@ import java.util.List;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class Keyword extends RealmObject {
-    @PrimaryKey
+public class Keyword{
     private String keyword;
+    private String hash;
 
     public Keyword() {
     }
@@ -25,6 +25,10 @@ public class Keyword extends RealmObject {
         return keyword;
     }
 
+    public String getHash() {
+        return hash;
+    }
+
     @Override
     public boolean equals(Object obj) {
         Keyword otherKeyword = (Keyword) obj;
@@ -35,5 +39,9 @@ public class Keyword extends RealmObject {
         Type listType = new TypeToken<List<Keyword>>() {
         }.getType();
         return new Gson().fromJson(response, listType);
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 }

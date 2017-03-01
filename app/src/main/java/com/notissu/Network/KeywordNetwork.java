@@ -1,5 +1,7 @@
 package com.notissu.Network;
 
+import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -10,6 +12,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.notissu.BaseApplication;
 import com.notissu.Model.NavigationMenu;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,15 +78,23 @@ public class KeywordNetwork {
 
     public void deleteKeyword(String title) {
         String token = FirebaseInstanceId.getInstance().getToken();
-        String url = BASE_URL + token + "/" + title + "/";
+        String url = BASE_URL + token + "/";
+        try {
+            title = URLEncoder.encode(title, "UTF-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        url = url + title + "/";
+
         StringRequest request = new StringRequestUTF8(Request.Method.DELETE, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.d(TAG, response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                error.printStackTrace();
             }
         });
         mQueue.add(request);

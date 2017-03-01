@@ -36,20 +36,14 @@ public class DeleteKeywordPresenter implements DeleteKeywordContract.Presenter {
     @Override
     public void deleteKeyword(int position) {
         final Keyword keyword = mAdapterModel.getItem(position);
-        //1. DB에서 지워져야한다.
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.where(Keyword.class).equalTo("keyword", keyword.getTitle()).findFirst().deleteFromRealm();
-            }
-        });
 
         // 서버에 삭제요청보낸다.
+
         KeywordNetwork sender = new KeywordNetwork();
         sender.deleteKeyword(keyword.getTitle());
 
         // 구독 취소 한다.
-        FirebaseMessaging.getInstance().unsubscribeFromTopic(keyword.getTitle());
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(keyword.getHash());
 
         //2. Menu에서 지워져야한다.
         NavigationMenu navigationMenu = NavigationMenu.getInstance();
@@ -64,13 +58,6 @@ public class DeleteKeywordPresenter implements DeleteKeywordContract.Presenter {
 
     @Override
     public void deleteKeywordAll() {
-        //1. DB에서 지워져야한다.
-        mRealm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.where(Keyword.class).findAll().deleteAllFromRealm();
-            }
-        });
 
         // 서버에 삭제요청보낸다.
         KeywordNetwork sender = new KeywordNetwork();
@@ -80,7 +67,7 @@ public class DeleteKeywordPresenter implements DeleteKeywordContract.Presenter {
         NavigationMenu navigationMenu = NavigationMenu.getInstance();
         List<Keyword> keywordList = navigationMenu.getKeywordList();
         for (int i = 0; i <keywordList.size(); i++) {
-            FirebaseMessaging.getInstance().unsubscribeFromTopic(keywordList.get(i).getTitle());
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(keywordList.get(i).getHash());
         }
 
         //2. Menu에서 지워져야한다.
