@@ -1,12 +1,9 @@
 package com.notissu;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -24,16 +21,13 @@ public class BaseApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        networkSettings();
-
-        pushSettings();
 
         databaseSettings();
+
+        networkSettings();
+
     }
 
-    private void pushSettings() {
-
-    }
 
     private void databaseSettings() {
         Realm.init(this);
