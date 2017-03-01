@@ -1,8 +1,8 @@
 package com.notissu.UI.Setting.DeleteKeyword;
 
 import android.support.annotation.NonNull;
-import android.view.Menu;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.notissu.Model.Keyword;
 import com.notissu.Model.NavigationMenu;
 import com.notissu.Network.KeywordNetwork;
@@ -48,6 +48,9 @@ public class DeleteKeywordPresenter implements DeleteKeywordContract.Presenter {
         KeywordNetwork sender = new KeywordNetwork();
         sender.deleteKeyword(keyword.getTitle());
 
+        // 구독 취소 한다.
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(keyword.getTitle());
+
         //2. Menu에서 지워져야한다.
         NavigationMenu navigationMenu = NavigationMenu.getInstance();
         navigationMenu.deleteKeyword(keyword);
@@ -73,9 +76,15 @@ public class DeleteKeywordPresenter implements DeleteKeywordContract.Presenter {
         KeywordNetwork sender = new KeywordNetwork();
         sender.deleteKeywordAll();
 
-        //2. Menu에서 지워져야한다.
+        // 구독 취소 한다.
         NavigationMenu navigationMenu = NavigationMenu.getInstance();
-        navigationMenu.removeKeywordAll();
+        List<Keyword> keywordList = navigationMenu.getKeywordList();
+        for (int i = 0; i <keywordList.size(); i++) {
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(keywordList.get(i).getTitle());
+        }
+
+        //2. Menu에서 지워져야한다.
+        navigationMenu.deleteKeywordAll();
 
         //3. 화면을 갱신해야한다.
         mView.showTextNoKeyword();

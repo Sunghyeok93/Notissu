@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.Menu;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.notissu.Model.Keyword;
 import com.notissu.Model.NavigationMenu;
 import com.notissu.Network.KeywordNetwork;
@@ -82,6 +83,9 @@ public class MainPresenter implements MainContract.Presenter {
 
         KeywordNetwork sender = new KeywordNetwork();
         sender.sendKeyword(keyword.getTitle());
+
+        //키워드 구독하기
+        FirebaseMessaging.getInstance().subscribeToTopic(keyword.getTitle());
 
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override

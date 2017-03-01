@@ -49,14 +49,8 @@ public class NavigationMenu {
         return id++;
     }
 
-    public void removeKeywordAll() {
-        Menu menu = getKeywordMenu();
-        int menuSize = menu.size();
-        for (int i = 0; i < menuSize; i++) {
-            int itemId = menu.getItem(0).getItemId();
-            menu.removeItem(itemId);
-        }
-        keywordList = new ArrayList<>();
+    public List<Keyword> getKeywordList() {
+        return keywordList;
     }
 
     private OnFetchKeywordListener onFetchKeywordListener = new OnFetchKeywordListener() {
@@ -78,10 +72,6 @@ public class NavigationMenu {
         keywordList.add(keyword);
     }
 
-    public List<Keyword> getKeywordList() {
-        return keywordList;
-    }
-
     public void deleteKeyword(Keyword keyword) {
         Menu menu = getKeywordMenu();
         int menuSize = menu.size();
@@ -96,6 +86,16 @@ public class NavigationMenu {
             }
         }
         keywordList.remove(keyword);
+    }
+
+    public void deleteKeywordAll() {
+        Menu menu = getKeywordMenu();
+        int menuSize = menu.size();
+        for (int i = 0; i < menuSize; i++) {
+            int itemId = menu.getItem(0).getItemId();
+            menu.removeItem(itemId);
+        }
+        keywordList = new ArrayList<>();
     }
 
     public interface OnFetchKeywordListener {
