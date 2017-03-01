@@ -56,6 +56,7 @@ public class NavigationMenu {
     private OnFetchKeywordListener onFetchKeywordListener = new OnFetchKeywordListener() {
         @Override
         public void onFetchKeyword(String response) {
+            keywordList.clear();
             List<Keyword> keywordList = Keyword.fromJson(response);
             addKeywordAll(keywordList);
         }
