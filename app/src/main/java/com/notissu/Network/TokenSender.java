@@ -7,18 +7,11 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.notissu.BaseApplication;
 import com.notissu.Firebase.MyFirebaseInstanceIDService;
-import com.notissu.UI.Splach.SplashContract;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.jsoup.Connection;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +26,7 @@ public class TokenSender {
         mOnSendTokenListener = onSendTokenListener;
     }
 
-    public void tokenSend(final String token) {
+    public void sendToken(final String token) {
 
         StringRequest request = new StringRequestUTF8(Request.Method.POST, BASE_URL, new Response.Listener<String>() {
             @Override

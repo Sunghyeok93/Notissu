@@ -11,15 +11,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.notissu.Model.Keyword;
 import com.notissu.UI.Main.AddKeywordDialog.Presenter.AddKeywordContract;
 import com.notissu.UI.Main.AddKeywordDialog.View.AddKeywordDialog;
@@ -204,8 +201,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void addMenuKeyword(Keyword keyword) {
         NavigationMenu navigationMenu = NavigationMenu.getInstance();
-        Menu menu = navigationMenu.getKeywordMenu();
-        int newId = navigationMenu.getNewId();
-        menu.add(R.id.group_keyword, newId, 1, keyword.getTitle()).setIcon(R.drawable.ic_menu_send);
+        navigationMenu.addKeyword(keyword);
     }
 }

@@ -7,6 +7,7 @@ import android.view.Menu;
 
 import com.notissu.Model.Keyword;
 import com.notissu.Model.NavigationMenu;
+import com.notissu.Network.KeywordNetwork;
 import com.notissu.UI.NoticeList.NoticeListFragment;
 import com.notissu.UI.NoticeTab.NoticeTabFragment;
 import com.notissu.Notification.Alarm;
@@ -43,12 +44,12 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void start() {
         mView.showNavigation();
-        List<Keyword> keywordList = mRealm.where(Keyword.class).findAll();
-        if (keywordList.size() != 0) {
-            for (int i = 0; i < keywordList.size(); i++) {
-                mView.addMenuKeyword(keywordList.get(i));
-            }
-        }
+//        List<Keyword> keywordList = mRealm.where(Keyword.class).findAll();
+//        if (keywordList.size() != 0) {
+//            for (int i = 0; i < keywordList.size(); i++) {
+//                mView.addMenuKeyword(keywordList.get(i));
+//            }
+//        }
 
         boolean isAlarm = mBundle.getBoolean(Alarm.KEY_IS_ALRAM, false);
         if (!isAlarm) {
@@ -84,6 +85,9 @@ public class MainPresenter implements MainContract.Presenter {
         }
 
         mView.addMenuKeyword(keyword);
+
+        KeywordNetwork sender = new KeywordNetwork();
+        sender.sendKeyword(keyword.getTitle());
 
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override

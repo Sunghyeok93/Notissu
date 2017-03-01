@@ -2,13 +2,12 @@ package com.notissu.Model;
 
 import android.support.design.widget.NavigationView;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
+import com.notissu.Network.KeywordNetwork;
 import com.notissu.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by forhack on 2016-12-11.
@@ -19,14 +18,12 @@ public class NavigationMenu {
     private static NavigationMenu navigationMenu = new NavigationMenu();
     private NavigationView menu;
 
+    private List<Keyword> keywordList = new ArrayList<>();
+
     private NavigationMenu() {
     }
 
     private int id;
-
-    private TextView mTvMainCount;
-    private TextView mTvLibraryCount;
-    private ArrayList<KeywordPair> mTvKeywordCount = new ArrayList<>();
 
     public static NavigationMenu getInstance() {
         return navigationMenu;
@@ -35,12 +32,8 @@ public class NavigationMenu {
     public void setMenu(NavigationView menu) {
         this.menu = menu;
         this.menu.inflateMenu(R.menu.activity_main_drawer);
-
-        LinearLayout view = (LinearLayout) menu.getMenu().findItem(R.id.nav_ssu_main).getActionView();
-        mTvMainCount = (TextView) view.findViewById(R.id.navigation_item_tv_count);
-        view = (LinearLayout) menu.getMenu().findItem(R.id.nav_ssu_library).getActionView();
-        mTvLibraryCount = (TextView) view.findViewById(R.id.navigation_item_tv_count);
-
+        KeywordNetwork fetcher = new KeywordNetwork(onFetchKeywordListener);
+        fetcher.fetchKeywordList();
     }
 
     public Menu getKeywordMenu() {
@@ -50,48 +43,6 @@ public class NavigationMenu {
     public String getFristItemTitle() {
         String title = menu.getMenu().getItem(0).getSubMenu().getItem(0).getTitle().toString();
         return title;
-    }
-
-    private void setMainNotReadCount(int count) {
-        if (count == 0) {
-            mTvMainCount.setText("");
-        } else {
-            mTvMainCount.setText(count + "");
-        }
-    }
-
-    private void setLibraryNotReadCount(int count) {
-        if (count == 0) {
-            mTvLibraryCount.setText("");
-        } else {
-            mTvLibraryCount.setText(count + "");
-        }
-    }
-
-    private void setKeywordTvArray() {
-        //menu 목록에 있는 메뉴의 배열 혹은 리스트를 구해서 for문을 돌리자.
-        Menu keywordMenu = getKeywordMenu();
-        for (int i = 0; i < keywordMenu.size(); i++) {
-            MenuItem menuItem = keywordMenu.getItem(i);
-            //먼저 Keyword List에 새로운 키워드가 있는지 확인하고,
-            KeywordPair menuKeyword = new KeywordPair(menuItem);
-            for (int j = 0; j < mTvKeywordCount.size(); j++) {
-                KeywordPair listKeyword = mTvKeywordCount.get(j);
-                if (!menuKeyword.equals(listKeyword)) {
-                    //없을 때만 새롭가 추가한다.
-                    mTvKeywordCount.add(menuKeyword);
-                }
-            }
-
-        }
-    }
-
-    private void setKeywodNotReadCount(TextView textView, int count) {
-        if (count == 0) {
-            textView.setText("");
-        } else {
-            textView.setText(count + "");
-        }
     }
 
     public int getNewId() {
@@ -107,34 +58,31 @@ public class NavigationMenu {
         }
     }
 
-    class KeywordPair {
-        private String keyword;
-        private TextView tvCount;
+    public void setKeywordList(List<Keyword> keywordList) {
+        this.keywordList = keywordList;
+    }
 
-        public KeywordPair(MenuItem menuItem) {
-            keyword = menuItem.getTitle().toString();
-            LinearLayout view = (LinearLayout) menuItem.getActionView();
-            tvCount = (TextView) view.findViewById(R.id.navigation_item_tv_count);
-        }
-
+    private OnFetchKeywordListener onFetchKeywordListener = new OnFetchKeywordListener() {
         @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            KeywordPair that = (KeywordPair) o;
-
-            return keyword != null ? keyword.equals(that.keyword) : that.keyword == null;
-
+        public void onFetchKeyword(String response) {
+            List<Keyword> keywordList = Keyword.fromJson(response);
+            addKeywordAll(keywordList);
         }
+    };
 
-        public String getKeyword() {
-            return keyword;
+    public void addKeywordAll(List<Keyword> keywordList) {
+        setKeywordList(keywordList);
+        for (int i = 0; i < keywordList.size(); i++) {
+            addKeyword(keywordList.get(i));
         }
+    }
 
-        public TextView getTvCount() {
-            return tvCount;
-        }
+    public void addKeyword(Keyword keyword) {
+        getKeywordMenu().add(R.id.group_keyword, getNewId(), 1, keyword.getTitle()).setIcon(R.drawable.ic_menu_send);
+    }
+
+    public interface OnFetchKeywordListener {
+        void onFetchKeyword(String response);
     }
 
 }
