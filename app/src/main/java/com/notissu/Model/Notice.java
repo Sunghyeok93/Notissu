@@ -25,14 +25,14 @@ public class Notice extends RealmObject implements Parcelable {
     @Ignore
     private static final String TAG = Notice.class.getSimpleName();
     @PrimaryKey
-    private int notice_id;
+    private int id;
     private String title;
     private String date;
     private boolean isStarred;
     private boolean isRead;
 
     public Notice(int id, String title, String date, boolean isStarred, boolean isRead) {
-        this.notice_id = id;
+        this.id = id;
         this.title = title;
         this.date = date;
         this.isStarred = isStarred;
@@ -43,7 +43,7 @@ public class Notice extends RealmObject implements Parcelable {
     }
 
     protected Notice(Parcel in) {
-        notice_id = in.readInt();
+        id = in.readInt();
         title = in.readString();
         date = in.readString();
         isStarred = in.readByte() != 0;
@@ -52,7 +52,7 @@ public class Notice extends RealmObject implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(notice_id);
+        dest.writeInt(id);
         dest.writeString(title);
         dest.writeString(date);
         dest.writeByte((byte) (isStarred ? 1 : 0));
@@ -77,7 +77,7 @@ public class Notice extends RealmObject implements Parcelable {
     };
 
     public int getId() {
-        return notice_id;
+        return id;
     }
 
     public String getTitle() {
