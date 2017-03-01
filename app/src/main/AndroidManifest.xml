@@ -29,9 +29,6 @@
             android:name=".UI.Setting.DeleteKeyword.DeleteKeywordActivity"
             android:theme="@style/AppThemeNoActionBar" />
         <activity
-            android:name=".UI.Setting.WithUs.WithUsActivity"
-            android:theme="@style/AppThemeNoActionBar" />
-        <activity
             android:name=".UI.Setting.AboutLibraries.AboutLibrariesActivity"
             android:theme="@style/AppThemeNoActionBar" />
         <activity
@@ -40,6 +37,17 @@
         <activity
             android:name=".UI.NoticeList.Detail.NoticeDetailActivity"
             android:theme="@style/AppThemeNoActionBar" />
+
+        <service android:name=".Firebase.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".Firebase.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
 
         <meta-data
             android:name="io.fabric.ApiKey"
