@@ -5,7 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 
-import com.notissu.Fetcher.NoticeFetcher;
+import com.notissu.Network.NoticeFetcher;
 import com.notissu.Model.AttachedFile;
 import com.notissu.Model.NoticeDetail;
 import com.notissu.UI.NoticeList.NoticeListContract;

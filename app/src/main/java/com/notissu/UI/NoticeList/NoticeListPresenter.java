@@ -7,7 +7,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.CheckBox;
 
-import com.notissu.Fetcher.NoticeFetcher;
+import com.notissu.Network.NoticeFetcher;
 import com.notissu.Model.Notice;
 import com.notissu.R;
 import com.notissu.UI.NoticeTab.NoticeTabContract;

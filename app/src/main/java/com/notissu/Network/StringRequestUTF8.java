@@ -1,4 +1,4 @@
-package com.notissu.Fetcher;
+package com.notissu.Network;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
