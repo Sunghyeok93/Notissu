@@ -33,7 +33,7 @@ public class KeywordNetwork {
 
     public void sendKeyword(final String title) {
         String token = FirebaseInstanceId.getInstance().getToken();
-        String url = BASE_URL + token +"/";
+        String url = BASE_URL + token + "/";
         StringRequest request = new StringRequestUTF8(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -56,7 +56,7 @@ public class KeywordNetwork {
 
     public void fetchKeywordList() {
         String token = FirebaseInstanceId.getInstance().getToken();
-        String url = BASE_URL + token +"/";
+        String url = BASE_URL + token + "/";
         StringRequest request = new StringRequestUTF8(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -70,5 +70,21 @@ public class KeywordNetwork {
         });
         mQueue.add(request);
 
+    }
+
+    public void deleteKeyword(String title) {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        String url = BASE_URL + token + "/" + title + "/";
+        StringRequest request = new StringRequestUTF8(Request.Method.DELETE, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        mQueue.add(request);
     }
 }

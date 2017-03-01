@@ -44,12 +44,6 @@ public class MainPresenter implements MainContract.Presenter {
     @Override
     public void start() {
         mView.showNavigation();
-//        List<Keyword> keywordList = mRealm.where(Keyword.class).findAll();
-//        if (keywordList.size() != 0) {
-//            for (int i = 0; i < keywordList.size(); i++) {
-//                mView.addMenuKeyword(keywordList.get(i));
-//            }
-//        }
 
         boolean isAlarm = mBundle.getBoolean(Alarm.KEY_IS_ALRAM, false);
         if (!isAlarm) {

@@ -5,6 +5,7 @@ import android.view.Menu;
 
 import com.notissu.Model.Keyword;
 import com.notissu.Model.NavigationMenu;
+import com.notissu.Network.KeywordNetwork;
 
 import java.util.List;
 
@@ -34,29 +35,22 @@ public class DeleteKeywordPresenter implements DeleteKeywordContract.Presenter {
 
     @Override
     public void deleteKeyword(int position) {
-        final String title = mAdapterModel.getItem(position).getTitle();
-        //키워드를 지울 때 무엇을 해야할까?
+        final Keyword keyword = mAdapterModel.getItem(position);
         //1. DB에서 지워져야한다.
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.where(Keyword.class).equalTo("title", title).findFirst().deleteFromRealm();
+                realm.where(Keyword.class).equalTo("keyword", keyword.getTitle()).findFirst().deleteFromRealm();
             }
         });
 
+        // 서버에 삭제요청보낸다.
+        KeywordNetwork sender = new KeywordNetwork();
+        sender.deleteKeyword(keyword.getTitle());
+
         //2. Menu에서 지워져야한다.
-        Menu menu = NavigationMenu.getInstance().getKeywordMenu();
-        int menuSize = menu.size();
-        // 내가 지우고자 하는 키워드의 이름으로 아이템을 찾고 아이디를 받아옴
-        for (int i = 0; i < menuSize; i++) {
-            String menuTitle = menu.getItem(i).getTitle().toString();
-            if (title.equals(menuTitle) == true) {
-                //지워버릴 Item의 아이디 얻어옴
-                int itemId = menu.getItem(i).getItemId();
-                menu.removeItem(itemId);
-                break;
-            }
-        }
+        NavigationMenu navigationMenu = NavigationMenu.getInstance();
+        navigationMenu.deleteKeyword(keyword);
 
         //3. 화면을 갱신해야한다.
         mAdapterView.refresh();
@@ -92,7 +86,7 @@ public class DeleteKeywordPresenter implements DeleteKeywordContract.Presenter {
 
     @Override
     public void fetchKeyword() {
-        List<Keyword> keywordList = mRealm.where(Keyword.class).findAll();
+        List<Keyword> keywordList = NavigationMenu.getInstance().getKeywordList();
         mAdapterModel.setData(keywordList);
         mAdapterView.refresh();
         if (mAdapterModel.getCount() == 0) {

@@ -58,10 +58,6 @@ public class NavigationMenu {
         }
     }
 
-    public void setKeywordList(List<Keyword> keywordList) {
-        this.keywordList = keywordList;
-    }
-
     private OnFetchKeywordListener onFetchKeywordListener = new OnFetchKeywordListener() {
         @Override
         public void onFetchKeyword(String response) {
@@ -71,7 +67,6 @@ public class NavigationMenu {
     };
 
     public void addKeywordAll(List<Keyword> keywordList) {
-        setKeywordList(keywordList);
         for (int i = 0; i < keywordList.size(); i++) {
             addKeyword(keywordList.get(i));
         }
@@ -79,6 +74,27 @@ public class NavigationMenu {
 
     public void addKeyword(Keyword keyword) {
         getKeywordMenu().add(R.id.group_keyword, getNewId(), 1, keyword.getTitle()).setIcon(R.drawable.ic_menu_send);
+        keywordList.add(keyword);
+    }
+
+    public List<Keyword> getKeywordList() {
+        return keywordList;
+    }
+
+    public void deleteKeyword(Keyword keyword) {
+        Menu menu = getKeywordMenu();
+        int menuSize = menu.size();
+        // 내가 지우고자 하는 키워드의 이름으로 아이템을 찾고 아이디를 받아옴
+        for (int i = 0; i < menuSize; i++) {
+            String menuTitle = menu.getItem(i).getTitle().toString();
+            if (keyword.getTitle().equals(menuTitle) == true) {
+                //지워버릴 Item의 아이디 얻어옴
+                int itemId = menu.getItem(i).getItemId();
+                menu.removeItem(itemId);
+                break;
+            }
+        }
+        keywordList.remove(keyword);
     }
 
     public interface OnFetchKeywordListener {
