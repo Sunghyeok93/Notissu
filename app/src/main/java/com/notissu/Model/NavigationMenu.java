@@ -56,6 +56,7 @@ public class NavigationMenu {
             int itemId = menu.getItem(0).getItemId();
             menu.removeItem(itemId);
         }
+        keywordList = new ArrayList<>();
     }
 
     private OnFetchKeywordListener onFetchKeywordListener = new OnFetchKeywordListener() {

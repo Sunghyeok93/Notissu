@@ -87,4 +87,20 @@ public class KeywordNetwork {
         });
         mQueue.add(request);
     }
+
+    public void deleteKeywordAll() {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        String url = BASE_URL + token + "/";
+        StringRequest request = new StringRequestUTF8(Request.Method.DELETE, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        mQueue.add(request);
+    }
 }

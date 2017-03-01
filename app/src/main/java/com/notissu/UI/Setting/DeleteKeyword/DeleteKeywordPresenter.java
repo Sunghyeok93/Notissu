@@ -69,6 +69,10 @@ public class DeleteKeywordPresenter implements DeleteKeywordContract.Presenter {
             }
         });
 
+        // 서버에 삭제요청보낸다.
+        KeywordNetwork sender = new KeywordNetwork();
+        sender.deleteKeywordAll();
+
         //2. Menu에서 지워져야한다.
         NavigationMenu navigationMenu = NavigationMenu.getInstance();
         navigationMenu.removeKeywordAll();
