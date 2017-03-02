@@ -3,6 +3,7 @@ package com.notissu.UI.NoticeList;
 import com.notissu.Model.Notice;
 import com.notissu.View.Interface.OnRecyclerItemClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.RealmList;
@@ -33,6 +34,8 @@ public interface NoticeListAdapterContract {
         List<Notice> getList();
 
         void addList(List<Notice> noticeList);
+
+        void setList(List<Notice> noticeList);
     }
 
     interface OnStarredClickListner {

@@ -128,6 +128,11 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
         }
     }
 
+    @Override
+    public void setList(List<Notice> noticeList) {
+        mNoticeList = noticeList;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.notice_tv_subject)
         TextView tvSubject;

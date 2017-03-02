@@ -2,6 +2,7 @@ package com.notissu.UI.NoticeList;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompatSideChannelService;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.notissu.Model.Notice;
 import com.notissu.R;
 import com.notissu.UI.NoticeTab.NoticeTabContract;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -68,12 +70,11 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
     public void onItemClick(View itemView, int position) {
         //읽음표시로 변경
         final Notice notice = mAdapterModel.getItem(position);
-        notice.setRead(true);
-
         //Notice Update
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                notice.setRead(true);
                 realm.copyToRealmOrUpdate(notice);
             }
         });
@@ -125,12 +126,12 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
                 //클릭되고 난 다음이라 isChecked는 체크되는 순간이다.
                 if (cb.isChecked()) {
                     cb.setChecked(false);
-                    realm.where(Notice.class).equalTo("notice_id", notice.getId()).findFirst().deleteFromRealm();
+                    notice.setStarred(false);
                 } else {
                     cb.setChecked(true);
                     notice.setStarred(true);
-                    realm.copyToRealmOrUpdate(notice);
                 }
+                realm.copyToRealmOrUpdate(notice);
             }
         });
     }
@@ -158,6 +159,7 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
     private void fetchStarred() {
         RealmResults<Notice> noticeList = mRealm.where(Notice.class).equalTo("isStarred", true).findAll();
         noticeList = noticeList.sort("date", Sort.DESCENDING);
+        mAdapterModel.setList(new ArrayList<Notice>());
         setList(noticeList);
     }
 

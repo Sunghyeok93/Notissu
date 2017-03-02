@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.RealmObject;
@@ -36,9 +37,15 @@ public class Keyword{
     }
 
     public static List<Keyword> fromJson(String response) {
-        Type listType = new TypeToken<List<Keyword>>() {
-        }.getType();
-        return new Gson().fromJson(response, listType);
+        List<Keyword> keywordList = new ArrayList<>();
+        try {
+            Type listType = new TypeToken<List<Keyword>>() {
+            }.getType();
+            keywordList = new Gson().fromJson(response, listType);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return keywordList;
     }
 
     public void setHash(String hash) {
