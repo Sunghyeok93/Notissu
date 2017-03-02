@@ -2,26 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.notissu">
 
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-    <!-- Required for fetching feed data. -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- Required to register a SyncStatusObserver to display a "syncing..." progress indicator. -->
-    <uses-permission android:name="android.permission.READ_SYNC_STATS" />
-    <!-- Required to enable our SyncAdapter after it's created. -->
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
-    <!-- Required because we're manually creating a new account. -->
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".UI.Splach.View.SplashActivity"
+            android:name=".UI.Splach.SplashActivity"
             android:theme="@style/AppThemeNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,58 +22,36 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UI.Main.View.MainActivity"
+            android:name=".UI.Main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".UI.Setting.DeleteKeyword.DeleteKeywordActivity"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".UI.Setting.AboutLibraries.AboutLibrariesActivity"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".UI.NoticeList.Search.SearchActivity"
+            android:theme="@style/AppThemeNoActionBar" />
+        <activity
+            android:name=".UI.NoticeList.Detail.NoticeDetailActivity"
+            android:theme="@style/AppThemeNoActionBar" />
 
-        <provider
-            android:name=".SyncAdapter.RSSProvider"
-            android:authorities="com.notissu"
-            android:exported="false"
-            android:syncable="true" />
-
-        <service android:name=".SyncAdapter.AuthenticatorService">
+        <service android:name=".Firebase.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-
-            <meta-data
-                android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
         </service>
-        <service
-            android:name=".SyncAdapter.SyncService"
-            android:exported="true">
+        <service android:name=".Firebase.MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
-
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/syncadapter" />
         </service>
 
-        <activity
-            android:name=".UI.UpdatePeriod.View.UpdatePeriodActivity"
-            android:theme="@style/AppThemeNoActionBar" />
-        <activity
-            android:name=".UI.DeleteKeyword.View.DeleteKeywordActivity"
-            android:theme="@style/AppThemeNoActionBar" />
-        <activity
-            android:name=".UI.WithUs.WithUsActivity"
-            android:theme="@style/AppThemeNoActionBar" />
-        <activity
-            android:name=".UI.AboutLibraries.AboutLibrariesActivity"
-            android:theme="@style/AppThemeNoActionBar" />
-        <activity
-            android:name=".UI.Search.View.SearchActivity"
-            android:theme="@style/AppThemeNoActionBar"/>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="fa0977a1de019e67313d89ce2eafc3bf19577da4" />
-        <activity
-            android:name=".UI.WebView.View.WebViewActivity"
-            android:theme="@style/AppThemeNoActionBar"/>
     </application>
 
 </manifest>

@@ -2,20 +2,12 @@ package com.notissu.Model;
 
 import android.support.design.widget.NavigationView;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.notissu.Database.KeywordProvider;
-import com.notissu.Database.KeywordProviderImp;
-import com.notissu.Database.LibraryProvider;
-import com.notissu.Database.LibraryProviderImp;
-import com.notissu.Database.MainProvider;
-import com.notissu.Database.MainProviderImp;
-import com.notissu.Database.RssDatabase;
+import com.notissu.Network.KeywordNetwork;
 import com.notissu.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by forhack on 2016-12-11.
@@ -25,12 +17,13 @@ import java.util.ArrayList;
 public class NavigationMenu {
     private static NavigationMenu navigationMenu = new NavigationMenu();
     private NavigationView menu;
-    private NavigationMenu() {}
-    private int id;
 
-    private TextView mTvMainCount;
-    private TextView mTvLibraryCount;
-    private ArrayList<KeywordPair> mTvKeywordCount = new ArrayList<>();
+    private List<Keyword> keywordList = new ArrayList<>();
+
+    private NavigationMenu() {
+    }
+
+    private int id;
 
     public static NavigationMenu getInstance() {
         return navigationMenu;
@@ -39,12 +32,8 @@ public class NavigationMenu {
     public void setMenu(NavigationView menu) {
         this.menu = menu;
         this.menu.inflateMenu(R.menu.activity_main_drawer);
-
-        LinearLayout view = (LinearLayout) menu.getMenu().findItem(R.id.nav_ssu_main).getActionView();
-        mTvMainCount = (TextView) view.findViewById(R.id.navigation_item_tv_count);
-        view = (LinearLayout) menu.getMenu().findItem(R.id.nav_ssu_library).getActionView();
-        mTvLibraryCount = (TextView) view.findViewById(R.id.navigation_item_tv_count);
-
+        KeywordNetwork fetcher = new KeywordNetwork(onFetchKeywordListener);
+        fetcher.fetchKeywordList();
     }
 
     public Menu getKeywordMenu() {
@@ -56,100 +45,62 @@ public class NavigationMenu {
         return title;
     }
 
-    private void setMainNotReadCount(int count) {
-        if (count == 0) {
-            mTvMainCount.setText("");
-        } else {
-            mTvMainCount.setText(count+"");
-        }
-    }
-
-    private void setLibraryNotReadCount(int count) {
-        if (count == 0) {
-            mTvLibraryCount.setText("");
-        } else {
-            mTvLibraryCount.setText(count+"");
-        }
-    }
-
-    private void setKeywordTvArray() {
-        //menu 목록에 있는 메뉴의 배열 혹은 리스트를 구해서 for문을 돌리자.
-        Menu keywordMenu = getKeywordMenu();
-        for (int i = 0; i < keywordMenu.size(); i++) {
-            MenuItem menuItem = keywordMenu.getItem(i);
-            //먼저 Keyword List에 새로운 키워드가 있는지 확인하고,
-            KeywordPair menuKeyword = new KeywordPair(menuItem);
-            for (int j = 0; j <mTvKeywordCount.size(); j++) {
-                KeywordPair listKeyword = mTvKeywordCount.get(j);
-                if (!menuKeyword.equals(listKeyword)) {
-                    //없을 때만 새롭가 추가한다.
-                    mTvKeywordCount.add(menuKeyword);
-                }
-            }
-
-        }
-    }
-
-    private void setKeywodNotReadCount(TextView textView, int count) {
-        if (count == 0) {
-            textView.setText("");
-        } else {
-            textView.setText(count+"");
-        }
-    }
-
-    public void setMenuNotReadCount() {
-        MainProvider mainProvider = new MainProviderImp();
-        LibraryProvider libraryProvider = new LibraryProviderImp();
-        KeywordProvider keywordProvider = new KeywordProviderImp();
-        setMainNotReadCount(mainProvider.getNotReadCount());
-        setLibraryNotReadCount(libraryProvider.getNotReadCount());
-
-        /*키워드 추가 기능은 잠시 멈춰둔다. 동적으로 삽입하는 키워드에 ActionView를 넣지 못한다.*/
-        /*//키워드의 변화를 체크해서 Array에 담는다.
-        setKeywordTvArray();
-
-        //변화된 Array를 이용해서 Keyword Count를 세팅한다.
-        for (int i = 0; i < mTvKeywordCount.size(); i++) {
-            KeywordPair keywordPair = mTvKeywordCount.get(i);
-            TextView textView = keywordPair.getTvCount();
-            setKeywodNotReadCount(textView, keywordProvider.getNotReadCount(keywordPair.getKeyword()));
-        }*/
-
-    }
-
     public int getNewId() {
         return id++;
     }
 
-    class KeywordPair {
-        private String keyword;
-        private TextView tvCount;
+    public List<Keyword> getKeywordList() {
+        return keywordList;
+    }
 
-        public KeywordPair(MenuItem menuItem) {
-            keyword = menuItem.getTitle().toString();
-            LinearLayout view = (LinearLayout) menuItem.getActionView();
-            tvCount = (TextView) view.findViewById(R.id.navigation_item_tv_count);
-        }
-
+    private OnFetchKeywordListener onFetchKeywordListener = new OnFetchKeywordListener() {
         @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            KeywordPair that = (KeywordPair) o;
-
-            return keyword != null ? keyword.equals(that.keyword) : that.keyword == null;
-
+        public void onFetchKeyword(String response) {
+            keywordList.clear();
+            List<Keyword> keywordList = Keyword.fromJson(response);
+            addKeywordAll(keywordList);
         }
+    };
 
-        public String getKeyword() {
-            return keyword;
+    public void addKeywordAll(List<Keyword> keywordList) {
+        for (int i = 0; i < keywordList.size(); i++) {
+            addKeyword(keywordList.get(i));
         }
+    }
 
-        public TextView getTvCount() {
-            return tvCount;
+    public void addKeyword(Keyword keyword) {
+        getKeywordMenu().add(R.id.group_keyword, getNewId(), 1, keyword.getTitle()).setIcon(R.drawable.ic_menu_send);
+        keywordList.add(keyword);
+    }
+
+    public void deleteKeyword(Keyword keyword) {
+        Menu menu = getKeywordMenu();
+        int menuSize = menu.size();
+        // 내가 지우고자 하는 키워드의 이름으로 아이템을 찾고 아이디를 받아옴
+        for (int i = 0; i < menuSize; i++) {
+            String menuTitle = menu.getItem(i).getTitle().toString();
+            if (keyword.getTitle().equals(menuTitle) == true) {
+                //지워버릴 Item의 아이디 얻어옴
+                int itemId = menu.getItem(i).getItemId();
+                menu.removeItem(itemId);
+                break;
+            }
         }
+        keywordList.remove(keyword);
+    }
+
+    public void deleteKeywordAll() {
+        Menu menu = getKeywordMenu();
+        int menuSize = menu.size();
+        for (int i = 0; i < menuSize; i++) {
+            int itemId = menu.getItem(0).getItemId();
+            menu.removeItem(itemId);
+        }
+        keywordList = new ArrayList<>();
+    }
+
+    public interface OnFetchKeywordListener {
+        void onFetchKeyword(String response);
     }
 
 }

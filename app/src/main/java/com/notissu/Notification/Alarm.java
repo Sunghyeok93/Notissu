@@ -6,9 +6,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
-import com.notissu.UI.Main.View.MainActivity;
+import com.notissu.UI.Main.MainActivity;
 import com.notissu.R;
-import com.notissu.Util.ResString;
 
 import java.util.ArrayList;
 
@@ -34,19 +33,19 @@ public class Alarm {
         sb.append("[");
         sb.append(notice.get(0));
         for (int i = 1; i < notice.size(); i++) {
-            sb.append(", "+notice.get(i));
+            sb.append(", " + notice.get(i));
         }
         sb.append("]");
 
         Intent notificationIntent = new Intent(context, MainActivity.class);
-        notificationIntent.putExtra(KEY_FIRST_KEYWORD,notice.get(0));
-        notificationIntent.putExtra(KEY_IS_ALRAM,true);
+        notificationIntent.putExtra(KEY_FIRST_KEYWORD, notice.get(0));
+        notificationIntent.putExtra(KEY_IS_ALRAM, true);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification.Builder mBuilder = new Notification.Builder(context);
         mBuilder.setSmallIcon(R.drawable.notissulogo2);
-        mBuilder.setTicker(ResString.getInstance().getString(ResString.RES_ALARM_TICKER));
-        mBuilder.setContentTitle(ResString.getInstance().getString(ResString.RES_ALARM_TITLE));
+        mBuilder.setTicker("새로운 공지사항이 도착했습니다!");
+        mBuilder.setContentTitle("NOTISSU 공지사항 업데이트");
         mBuilder.setContentText(sb.toString() + " 관련 공지사항");
         mBuilder.setWhen(System.currentTimeMillis());
         mBuilder.setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE);
