@@ -2,7 +2,6 @@ package com.notissu.UI.NoticeList;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompatSideChannelService;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
