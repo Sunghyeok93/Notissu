@@ -7,8 +7,8 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.google.gson.JsonObject;
 import com.notissu.Network.TokenSender;
 
-public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
-    private static final String TAG = MyFirebaseInstanceIDService.class.getSimpleName();
+public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService {
+    private static final String TAG = MyFirebaseInstanceIdService.class.getSimpleName();
     private static final String KEY_TOKEN_REGISTER = "KEY_TOKEN_REGISTER";
 
     @Override

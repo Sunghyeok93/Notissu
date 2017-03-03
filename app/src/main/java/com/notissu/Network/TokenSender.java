@@ -1,7 +1,5 @@
 package com.notissu.Network;
 
-import android.util.Log;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -11,7 +9,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.notissu.BaseApplication;
-import com.notissu.Firebase.MyFirebaseInstanceIDService;
+import com.notissu.Firebase.MyFirebaseInstanceIdService;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,9 +18,9 @@ public class TokenSender {
     private static final String BASE_URL = BaseApplication.BASE_URL + "token/";
 
     private RequestQueue mQueue = BaseApplication.getRequestQueue();
-    private MyFirebaseInstanceIDService.OnSendTokenListener mOnSendTokenListener;
+    private MyFirebaseInstanceIdService.OnSendTokenListener mOnSendTokenListener;
 
-    public TokenSender(MyFirebaseInstanceIDService.OnSendTokenListener onSendTokenListener) {
+    public TokenSender(MyFirebaseInstanceIdService.OnSendTokenListener onSendTokenListener) {
         mOnSendTokenListener = onSendTokenListener;
     }
 
