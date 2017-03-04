@@ -177,7 +177,7 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
     private NoticeListContract.OnFetchSearchListener onFetchSearchListener = new NoticeListContract.OnFetchSearchListener() {
         @Override
         public void onFetchKeyword(String response) {
-            List<Notice> noticeList = Notice.fromHtml(response);
+            List<Notice> noticeList = Notice.fromJson(response);
             setList(noticeList);
         }
     };
