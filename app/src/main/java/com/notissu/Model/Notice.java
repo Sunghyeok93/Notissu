@@ -134,24 +134,4 @@ public class Notice extends RealmObject implements Parcelable {
         return noticeList;
     }
 
-    public static List<Notice> fromHtml(String response) {
-        List<Notice> noticeList = new ArrayList<>();
-        Document doc = Jsoup.parse(response);
-        Elements bbsList = doc.select("ol.bbs-list li.first-child");
-        String firstDelimiter = "messageId=";
-        String lastDelimiter = "&amp;curPage";
-
-        for (Element element : bbsList) {
-            String tagA = element.select("a").toString();
-            int firstIndex = tagA.indexOf(firstDelimiter) + firstDelimiter.length();
-            int lastIndex = tagA.indexOf(lastDelimiter);
-            int id = Integer.valueOf(tagA.substring(firstIndex, lastIndex));
-            String title = element.select("a").text();
-            String date = element.select("span").text();
-            Notice notice = new Notice(id, title, date, false, false);
-            noticeList.add(notice);
-        }
-        setProperty(noticeList);
-        return noticeList;
-    }
 }

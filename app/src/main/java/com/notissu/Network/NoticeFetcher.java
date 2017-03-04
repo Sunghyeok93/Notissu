@@ -10,6 +10,8 @@ import com.notissu.UI.NoticeList.Detail.NoticeDetailContract;
 import com.notissu.UI.NoticeList.NoticeListContract;
 import com.notissu.UI.NoticeTab.NoticeTabContract;
 
+import java.net.URLEncoder;
+
 /**
  * Created by forhack on 2017-02-06.
  */
@@ -38,7 +40,7 @@ public class NoticeFetcher {
 
     public void fetchNoticeList(String categoryKo, int pageNum) {
         String categoryEng = changeCategoryToEng(categoryKo);
-        String url = BaseApplication.BASE_URL + "list/"+categoryEng+"/" + pageNum;
+        String url = BaseApplication.BASE_URL + "list/" + categoryEng + "/" + pageNum;
         StringRequest request = new StringRequestUTF8(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -69,9 +71,13 @@ public class NoticeFetcher {
     }
 
     public void fetchSearchList(String keyword, int pageNum) {
-        //Category=%s 에 인자가 아무것도 들어가지 않으면 전체 카테고리로 검색
-        String url = String.format(BaseApplication.BASE_SEARCH_URL, pageNum, "", "TITLE", keyword);
-        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+        try {
+            keyword = URLEncoder.encode(keyword, "UTF-8").replace("+","%20");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String url = BaseApplication.BASE_URL + "search/" + keyword + "/" + pageNum;
+        StringRequest request = new StringRequestUTF8(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 mOnFetchSearchListener.onFetchKeyword(response);
@@ -79,6 +85,7 @@ public class NoticeFetcher {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
             }
         });
         mQueue.add(request);
