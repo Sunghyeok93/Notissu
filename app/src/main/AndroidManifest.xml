@@ -50,7 +50,7 @@
         </service>
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@mipmap/ic_launcher" />
+            android:resource="@drawable/notissulogo2" />
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="fa0977a1de019e67313d89ce2eafc3bf19577da4" />
