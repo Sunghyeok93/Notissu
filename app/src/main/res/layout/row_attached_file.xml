@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:paddingBottom="4dp"
+    android:paddingTop="4dp">
+
     <ImageView
-        android:src="@drawable/ic_file"
-        android:adjustViewBounds="true"
         android:layout_width="24dp"
-        android:layout_height="24dp" />
+        android:layout_height="24dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_file" />
+
     <TextView
         android:id="@+id/attched_file_title"
-        android:layout_gravity="center_vertical"
-        android:text="교환학생 지원서.hwp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="교환학생 지원서.hwp" />
 </LinearLayout>

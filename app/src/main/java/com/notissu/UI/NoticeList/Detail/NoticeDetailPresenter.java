@@ -50,7 +50,7 @@ public class NoticeDetailPresenter implements NoticeDetailContract.Presenter,
     public void setAttchedFileAdapter(AttachedFileAdapter attachedFileAdapter) {
         mAdapterModel = attachedFileAdapter;
         mAdapterView = attachedFileAdapter;
-        mView.showAttchedFiles(attachedFileAdapter);
+        mView.setAttchedFiles(attachedFileAdapter);
     }
 
     @Override
@@ -84,10 +84,11 @@ public class NoticeDetailPresenter implements NoticeDetailContract.Presenter,
         mAdapterModel.setAttachedFileList(mNoticeDetail.getAttachedFileList());
         mAdapterView.refresh();
 
-        if (mAdapterModel.getCount() == 0) {
-            mView.hideAttchedFiles();
+        if (mAdapterModel.getCount() != 0) {
+            mView.showFolder();
+        } else {
+            mView.hideFolder();
         }
-
         mView.showNoticeDetail(mNoticeDetail);
         mView.hideProgress();
     }

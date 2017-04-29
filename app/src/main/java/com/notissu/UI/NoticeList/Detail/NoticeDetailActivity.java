@@ -8,24 +8,28 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.notissu.Model.Notice;
 import com.notissu.Model.NoticeDetail;
+import com.notissu.Network.Util.StringRequestUTF8;
 import com.notissu.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class NoticeDetailActivity extends AppCompatActivity implements NoticeDetailContract.View {
+    private static final String TAG = NoticeDetailActivity.class.getSimpleName();
     @BindView(R.id.notice_detail_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.notice_detail_title)
@@ -38,6 +42,8 @@ public class NoticeDetailActivity extends AppCompatActivity implements NoticeDet
     RecyclerView mAttachedFilesList;
     @BindView(R.id.notice_detail_web_view)
     WebView mWebView;
+    @BindView(R.id.notice_detail_btn_folder)
+    ImageView mFolder;
 
     private NoticeDetailContract.Presenter mPresenter;
     private DownloadManager mDownloadManager;
@@ -96,6 +102,25 @@ public class NoticeDetailActivity extends AppCompatActivity implements NoticeDet
         });
     }
 
+    @OnClick(R.id.notice_detail_btn_folder)
+    void onFolderClick() {
+        if (mAttchedFilesLayout.getVisibility() == View.VISIBLE) {
+            hideAttchedFiles();
+            mFolder.setBackgroundResource(R.drawable.ic_arrow_drop_down_black_24dp);
+        } else if (mAttchedFilesLayout.getVisibility() == View.GONE) {
+            showAttchedFiles();
+            mFolder.setBackgroundResource(R.drawable.ic_arrow_drop_up_black_24dp);
+        }
+    }
+
+    private void showAttchedFiles() {
+        mAttchedFilesLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void hideAttchedFiles() {
+        mAttchedFilesLayout.setVisibility(View.GONE);
+    }
+
     @Override
     public void showNoticeDetail(NoticeDetail noticeDetail) {
         mTitle.setText(noticeDetail.getTitle());
@@ -111,15 +136,10 @@ public class NoticeDetailActivity extends AppCompatActivity implements NoticeDet
     }
 
     @Override
-    public void showAttchedFiles(AttachedFileAdapter attachedFileList) {
+    public void setAttchedFiles(AttachedFileAdapter attachedFileList) {
+        hideAttchedFiles();
         mAttachedFilesList.setLayoutManager(new GridLayoutManager(this, 2));
-        mAttachedFilesList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mAttachedFilesList.setAdapter(attachedFileList);
-    }
-
-    @Override
-    public void hideAttchedFiles() {
-        mAttchedFilesLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -135,5 +155,15 @@ public class NoticeDetailActivity extends AppCompatActivity implements NoticeDet
     @Override
     public void hideProgress() {
         mProgressDialog.dismiss();
+    }
+
+    @Override
+    public void showFolder() {
+        mFolder.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideFolder() {
+        mFolder.setVisibility(View.INVISIBLE);
     }
 }
