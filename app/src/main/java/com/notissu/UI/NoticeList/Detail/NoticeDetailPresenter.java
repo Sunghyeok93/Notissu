@@ -4,10 +4,19 @@ import android.app.DownloadManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 
-import com.notissu.Network.NoticeFetcher;
+import com.kakao.kakaolink.v2.KakaoLinkResponse;
+import com.kakao.kakaolink.v2.KakaoLinkService;
+import com.kakao.kakaolink.v2.model.ButtonObject;
+import com.kakao.kakaolink.v2.model.ContentObject;
+import com.kakao.kakaolink.v2.model.FeedTemplate;
+import com.kakao.kakaolink.v2.model.LinkObject;
+import com.kakao.network.ErrorResult;
+import com.kakao.network.callback.ResponseCallback;
 import com.notissu.Model.AttachedFile;
 import com.notissu.Model.NoticeDetail;
+import com.notissu.Network.NoticeFetcher;
 import com.notissu.UI.NoticeList.NoticeListContract;
 
 import java.util.List;
@@ -65,6 +74,21 @@ public class NoticeDetailPresenter implements NoticeDetailContract.Presenter,
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, attachedFile.getTitle());
         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).mkdirs();
         mView.showDownload(request);
+    }
+
+    @Override
+    public void setShareNotice() {
+        FeedTemplate params = FeedTemplate
+                .newBuilder(ContentObject.newBuilder(mNoticeDetail.getTitle(),
+                        "https://lh3.googleusercontent.com/r4AnCey_J8IFlnGAjlR9ni2Kx2FGUjiJUwxlWb1bKmsujXHPAYwQyo3-y1EyVItKyPHm=w300-rw",
+                        LinkObject.newBuilder().setWebUrl(mNoticeDetail.getUrl())
+                                .setMobileWebUrl(mNoticeDetail.getUrl()).build())
+                        .setDescrption(mNoticeDetail.getDate())
+                        .build())
+                .addButton(new ButtonObject("웹에서 보기", LinkObject.newBuilder().setWebUrl(mNoticeDetail.getUrl()).setMobileWebUrl(mNoticeDetail.getUrl()).build()))
+                .build();
+        mView.showShareNotice(params);
+
     }
 
     @Override

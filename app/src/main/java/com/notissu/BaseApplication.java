@@ -15,7 +15,8 @@ import io.realm.RealmConfiguration;
 public class BaseApplication extends Application {
     public static final String TAG = BaseApplication.class.getSimpleName();
     private static RequestQueue mQueue;
-    public static final String BASE_URL = "http://1004xlsrn.gonetis.com:8080/";
+    //    public static final String BASE_URL = "http://1004xlsrn.gonetis.com:8080/";
+    public static final String BASE_URL = "http://1004xlsrn.gonetis.com:8081/";
 
     @Override
     public void onCreate() {

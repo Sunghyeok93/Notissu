@@ -14,8 +14,8 @@ apply plugin: 'com.google.gms.google-services'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    maven { url 'http://devrepo.kakao.com:8088/nexus/content/groups/public/' }
 }
-
 
 android {
     compileSdkVersion 25
@@ -55,6 +55,8 @@ dependencies {
 
     compile "com.google.firebase:firebase-core:$firebaseVersion"
     compile "com.google.firebase:firebase-messaging:$firebaseVersion"
+
+    compile group: 'com.kakao.sdk', name: 'kakaolink', version: "1.2.2"
 
     compile 'com.jakewharton:butterknife:8.4.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'

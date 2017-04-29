@@ -12,16 +12,23 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.kakao.kakaolink.v2.KakaoLinkResponse;
+import com.kakao.kakaolink.v2.KakaoLinkService;
+import com.kakao.kakaolink.v2.model.FeedTemplate;
+import com.kakao.network.ErrorResult;
+import com.kakao.network.callback.ResponseCallback;
 import com.notissu.Model.Notice;
 import com.notissu.Model.NoticeDetail;
-import com.notissu.Network.Util.StringRequestUTF8;
 import com.notissu.R;
 
 import butterknife.BindView;
@@ -49,6 +56,22 @@ public class NoticeDetailActivity extends AppCompatActivity implements NoticeDet
     private DownloadManager mDownloadManager;
 
     private ProgressDialog mProgressDialog;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.notice_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_share) {
+            mPresenter.setShareNotice();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,5 +191,21 @@ public class NoticeDetailActivity extends AppCompatActivity implements NoticeDet
     @Override
     public void hideFolder() {
         mFolder.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showShareNotice(FeedTemplate params) {
+        KakaoLinkService.getInstance().sendDefault(this, params, new ResponseCallback<KakaoLinkResponse>() {
+            @Override
+            public void onFailure(ErrorResult errorResult) {
+                Toast.makeText(NoticeDetailActivity.this, "공유하기 에러", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, errorResult.toString());
+            }
+
+            @Override
+            public void onSuccess(KakaoLinkResponse result) {
+
+            }
+        });
     }
 }
