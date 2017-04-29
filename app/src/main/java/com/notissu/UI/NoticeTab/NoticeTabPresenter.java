@@ -21,12 +21,6 @@ public class NoticeTabPresenter implements NoticeTabContract.Presenter {
                               @NonNull NoticeTabContract.View view) {
         this.mBundle = arguments;
         this.mView = checkNotNull(view);
-
-        view.setPresenter(this);
-    }
-
-    @Override
-    public void start() {
     }
 
     @Override

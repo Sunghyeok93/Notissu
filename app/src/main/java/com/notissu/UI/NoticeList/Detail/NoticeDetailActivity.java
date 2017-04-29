@@ -8,24 +8,35 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.kakao.kakaolink.v2.KakaoLinkResponse;
+import com.kakao.kakaolink.v2.KakaoLinkService;
+import com.kakao.kakaolink.v2.model.FeedTemplate;
+import com.kakao.network.ErrorResult;
+import com.kakao.network.callback.ResponseCallback;
 import com.notissu.Model.Notice;
 import com.notissu.Model.NoticeDetail;
 import com.notissu.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class NoticeDetailActivity extends AppCompatActivity implements NoticeDetailContract.View {
+    private static final String TAG = NoticeDetailActivity.class.getSimpleName();
     @BindView(R.id.notice_detail_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.notice_detail_title)
@@ -38,11 +49,29 @@ public class NoticeDetailActivity extends AppCompatActivity implements NoticeDet
     RecyclerView mAttachedFilesList;
     @BindView(R.id.notice_detail_web_view)
     WebView mWebView;
+    @BindView(R.id.notice_detail_btn_folder)
+    ImageView mFolder;
 
     private NoticeDetailContract.Presenter mPresenter;
     private DownloadManager mDownloadManager;
 
     private ProgressDialog mProgressDialog;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.notice_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_share) {
+            mPresenter.setShareNotice();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,10 +125,32 @@ public class NoticeDetailActivity extends AppCompatActivity implements NoticeDet
         });
     }
 
+    @OnClick(R.id.notice_detail_btn_folder)
+    void onFolderClick() {
+        if (mAttchedFilesLayout.getVisibility() == View.VISIBLE) {
+            hideAttchedFiles();
+            mFolder.setBackgroundResource(R.drawable.ic_arrow_drop_down_black_24dp);
+        } else if (mAttchedFilesLayout.getVisibility() == View.GONE) {
+            showAttchedFiles();
+            mFolder.setBackgroundResource(R.drawable.ic_arrow_drop_up_black_24dp);
+        }
+    }
+
+    private void showAttchedFiles() {
+        mAttchedFilesLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void hideAttchedFiles() {
+        mAttchedFilesLayout.setVisibility(View.GONE);
+    }
+
     @Override
     public void showNoticeDetail(NoticeDetail noticeDetail) {
         mTitle.setText(noticeDetail.getTitle());
         mDate.setText(noticeDetail.getDate());
+        mWebView.getSettings().setBuiltInZoomControls(true);
+        mWebView.getSettings().setSupportZoom(true);
+        mWebView.getSettings().setDisplayZoomControls(false);
         mWebView.loadData(noticeDetail.getContents(), "text/html; charset=UTF-8", null);
         mWebView.setWebViewClient(new WebViewClient());
     }
@@ -111,15 +162,10 @@ public class NoticeDetailActivity extends AppCompatActivity implements NoticeDet
     }
 
     @Override
-    public void showAttchedFiles(AttachedFileAdapter attachedFileList) {
-        mAttachedFilesList.setLayoutManager(new GridLayoutManager(this,2));
-        mAttachedFilesList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+    public void setAttchedFiles(AttachedFileAdapter attachedFileList) {
+        hideAttchedFiles();
+        mAttachedFilesList.setLayoutManager(new GridLayoutManager(this, 2));
         mAttachedFilesList.setAdapter(attachedFileList);
-    }
-
-    @Override
-    public void hideAttchedFiles() {
-        mAttchedFilesLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -135,5 +181,31 @@ public class NoticeDetailActivity extends AppCompatActivity implements NoticeDet
     @Override
     public void hideProgress() {
         mProgressDialog.dismiss();
+    }
+
+    @Override
+    public void showFolder() {
+        mFolder.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideFolder() {
+        mFolder.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showShareNotice(FeedTemplate params) {
+        KakaoLinkService.getInstance().sendDefault(this, params, new ResponseCallback<KakaoLinkResponse>() {
+            @Override
+            public void onFailure(ErrorResult errorResult) {
+                Toast.makeText(NoticeDetailActivity.this, "공유하기 에러", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, errorResult.toString());
+            }
+
+            @Override
+            public void onSuccess(KakaoLinkResponse result) {
+
+            }
+        });
     }
 }

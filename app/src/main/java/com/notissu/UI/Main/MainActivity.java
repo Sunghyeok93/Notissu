@@ -11,15 +11,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.notissu.Model.Keyword;
-import com.notissu.UI.Main.AddKeywordDialog.Presenter.AddKeywordContract;
-import com.notissu.UI.Main.AddKeywordDialog.View.AddKeywordDialog;
+import com.notissu.UI.Main.AddKeywordDialog.AddKeywordContract;
+import com.notissu.UI.Main.AddKeywordDialog.AddKeywordDialog;
 import com.notissu.UI.NoticeList.NoticeListFragment;
 import com.notissu.UI.NoticeTab.NoticeTabFragment;
 import com.notissu.UI.Setting.SettingFragment;
@@ -53,11 +52,6 @@ public class MainActivity extends AppCompatActivity
     private int mPresenterFragment;
 
     private MainContract.Presenter mPresenter;
-
-    @Override
-    public void setPresenter(MainContract.Presenter presenter) {
-        this.mPresenter = presenter;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

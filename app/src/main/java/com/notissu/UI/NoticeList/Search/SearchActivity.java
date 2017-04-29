@@ -42,11 +42,6 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
     }
 
     @Override
-    public void setPresenter(SearchContract.Presenter presenter) {
-        this.mPresenter = presenter;
-    }
-
-    @Override
     public void showTitle(String query) {
         mToolbar.setTitle(query);
     }

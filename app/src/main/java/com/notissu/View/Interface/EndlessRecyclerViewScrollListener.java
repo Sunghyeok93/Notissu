@@ -26,7 +26,6 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     RecyclerView.LayoutManager mLayoutManager;
 
 
-
     public EndlessRecyclerViewScrollListener(LinearLayoutManager layoutManager) {
         this.mLayoutManager = layoutManager;
     }
@@ -46,8 +45,7 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
         for (int i = 0; i < lastVisibleItemPositions.length; i++) {
             if (i == 0) {
                 maxSize = lastVisibleItemPositions[i];
-            }
-            else if (lastVisibleItemPositions[i] > maxSize) {
+            } else if (lastVisibleItemPositions[i] > maxSize) {
                 maxSize = lastVisibleItemPositions[i];
             }
         }

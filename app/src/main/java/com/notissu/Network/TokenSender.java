@@ -10,6 +10,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.notissu.BaseApplication;
 import com.notissu.Firebase.MyFirebaseInstanceIdService;
+import com.notissu.Network.Util.StringRequestUTF8;
+
 import java.util.HashMap;
 import java.util.Map;
 

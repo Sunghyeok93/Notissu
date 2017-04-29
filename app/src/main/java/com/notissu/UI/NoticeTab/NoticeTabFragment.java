@@ -71,11 +71,6 @@ public class NoticeTabFragment extends Fragment implements NoticeTabContract.Vie
     }
 
     @Override
-    public void setPresenter(NoticeTabContract.Presenter presenter) {
-        this.mPresenter = presenter;
-    }
-
-    @Override
     public void addTabs(String[] noticeCategory) {
         for (int i = 0; i < noticeCategory.length; i++) {
             tabLayout.addTab(tabLayout.newTab().setText(noticeCategory[i]));

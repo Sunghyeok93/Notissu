@@ -15,7 +15,6 @@ public class SplashPresenter implements SplashContract.Presenter {
 
     public SplashPresenter(@NonNull SplashContract.View view) {
         this.mView = checkNotNull(view);
-        view.setPresenter(this);
     }
 
     @Override

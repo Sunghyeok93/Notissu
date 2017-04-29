@@ -11,6 +11,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.notissu.BaseApplication;
 import com.notissu.Model.NavigationMenu;
+import com.notissu.Network.Util.StringRequestUTF8;
 
 import java.net.URLEncoder;
 import java.util.HashMap;

@@ -16,5 +16,7 @@
     <string name="setting_title_about_libraries">오픈소스 라이브러리</string>
     <string name="setting_title_send_email">개발자에게 메일 보내기</string>
 
-
+    <string name="kakao_app_key">9078b3520bbbb8227c06e57b9f4fc697</string>
+    <string name="kakao_scheme">kakao9078b3520bbbb8227c06e57b9f4fc697</string>
+    <string name="kakaolink_host">kakaolink</string>
 </resources>

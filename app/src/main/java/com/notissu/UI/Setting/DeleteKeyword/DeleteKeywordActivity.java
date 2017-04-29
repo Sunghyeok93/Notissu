@@ -92,7 +92,7 @@ public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKe
     @Override
     public void setAdapter(DeleteKeywordAdapter deleteKeywordAdapter) {
         mList.setLayoutManager(new LinearLayoutManager(DeleteKeywordActivity.this));
-        mList.addItemDecoration(new DividerItemDecoration(mList.getContext(),DividerItemDecoration.VERTICAL));
+        mList.addItemDecoration(new DividerItemDecoration(mList.getContext(), DividerItemDecoration.VERTICAL));
         mList.setAdapter(deleteKeywordAdapter);
     }
 
@@ -107,10 +107,5 @@ public class DeleteKeywordActivity extends AppCompatActivity implements DeleteKe
         });
         alert.setMessage("키워드를 삭제 하시겠습니까?");
         alert.show();
-    }
-
-    @Override
-    public void setPresenter(@NonNull DeleteKeywordContract.Presenter presenter) {
-        this.mPresenter = checkNotNull(presenter);
     }
 }

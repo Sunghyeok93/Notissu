@@ -3,8 +3,6 @@ package com.notissu.UI.NoticeList;
 import android.view.Menu;
 import android.view.MenuInflater;
 
-import com.notissu.BasePresenter;
-import com.notissu.BaseView;
 import com.notissu.Model.Notice;
 
 /**
@@ -18,7 +16,7 @@ public interface NoticeListContract {
     String KEY_FLAG = "KEY_FLAG";
     String KEY_NOTICE_ID = "KEY_NOTICE_ID";
 
-    interface View extends BaseView<Presenter> {
+    interface View {
         void showTitle(String title);
 
         void showProgress();
@@ -32,7 +30,8 @@ public interface NoticeListContract {
         void setAdapter(NoticeListAdapter noticeListAdapter);
     }
 
-    interface Presenter extends BasePresenter {
+    interface Presenter {
+        void start();
 
         void onItemClick(android.view.View itemView, int position);
 

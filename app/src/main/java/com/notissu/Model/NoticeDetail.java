@@ -15,8 +15,13 @@ public class NoticeDetail extends RealmObject{
     private int notice_id;
     private String title;
     private String date;
+    private String url;
     private String contents;
     private RealmList<AttachedFile> attached_files;
+
+    public String getUrl() {
+        return url;
+    }
 
     public int getNoticeId() {
         return notice_id;

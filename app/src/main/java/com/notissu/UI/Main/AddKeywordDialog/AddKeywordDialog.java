@@ -1,4 +1,4 @@
-package com.notissu.UI.Main.AddKeywordDialog.View;
+package com.notissu.UI.Main.AddKeywordDialog;
 
 
 import android.os.Bundle;
@@ -10,8 +10,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.notissu.Model.Keyword;
-import com.notissu.UI.Main.AddKeywordDialog.Presenter.AddKeywordContract;
-import com.notissu.UI.Main.AddKeywordDialog.Presenter.AddKeywordPresenter;
 import com.notissu.R;
 
 import butterknife.BindView;
@@ -25,11 +23,6 @@ public class AddKeywordDialog extends DialogFragment implements AddKeywordContra
     private AddKeywordContract.OnAddKeywordListner mOnAddKeywordListner;
 
     private AddKeywordContract.Presenter mPresenter;
-
-    @Override
-    public void setPresenter(AddKeywordContract.Presenter presenter) {
-        this.mPresenter = presenter;
-    }
 
     public static AddKeywordDialog newInstance() {
         Bundle args = new Bundle();

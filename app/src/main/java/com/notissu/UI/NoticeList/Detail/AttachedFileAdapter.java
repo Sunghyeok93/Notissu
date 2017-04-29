@@ -38,7 +38,7 @@ public class AttachedFileAdapter extends RecyclerView.Adapter<AttachedFileAdapte
         holder.attchedFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnRecyclerItemClickListener.onItemClick(holder.itemView,AttachedFileAdapter.this,position);
+                mOnRecyclerItemClickListener.onItemClick(holder.itemView, AttachedFileAdapter.this, position);
             }
         });
     }

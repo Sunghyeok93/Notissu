@@ -1,4 +1,4 @@
-package com.notissu.Network;
+package com.notissu.Network.Util;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
@@ -20,7 +20,7 @@ public class StringRequestUTF8 extends StringRequest {
     protected Response<String> parseNetworkResponse(NetworkResponse response) {
         String parsed;
         try {
-            response.headers.put("Content-Type","Application/json;  charset=UTF-8");
+            response.headers.put("Content-Type", "Application/json;  charset=UTF-8");
             parsed = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
         } catch (UnsupportedEncodingException e) {
             parsed = new String(response.data);

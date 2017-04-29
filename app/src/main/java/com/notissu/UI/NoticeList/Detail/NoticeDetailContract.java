@@ -2,6 +2,7 @@ package com.notissu.UI.NoticeList.Detail;
 
 import android.app.DownloadManager;
 
+import com.kakao.kakaolink.v2.model.FeedTemplate;
 import com.notissu.Model.Notice;
 import com.notissu.Model.NoticeDetail;
 
@@ -11,15 +12,19 @@ public interface NoticeDetailContract {
 
         void setViews(Notice notice);
 
-        void showAttchedFiles(AttachedFileAdapter attachedFileList);
-
-        void hideAttchedFiles();
+        void setAttchedFiles(AttachedFileAdapter attachedFileList);
 
         void showDownload(DownloadManager.Request request);
 
         void showProgress();
 
         void hideProgress();
+
+        void showFolder();
+
+        void hideFolder();
+
+        void showShareNotice(FeedTemplate params);
     }
 
     interface Presenter {
@@ -28,6 +33,8 @@ public interface NoticeDetailContract {
         void setAttchedFileAdapter(AttachedFileAdapter attachedFileAdapter);
 
         void onAttachedFileClick(int position);
+
+        void setShareNotice();
     }
 
     interface OnFetchNoticeDetailListener {

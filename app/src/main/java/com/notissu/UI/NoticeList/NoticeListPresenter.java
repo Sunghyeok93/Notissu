@@ -52,7 +52,6 @@ public class NoticeListPresenter implements NoticeListContract.Presenter {
     public NoticeListPresenter(Bundle bundle, @NonNull NoticeListContract.View view) {
         this.bundle = bundle;
         this.mView = checkNotNull(view, "NoticeListContract.View cannot be null");
-        view.setPresenter(this);
 
         title = bundle.getString(KEY_TITLE);
         flag = bundle.getInt(KEY_FLAG);

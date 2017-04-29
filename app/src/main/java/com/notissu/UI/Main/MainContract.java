@@ -2,8 +2,6 @@ package com.notissu.UI.Main;
 
 import android.support.v4.app.Fragment;
 
-import com.notissu.BasePresenter;
-import com.notissu.BaseView;
 import com.notissu.Model.Keyword;
 
 /**
@@ -18,7 +16,7 @@ public interface MainContract {
     int FLAG_SEARCH = 4;
     int FLAG_SETTING = 5;
 
-    interface View extends BaseView<Presenter> {
+    interface View {
 
         void showNavigation();
 
@@ -29,7 +27,9 @@ public interface MainContract {
         void showAddKeyword();
     }
 
-    interface Presenter extends BasePresenter {
+    interface Presenter {
+
+        void start();
 
         void onFabClick();
 
