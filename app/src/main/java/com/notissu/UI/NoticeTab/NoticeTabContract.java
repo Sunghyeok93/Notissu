@@ -1,8 +1,5 @@
 package com.notissu.UI.NoticeTab;
 
-import com.notissu.BasePresenter;
-import com.notissu.BaseView;
-
 /**
  * Created by forhack on 2017-01-01.
  */
@@ -26,7 +23,7 @@ public interface NoticeTabContract {
     String KEY_TITLE = "KEY_TITLE";
     String KEY_FLAG = "KEY_FLAG";
 
-    interface View extends BaseView<Presenter> {
+    interface View {
 
         void addTabs(String[] noticeCategory);
 
@@ -35,7 +32,7 @@ public interface NoticeTabContract {
         void setAdapter(NoticeTabPagerAdapter noticeTabPagerAdapter);
     }
 
-    interface Presenter extends BasePresenter {
+    interface Presenter {
 
         void setAdapter(NoticeTabPagerAdapter noticeTabPagerAdapter);
 

@@ -18,8 +18,6 @@ public class SearchPresenter implements SearchContract.Presenter {
     public SearchPresenter(Bundle bundle, @NonNull SearchContract.View view) {
         this.bundle = bundle;
         this.view = checkNotNull(view);
-
-        view.setPresenter(this);
     }
 
     @Override
@@ -28,6 +26,5 @@ public class SearchPresenter implements SearchContract.Presenter {
         view.showTitle(query);
 
         view.showSearch(query);
-
     }
 }

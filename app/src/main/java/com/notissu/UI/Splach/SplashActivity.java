@@ -12,15 +12,10 @@ import io.fabric.sdk.android.Fabric;
 
 import static com.notissu.Util.LogUtils.makeLogTag;
 
-public class SplashActivity extends AppCompatActivity implements SplashContract.View{
+public class SplashActivity extends AppCompatActivity implements SplashContract.View {
     private static final String TAG = makeLogTag(SplashActivity.class);
 
     SplashContract.Presenter mPresenter;
-
-    @Override
-    public void setPresenter(SplashContract.Presenter presenter) {
-        this.mPresenter = presenter;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

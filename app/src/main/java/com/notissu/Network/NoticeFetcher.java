@@ -6,6 +6,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.notissu.BaseApplication;
+import com.notissu.Network.Util.StringRequestUTF8;
 import com.notissu.UI.NoticeList.Detail.NoticeDetailContract;
 import com.notissu.UI.NoticeList.NoticeListContract;
 import com.notissu.UI.NoticeTab.NoticeTabContract;
@@ -72,7 +73,7 @@ public class NoticeFetcher {
 
     public void fetchSearchList(String keyword, int pageNum) {
         try {
-            keyword = URLEncoder.encode(keyword, "UTF-8").replace("+","%20");
+            keyword = URLEncoder.encode(keyword, "UTF-8").replace("+", "%20");
         } catch (Exception e) {
             e.printStackTrace();
         }

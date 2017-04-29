@@ -168,7 +168,7 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
         mNoticeList.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                mPresenter.fetchNotice(page+1);
+                mPresenter.fetchNotice(page + 1);
                 Log.d(TAG, "page = " + page + ", totalItemsCount = " + totalItemsCount);
             }
         });
@@ -186,10 +186,5 @@ public class NoticeListFragment extends Fragment implements NoticeListContract.V
             mPresenter.readAllItem();
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void setPresenter(@NonNull NoticeListContract.Presenter presenter) {
-        this.mPresenter = presenter;
     }
 }

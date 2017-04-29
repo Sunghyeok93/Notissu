@@ -39,8 +39,6 @@ public class MainPresenter implements MainContract.Presenter {
             this.mBundle = new Bundle();
         }
         this.mView = checkNotNull(view);
-
-        view.setPresenter(this);
     }
 
     @Override

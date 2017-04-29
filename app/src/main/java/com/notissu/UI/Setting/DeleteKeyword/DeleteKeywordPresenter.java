@@ -26,11 +26,6 @@ public class DeleteKeywordPresenter implements DeleteKeywordContract.Presenter {
 
     public DeleteKeywordPresenter(@NonNull DeleteKeywordContract.View view) {
         this.mView = checkNotNull(view, "DeleteKeywordContract.View cannot be null");
-        view.setPresenter(this);
-    }
-
-    @Override
-    public void start() {
     }
 
     @Override
@@ -66,7 +61,7 @@ public class DeleteKeywordPresenter implements DeleteKeywordContract.Presenter {
         // 구독 취소 한다.
         NavigationMenu navigationMenu = NavigationMenu.getInstance();
         List<Keyword> keywordList = navigationMenu.getKeywordList();
-        for (int i = 0; i <keywordList.size(); i++) {
+        for (int i = 0; i < keywordList.size(); i++) {
             FirebaseMessaging.getInstance().unsubscribeFromTopic(keywordList.get(i).getHash());
         }
 

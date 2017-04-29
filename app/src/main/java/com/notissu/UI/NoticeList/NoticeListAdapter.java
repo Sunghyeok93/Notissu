@@ -111,7 +111,7 @@ public class NoticeListAdapter extends RecyclerView.Adapter<NoticeListAdapter.Vi
 
     @Override
     public void readAll() {
-        for (int i = 0; i <mNoticeList.size(); i++) {
+        for (int i = 0; i < mNoticeList.size(); i++) {
             getItem(i).setRead(true);
         }
     }

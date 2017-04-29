@@ -112,7 +112,7 @@ public class NoticeDetailActivity extends AppCompatActivity implements NoticeDet
 
     @Override
     public void showAttchedFiles(AttachedFileAdapter attachedFileList) {
-        mAttachedFilesList.setLayoutManager(new GridLayoutManager(this,2));
+        mAttachedFilesList.setLayoutManager(new GridLayoutManager(this, 2));
         mAttachedFilesList.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mAttachedFilesList.setAdapter(attachedFileList);
     }

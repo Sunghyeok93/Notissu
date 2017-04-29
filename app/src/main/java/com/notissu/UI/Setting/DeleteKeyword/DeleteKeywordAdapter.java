@@ -21,7 +21,7 @@ import com.notissu.View.Interface.OnRecyclerItemClickListener;
  */
 
 public class DeleteKeywordAdapter extends RecyclerView.Adapter<DeleteKeywordAdapter.ViewHolder>
-        implements DeleteKeywordAdapterContract.Model, DeleteKeywordAdapterContract.View{
+        implements DeleteKeywordAdapterContract.Model, DeleteKeywordAdapterContract.View {
     //ListView에 보여줄 Item
     List<Keyword> keywordList = new ArrayList<>();
 
@@ -87,7 +87,7 @@ public class DeleteKeywordAdapter extends RecyclerView.Adapter<DeleteKeywordAdap
         this.onRecyclerItemClickListener = onRecyclerItemClickListener;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.delete_keyword_tv_title)
         TextView tvKeyword;
 
