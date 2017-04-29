@@ -11,15 +11,17 @@ public interface NoticeDetailContract {
 
         void setViews(Notice notice);
 
-        void showAttchedFiles(AttachedFileAdapter attachedFileList);
-
-        void hideAttchedFiles();
+        void setAttchedFiles(AttachedFileAdapter attachedFileList);
 
         void showDownload(DownloadManager.Request request);
 
         void showProgress();
 
         void hideProgress();
+
+        void showFolder();
+
+        void hideFolder();
     }
 
     interface Presenter {
