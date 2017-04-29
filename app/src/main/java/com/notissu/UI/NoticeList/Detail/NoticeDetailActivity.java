@@ -125,6 +125,9 @@ public class NoticeDetailActivity extends AppCompatActivity implements NoticeDet
     public void showNoticeDetail(NoticeDetail noticeDetail) {
         mTitle.setText(noticeDetail.getTitle());
         mDate.setText(noticeDetail.getDate());
+        mWebView.getSettings().setBuiltInZoomControls(true);
+        mWebView.getSettings().setSupportZoom(true);
+        mWebView.getSettings().setDisplayZoomControls(false);
         mWebView.loadData(noticeDetail.getContents(), "text/html; charset=UTF-8", null);
         mWebView.setWebViewClient(new WebViewClient());
     }
